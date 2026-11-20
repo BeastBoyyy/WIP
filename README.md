@@ -7,7 +7,7 @@ coherent theme. One apply sets up a custom top bar with a dashboard, a desktop c
 window manager, a themed launcher, Start menu and Explorer styling, window animations, terminal colours and the
 wallpaper, and it can all be undone in one step.
 
-> **Status: work in progress.** The app runs and applies themes end to end on the author's machine. Installer
+> **Status: work in progress, private development repository.** The app runs and applies themes end to end on the author's machine. Installer
 > packaging, signed releases and the in-app Claude assistant are still in progress. Expect breaking changes.
 
 ---
@@ -190,8 +190,38 @@ Theming a desktop touches a lot of running software, so Rice Studio is deliberat
   theme stylesheet opens with its design stamp, and is checked with Hallmark's `sloplint` until no failures remain.
 - **Testing widgets.** `--pack-test` writes a theme's pack to a folder. Serve that folder over HTTP and open it in a
   browser to work on a bar or dashboard without touching the live desktop.
-- **Wallpapers and art** a user adds are stored in `data\art\<theme-id>\` next to the executable. That folder is
-  local only and is never committed or shipped.
+- **Wallpapers and art** a user adds are stored in `data\art\<theme-id>\` next to the executable. The installer never
+  ships that folder.
+
+## Theme art (development copy)
+
+This repository carries the working art for the four themes that have their own pictures, so collaborators see the
+themes exactly as designed. **It is reference material from the web, not licensed for redistribution, and must be
+removed before the repository is made public or the app is released.**
+
+```
+art/
+  fresco/   inferno/   relic/   vagabond/
+    walls/  desktop wallpapers, in picker order (01-…, 02-…)
+    ws/     one picture per workspace, shown on the dashboard (1-… to 5-…)
+  sources/  the original portrait pictures for Fresco, Inferno and Relic
+tools/
+  compose.py  turns art/sources into the 16:9 walls and ws pictures, composed the way each theme hangs a picture
+```
+
+To use the art, copy each theme folder next to the built executable:
+
+```powershell
+cargo build --release
+New-Item -ItemType Directory -Force target\release\data\art | Out-Null
+Copy-Item art\fresco, art\inferno, art\relic, art\vagabond target\release\data\art -Recurse -Force
+```
+
+To recompose the Fresco, Inferno and Relic pictures from the sources (needs Python with Pillow and NumPy):
+
+```powershell
+python tools\compose.py art\sources art\composed
+```
 
 ## Licence
 
