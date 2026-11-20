@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+</head>
+<body>
+<!-- three small copper plates along the top of the screen, black, each inside its plate mark with a hatched bevel.
+     On the left the five plates in roman numerals, the open one lit by the one point of light; in the middle what is
+     being worked on; on the right the dials, the hour, and the light itself, which puts everything out -->
+<div id="bar">
+  <div class="island" id="iLeft">
+    <button class="it follow" id="overview" title="Overview · Ctrl+Alt+Space">
+      <svg width="18" height="16" viewBox="0 0 24 20" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2.5" y="2.5" width="19" height="15"/><rect x="5.5" y="5.5" width="13" height="9"/><path d="M2.5 2.5l3 3M21.5 2.5l-3 3M2.5 17.5l3-3M21.5 17.5l-3-3"/></svg>
+    </button>
+    <i class="fl"></i>
+    <div id="ws" title="wheel: next / previous · right-click: send the focused window here"></div>
+    <i class="fl"></i>
+    <button class="it follow lk" id="lFlow" title="Seek · apps, files, web · Alt+Space">seek</button>
+    <button class="it follow lk" id="lFiles" title="Folio · File Explorer">folio</button>
+    <button class="it follow lk" id="lTerm" title="Press · Terminal">press</button>
+    <button class="it follow lk" id="lKeys" title="Keys and bar actions">keys</button>
+  </div>
+
+  <div class="island" id="iCenter">
+    <div class="it" id="title" title="wheel: focus ← → · double-click: maximize · right-click: float · middle-click: close"><span class="k" id="tk">TABULA RASA</span><b id="tapp">etch</b><span id="tname"></span></div>
+  </div>
+
+  <div class="island" id="iRight">
+    <div id="tray" hidden></div>
+    <button class="it follow" id="trayBtn" title="System tray"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="it follow cell" id="weather"><span class="k" id="wk">fair</span><span class="num" id="wt">–°</span></div>
+    <button class="it follow np" id="media" hidden title="click: play / pause · right-click: next · middle-click: previous">
+      <svg class="pipe" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 17V8M8 17V4M12 17V6M16 17V9"/><path d="M2 17.5h16"/><path d="M3 8h2M7 4h2M11 6h2M15 9h2" stroke-width="1.6"/></svg>
+      <span id="mt"></span>
+    </button>
+    <i class="fl"></i>
+    <div class="it follow" id="rings"><svg class="ring" viewBox="0 0 22 22" id="rcpu"></svg><svg class="ring" viewBox="0 0 22 22" id="rram"></svg></div>
+    <div class="it follow cell" id="batt" hidden><span class="k">cell</span><span class="bar"><i class="sb"><i id="bfill"></i></i><span class="num" id="bp">–</span></span></div>
+    <button class="it follow" id="net">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    </button>
+    <button class="it follow" id="volb" title="wheel: volume · click: mute · right-click: sound settings">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="wv" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/><path class="mx" d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></svg><span class="num" id="vol"></span>
+    </button>
+    <i class="fl"></i>
+    <button class="it follow cell" id="clock"><span class="k" id="day">Mon · i · Jan</span><span class="hm" id="hm">--:--</span></button>
+    <button class="it follow" id="pwr" title="Power · put out the light"><i class="lux"></i></button>
+  </div>
+</div>
+<script type="module" src="./bar.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+</head>
+<body>
+<!-- the top of a case file: index-card strips laid along the screen edge. On the left the file's tabs, the open one pulled
+     forward with a paper clip; in the middle the subject on file; on the right the typed readings, the date stamp and
+     the seal. Anything wrong gets a red marker ring -->
+<div id="bar">
+  <div class="island" id="iLeft">
+    <button class="it follow" id="overview" title="Overview · Ctrl+Alt+Space">
+      <svg width="20" height="18" viewBox="0 0 24 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M2 4.5h7l2 2.5h11v12.5H2z"/><path class="lid" d="M2 9h20"/></svg>
+    </button>
+    <i class="margin"></i>
+    <div id="ws" title="wheel: next / previous · right-click: send the focused window here"></div>
+    <i class="margin"></i>
+    <button class="it follow lk" id="lFlow" title="Search · apps, files, web · Alt+Space"><i>A·1</i>Inquiry</button>
+    <button class="it follow lk" id="lFiles" title="Records · File Explorer"><i>A·2</i>Records</button>
+    <button class="it follow lk" id="lTerm" title="Terminal"><i>A·3</i>Terminal</button>
+    <button class="it follow lk" id="lKeys" title="Codes · keys and bar actions"><i>A·4</i>Codes</button>
+  </div>
+
+  <div class="island" id="iCenter">
+    <div class="it" id="title" title="wheel: focus ← → · double-click: maximize · right-click: float · middle-click: close"><span class="k" id="tk">ON FILE</span><b id="tapp">dossier</b><span id="tname"></span></div>
+  </div>
+
+  <div class="island" id="iRight">
+    <div id="tray" hidden></div>
+    <button class="it follow" id="trayBtn" title="System tray"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="it follow cell" id="weather"><span class="k" id="wk">CLEAR</span><span class="num" id="wt">–°</span></div>
+    <button class="it follow np" id="media" hidden title="click: play / pause · right-click: next · middle-click: previous">
+      <svg class="tape" viewBox="0 0 24 16"><rect class="sh" x="1" y="1" width="22" height="14" rx="1.5"/><g class="reel"><circle cx="7.5" cy="7.5" r="3"/><path d="M7.5 4.5v6M4.5 7.5h6"/></g><g class="reel r2"><circle cx="16.5" cy="7.5" r="3"/><path d="M16.5 4.5v6M13.5 7.5h6"/></g><path class="sh" d="M5 15l1.5-3h11l1.5 3"/></svg>
+      <span id="mt"></span>
+    </button>
+    <i class="margin"></i>
+    <div class="it follow" id="rings"><svg class="ring" viewBox="0 0 20 20" id="rcpu"></svg><svg class="ring" viewBox="0 0 20 20" id="rram"></svg></div>
+    <div class="it follow cell" id="batt" hidden><span class="k">CELL</span><span class="bar"><i class="sb"><i id="bfill"></i></i><span class="num" id="bp">–</span></span></div>
+    <button class="it follow" id="net">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/></svg>
+    </button>
+    <button class="it follow" id="volb" title="wheel: volume · click: mute · right-click: sound settings">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path class="wv" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/><path class="mx" d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></svg><span class="num" id="vol"></span>
+    </button>
+    <i class="margin"></i>
+    <button class="it follow cell" id="clock"><span class="k" id="day">01 JAN</span><span class="hm" id="hm">--:--</span></button>
+    <button class="it follow" id="pwr" title="Power · seal the file"><span class="seal">SEAL</span></button>
+  </div>
+</div>
+<script type="module" src="./bar.js"></script>
+</body>
+</html>

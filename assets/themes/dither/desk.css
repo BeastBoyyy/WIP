@@ -1,0 +1,19 @@
+/* Dither — on the wallpaper: the hour in big dots. Each dot a square of ink with a dotted shadow down and to the
+   right; the figures change once a minute and nothing else moves (nothing at all while a game
+   is on). */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;-webkit-font-smoothing:none}
+:root{--dot:13px;--d50:repeating-conic-gradient(var(--ink) 0 25%,transparent 0 50%) 0 0/2px 2px}
+#desk{position:absolute;inset:0;pointer-events:none;color:var(--ink);font-family:var(--body)}
+/* the figures: a dot every 13 px, the gap of one pixel between them left dark so the grid shows */
+#pix{position:absolute;left:60px;bottom:calc(10% + 52px);width:calc(var(--w,25) * var(--dot));height:calc(7 * var(--dot));isolation:isolate}
+#pix i{position:absolute;left:calc(var(--x) * var(--dot));top:calc(var(--y) * var(--dot));width:calc(var(--dot) - 1px);height:calc(var(--dot) - 1px);
+  background:var(--ink);box-shadow:0 0 0 1px var(--bg)}
+#pix i::after{content:"";position:absolute;left:4px;top:4px;width:100%;height:100%;z-index:-1;background:var(--d50)}
+/* the status line: a strip of the title bar's kind, the parts knocked out of it */
+#status{position:absolute;left:60px;bottom:10%;height:26px;display:flex;align-items:center;gap:10px;padding:0 10px;white-space:nowrap;
+  background:var(--bg);box-shadow:inset 0 0 0 1px var(--ink),2px 2px 0 0 var(--ink)}
+#dicon svg{display:block}
+#dws,#dday,#dwx{font-family:var(--display);font-size:8px;letter-spacing:.05em;text-transform:uppercase}
+.sep{width:1px;height:12px;background:var(--d50)}
+body.nowm #desk{-webkit-mask:repeating-conic-gradient(#000 0 25%,transparent 0 50%) 0 0/2px 2px;mask:repeating-conic-gradient(#000 0 25%,transparent 0 50%) 0 0/2px 2px}

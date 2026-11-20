@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+<link rel="stylesheet" href="./dash.css">
+</head>
+<body data-mode="dash">
+<!-- the one-sheet: the act's poster on the left with its title knocked out of a black band; on the right the running
+     time, the month's programme, four countdown leaders, the score as a credit, and the tag line -->
+<main id="dash">
+  <section id="art">
+    <div class="port"><img id="artImg" alt=""><i class="flashf"></i></div>
+    <div class="cap"><span class="k" id="artK"></span><span id="artEn"></span></div>
+    <button class="follow" id="wallBtn" title="Wallpaper · put another picture up">NEW PRINT</button>
+  </section>
+  <section id="side">
+    <header class="rise">
+      <div class="run"><span class="lbl">RUNNING TIME</span><div class="big" id="hm">--:--</div></div>
+      <div class="date"><span id="jdate"></span><span id="edate"></span></div>
+    </header>
+    <div class="row rise"><div id="cal"></div><div id="rings"></div></div>
+    <div id="media" class="rise idle">
+      <div class="credit"><span class="role">ORIGINAL SCORE</span><b id="mt">NO SCORE</b><span id="ma"></span><div class="rule"><i id="mprog"></i></div></div>
+      <div class="ctl"><button class="follow" id="prev" title="Previous"><svg viewBox="0 0 24 24"><path d="M6 5h3v14H6zM20 5 10 12l10 7z"/></svg></button><button class="follow" id="pp" title="Play / pause"><svg viewBox="0 0 24 24"><path id="ppi" d="M7 5l12 7-12 7z"/></svg></button><button class="follow" id="next" title="Next"><svg viewBox="0 0 24 24"><path d="M15 5h3v14h-3zM4 5l10 7-10 7z"/></svg></button></div>
+    </div>
+    <footer class="rise"><span class="saying"><i id="precept"></i></span><span class="mark">RATED R · A RICE STUDIO PICTURE</span></footer>
+  </section>
+</main>
+
+<!-- power: four end cards. Armed, a card goes red and the leader under the heading counts down its 3 s -->
+<section id="power">
+  <div id="pmid"><b class="k" id="pk">LAST REEL</b><span id="pl"></span><i id="ph"></i></div>
+  <i class="fuse"></i>
+  <div class="brands">
+    <button class="pb" data-a="lock"></button><button class="pb" data-a="sleep"></button>
+    <button class="pb danger" data-a="restart"></button><button class="pb danger" data-a="off"></button>
+  </div>
+</section>
+
+<section id="wall"><header><b class="k">LOBBY</b><span>Put a picture up</span><i id="wmsg"></i></header><div class="cards"></div></section>
+<section id="keysheet"><header><b class="k">THE SCRIPT</b><span>What every key does</span><i>Esc to close</i></header><div class="cols"></div></section>
+
+<script type="module" src="./dash.js"></script>
+</body>
+</html>

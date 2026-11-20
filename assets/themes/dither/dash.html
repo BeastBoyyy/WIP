@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+<link rel="stylesheet" href="./dash.css">
+</head>
+<body data-mode="dash">
+<!-- a 1-bit window: a striped title bar with its close box and the picture's file name; inside, the picture one dot to a
+     pixel with its icon and a line about it, the four readings as bars, and down the right the hour, the month, what
+     plays, and a motto in an alert box -->
+<main id="dash" class="win">
+  <div class="tb"><i class="box"></i><span class="tt" id="wtitle">DITHER</span></div>
+  <section id="art">
+    <div class="port"><img id="artImg" alt=""></div>
+    <div class="cap">
+      <span id="aicon"></span>
+      <div class="about"><div><b class="k" id="artK"></b><span id="artEn"></span></div><p id="about"></p></div>
+      <button class="btn" id="wallBtn" title="Wallpaper · show another picture">OTHER…</button>
+    </div>
+    <div id="rings"></div>
+  </section>
+  <section id="side">
+    <header>
+      <div class="big" id="hm">--:--</div>
+      <div class="date"><span id="jdate"></span><span id="edate"></span></div>
+    </header>
+    <div id="cal"></div>
+    <div id="media" class="idle">
+      <svg class="note" width="12" height="14" viewBox="0 0 6 7" shape-rendering="crispEdges" fill="currentColor"><path d="M2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM2 1h1v1h-1zM5 1h1v1h-1zM2 2h1v1h-1zM5 2h1v1h-1zM2 3h1v1h-1zM4 3h1v1h-1zM5 3h1v1h-1zM0 4h1v1h-1zM1 4h1v1h-1zM2 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM0 5h1v1h-1zM1 5h1v1h-1zM2 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1z"/></svg>
+      <div class="credit"><b id="mt">NO SOUND</b><span id="ma"></span><i class="cb rule"><i id="mprog"></i></i></div>
+      <div class="ctl"><button class="btn" id="prev" title="Previous"><svg class="px" width="12" height="14" viewBox="0 0 6 7" shape-rendering="crispEdges" fill="currentColor"><path d="M0 0h1v1h-1zM5 0h1v1h-1zM0 1h1v1h-1zM4 1h1v1h-1zM5 1h1v1h-1zM0 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM5 3h1v1h-1zM0 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM0 5h1v1h-1zM4 5h1v1h-1zM5 5h1v1h-1zM0 6h1v1h-1zM5 6h1v1h-1z"/></svg></button><button class="btn" id="pp" title="Play / pause"><svg viewBox="0 0 24 24" shape-rendering="crispEdges"><path id="ppi" d="M7 5l12 7-12 7z"/></svg></button><button class="btn" id="next" title="Next"><svg class="px" width="12" height="14" viewBox="0 0 6 7" shape-rendering="crispEdges" fill="currentColor"><path d="M0 0h1v1h-1zM5 0h1v1h-1zM0 1h1v1h-1zM1 1h1v1h-1zM5 1h1v1h-1zM0 2h1v1h-1zM1 2h1v1h-1zM2 2h1v1h-1zM5 2h1v1h-1zM0 3h1v1h-1zM1 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM5 3h1v1h-1zM0 4h1v1h-1zM1 4h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM0 5h1v1h-1zM1 5h1v1h-1zM5 5h1v1h-1zM0 6h1v1h-1zM5 6h1v1h-1z"/></svg></button></div>
+    </div>
+    <footer><i class="bang">!</i><span class="saying" id="precept"></span></footer>
+  </section>
+</main>
+
+<!-- power: the dialog every 1-bit machine had, a face, a question, and four plain buttons. Armed, the button stays
+     inverted and the bar under the question empties in steps over the 3 s it waits -->
+<section id="power" class="win">
+  <div class="tb"><i class="box"></i><span class="tt">SPECIAL</span></div>
+  <div id="pmid"><svg class="face" width="32" height="32" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="M1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM0 1h1v1h-1zM7 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM5 2h1v1h-1zM7 2h1v1h-1zM0 3h1v1h-1zM7 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM7 4h1v1h-1zM0 5h1v1h-1zM3 5h1v1h-1zM4 5h1v1h-1zM7 5h1v1h-1zM0 6h1v1h-1zM7 6h1v1h-1zM1 7h1v1h-1zM2 7h1v1h-1zM3 7h1v1h-1zM4 7h1v1h-1zM5 7h1v1h-1zM6 7h1v1h-1z"/></svg><div class="q"><b class="k" id="pk">SPECIAL</b><span id="pl"></span><i id="ph"></i></div></div>
+  <i class="fuse"></i>
+  <div class="brands">
+    <button class="pb" data-a="lock"><svg class="pi" width="27" height="33" viewBox="0 0 9 11" shape-rendering="crispEdges" fill="currentColor"><path d="M2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM1 1h1v1h-1zM7 1h1v1h-1zM1 2h1v1h-1zM7 2h1v1h-1zM1 3h1v1h-1zM7 3h1v1h-1zM0 4h1v1h-1zM1 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM6 4h1v1h-1zM7 4h1v1h-1zM8 4h1v1h-1zM0 5h1v1h-1zM8 5h1v1h-1zM0 6h1v1h-1zM4 6h1v1h-1zM8 6h1v1h-1zM0 7h1v1h-1zM3 7h1v1h-1zM4 7h1v1h-1zM5 7h1v1h-1zM8 7h1v1h-1zM0 8h1v1h-1zM4 8h1v1h-1zM8 8h1v1h-1zM0 9h1v1h-1zM8 9h1v1h-1zM0 10h1v1h-1zM1 10h1v1h-1zM2 10h1v1h-1zM3 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM7 10h1v1h-1zM8 10h1v1h-1z"/></svg><span class="k">LOCK</span></button>
+    <button class="pb" data-a="sleep"><svg class="pi" width="33" height="33" viewBox="0 0 11 11" shape-rendering="crispEdges" fill="currentColor"><path d="M4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM7 0h1v1h-1zM2 1h1v1h-1zM3 1h1v1h-1zM1 2h1v1h-1zM7 2h1v1h-1zM8 2h1v1h-1zM9 2h1v1h-1zM0 3h1v1h-1zM8 3h1v1h-1zM0 4h1v1h-1zM7 4h1v1h-1zM8 4h1v1h-1zM9 4h1v1h-1zM0 5h1v1h-1zM0 6h1v1h-1zM1 7h1v1h-1zM9 7h1v1h-1zM2 8h1v1h-1zM3 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM6 9h1v1h-1z"/></svg><span class="k">SLEEP</span></button>
+    <button class="pb danger" data-a="restart"><svg class="pi" width="33" height="33" viewBox="0 0 11 11" shape-rendering="crispEdges" fill="currentColor"><path d="M3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM7 0h1v1h-1zM1 1h1v1h-1zM2 1h1v1h-1zM8 1h1v1h-1zM0 2h1v1h-1zM9 2h1v1h-1zM0 3h1v1h-1zM8 3h1v1h-1zM9 3h1v1h-1zM10 3h1v1h-1zM0 4h1v1h-1zM9 4h1v1h-1zM0 5h1v1h-1zM0 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM9 7h1v1h-1zM2 8h1v1h-1zM3 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM6 9h1v1h-1z"/></svg><span class="k">RESTART</span></button>
+    <button class="pb danger" data-a="off"><svg class="pi" width="33" height="33" viewBox="0 0 11 11" shape-rendering="crispEdges" fill="currentColor"><path d="M5 0h1v1h-1zM2 1h1v1h-1zM5 1h1v1h-1zM8 1h1v1h-1zM1 2h1v1h-1zM5 2h1v1h-1zM9 2h1v1h-1zM0 3h1v1h-1zM5 3h1v1h-1zM10 3h1v1h-1zM0 4h1v1h-1zM10 4h1v1h-1zM0 5h1v1h-1zM10 5h1v1h-1zM0 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM9 7h1v1h-1zM2 8h1v1h-1zM8 8h1v1h-1zM3 9h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM6 9h1v1h-1zM7 9h1v1h-1z"/></svg><span class="k">SHUT DOWN</span></button>
+  </div>
+</section>
+
+<section id="wall" class="win"><div class="tb"><i class="box"></i><span class="tt">PICTURES</span></div>
+  <header><b class="k">6 ITEMS</b><span>put a picture on the screen</span><i id="wmsg"></i></header><div class="cards"></div></section>
+<section id="keysheet" class="win"><div class="tb"><i class="box"></i><span class="tt">KEYS</span></div>
+  <header><b class="k">WHAT EVERY KEY DOES</b><i>ESC TO CLOSE</i></header><div class="cols"></div></section>
+
+<script type="module" src="./dash.js"></script>
+</body>
+</html>

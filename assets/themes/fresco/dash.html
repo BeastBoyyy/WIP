@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fresco dashboard</title>
+<meta name="description" content="The Fresco theme's dash: a ceiling painted one day's patch at a time.">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+<link rel="stylesheet" href="./dash.css">
+</head>
+<body data-mode="dash">
+<!-- the dashboard is one large patch of fresh plaster. On the left the workspace's picture in a lunette (the arched
+     field of a fresco wall), its pigment and what it is for. On the right the hour, cut large in the Roman face; the
+     month as a map of giornate (the days behind you painted, today wet, the days ahead only sketched in sinopia); the
+     machine as strokes of pigment along dotted guides; the song; a painter's rule of thumb -->
+<main id="dash" class="patch">
+  <section id="art">
+    <div id="lunette"><img id="artImg" alt="" src="./art/card-0.jpg"></div>
+    <div class="cap">
+      <span id="artN"></span>
+      <b id="artK"></b>
+      <span id="artEn"></span>
+    </div>
+  </section>
+  <section id="side">
+    <header class="time">
+      <div id="hm">--:--</div>
+      <div class="date"><b id="jdate"></b><span id="edate"></span></div>
+    </header>
+    <div class="mid">
+      <div id="cal"></div>
+      <div id="rings"></div>
+    </div>
+    <div id="media" class="idle">
+      <div class="song"><b id="mt">Nothing playing</b><span id="ma"></span></div>
+      <div class="ctl">
+        <button id="prev" title="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 5.5v13M18 5.5 9 12l9 6.5z"/></svg></button>
+        <button id="pp" title="Play or pause"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="ppi" d="M7 5l12 7-12 7z"/></svg></button>
+        <button id="next" title="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 5.5v13M6 5.5 15 12l-9 6.5z"/></svg></button>
+      </div>
+      <i class="guide wide"><i id="mprog"></i></i>
+    </div>
+    <footer>
+      <span id="precept"></span>
+      <button class="btn" id="wallBtn" title="Choose the picture on the wall">Wallpaper</button>
+    </footer>
+  </section>
+</main>
+
+<!-- power: four patches. Pointed at, one takes its pigment; armed, the pigment spreads across it over the 3 s -->
+<section id="power" class="patch">
+  <div id="pmid"><b id="pk">Done for the day?</b><span id="pl"></span><i id="ph"></i></div>
+  <div class="pbs">
+    <button class="pb p0" data-a="lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="10.5" width="13" height="9.5" rx="1"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg><span>Lock</span></button>
+    <button class="pb p1" data-a="sleep"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.5A7.5 7.5 0 0 1 9.5 4.5a7.5 7.5 0 1 0 10 10z"/></svg><span>Sleep</span></button>
+    <button class="pb p3" data-a="restart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12a7 7 0 1 1-2.1-5"/><path d="M17.5 3.5V7.5h-4"/></svg><span>Restart</span></button>
+    <button class="pb p2" data-a="off"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v8"/><path d="M6.6 7a7.5 7.5 0 1 0 10.8 0"/></svg><span>Shut down</span></button>
+  </div>
+</section>
+
+<section id="wall" class="patch"><header class="ph"><b>The wall</b><i id="wmsg"></i></header><div class="cards"></div></section>
+<section id="keysheet" class="patch"><header class="ph"><b>Shortcuts</b><i>Esc to close</i></header><div class="cols"></div></section>
+
+<script type="module" src="./dash.js"></script>
+</body>
+</html>

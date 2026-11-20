@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+</head>
+<body>
+<!-- a title block along the top edge: three panels of ruled cells on the drawing's grid, a dimension line run between them;
+     the sheets of the set on the left, the part in hand in the middle, the time and the readings on the right -->
+<div id="bar">
+  <div class="island" id="iLeft">
+    <button class="it follow" id="overview" title="Overview · Ctrl+Alt+Space">
+      <svg class="target" width="22" height="22" viewBox="0 0 24 24"><circle class="ring" cx="12" cy="12" r="6.5"/><circle class="dot" cx="12" cy="12" r="1.6"/><path class="hair" d="M12 1.5v6M12 16.5v6M1.5 12h6M16.5 12h6"/></svg>
+    </button>
+    <div class="sep"></div>
+    <div id="ws" title="wheel: next / previous · right-click: send the focused window here"></div>
+    <div class="sep"></div>
+    <button class="it follow lk" id="lFlow" title="Search · apps, files, web · Alt+Space"><i class="bn">1</i>Search</button>
+    <button class="it follow lk" id="lFiles" title="Files · File Explorer"><i class="bn">2</i>Files</button>
+    <button class="it follow lk" id="lTerm" title="Console · Terminal"><i class="bn">3</i>Console</button>
+    <button class="it follow lk" id="lKeys" title="Legend · keys and bar actions"><i class="bn">4</i>Legend</button>
+  </div>
+
+  <div class="island" id="iCenter">
+    <div class="it" id="title" title="wheel: focus ← → · double-click: maximize · right-click: float · middle-click: close"><span class="k" id="tk">BLANK</span><b id="tapp">schematic</b><span id="tname"></span></div>
+  </div>
+
+  <div class="island" id="iRight">
+    <div id="tray" hidden></div>
+    <button class="it follow" id="trayBtn" title="System tray"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="it follow cell" id="weather"><span class="k" id="wk">CLEAR</span><span class="num" id="wt">–°</span></div>
+    <button class="it follow np" id="media" hidden title="click: play / pause · right-click: next · middle-click: previous">
+      <svg class="pen" viewBox="0 0 26 18"><path class="paper" d="M1 16.5h24"/><path class="trace" pathLength="100" d="M2 11c2.5-6 4.5-6 7 0s4.5 6 7 0 4.5-6 7 0"/><g class="nib"><path d="M23 11l2.6-7.5 1.2.4L24.2 11.4z"/><circle cx="23" cy="11" r="1"/></g></svg>
+      <span id="mt"></span>
+    </button>
+    <div class="sep"></div>
+    <div class="it follow cell" id="rings"><span class="k">LOAD</span><span class="rules"><svg class="ring" viewBox="0 0 46 9" id="rcpu"></svg><svg class="ring" viewBox="0 0 46 9" id="rram"></svg></span></div>
+    <div class="it follow cell" id="batt" hidden><span class="k">CELL</span><span class="bar"><i class="sb"><i id="bfill"></i></i><span class="num" id="bp">–</span></span></div>
+    <button class="it follow" id="net">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><path d="M11 18h2v2h-2z" fill="currentColor"/></svg>
+    </button>
+    <button class="it follow" id="volb" title="wheel: volume · click: mute · right-click: sound settings">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="wv" d="M16 9a4 4 0 0 1 0 6"/><path class="mx" d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></svg><span class="num" id="vol"></span>
+    </button>
+    <div class="sep"></div>
+    <button class="it follow cell" id="clock"><span class="k" id="day">MON 01.01</span><span class="hm" id="hm">--:--</span></button>
+    <button class="it follow" id="pwr" title="Power · issue a revision">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="square"><rect class="box" x="2.5" y="2.5" width="19" height="19" stroke-width="1.4"/><rect x="5" y="5" width="14" height="14" stroke-width=".8" opacity=".6"/><path d="M12 7.5v4.5" stroke-width="1.8"/><path d="M8.6 9.6a4.6 4.6 0 1 0 6.8 0" stroke-width="1.6"/></svg>
+    </button>
+  </div>
+</div>
+<script type="module" src="./bar.js"></script>
+</body>
+</html>

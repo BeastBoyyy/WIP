@@ -1,0 +1,39 @@
+/* Schematic — on the wallpaper: the title block of the sheet, live. The window is the right quarter of the screen, so a
+   screen-width percentage is four vw here; the block lands exactly over the one drawn in each sheet's corner (2.6 % in
+   from the edges, 21 % wide, 7.2 % tall). Each new minute the dimension line under the time is plotted again (260 ms);
+   nothing else moves, and nothing at all while a game has the screen. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden}
+:root{--line:rgba(var(--ink-rgb),.6);--rule:rgba(var(--ink-rgb),.28);--faint:color-mix(in srgb,var(--ink) 50%,var(--bg));
+  --grid:linear-gradient(rgba(var(--accent2-rgb),.07) 1px,transparent 1px) 0 0/8px 8px,linear-gradient(90deg,rgba(var(--accent2-rgb),.07) 1px,transparent 1px) 0 0/8px 8px}
+#desk{position:absolute;inset:0;pointer-events:none;color:var(--ink);font-family:var(--body)}
+#tb{position:absolute;right:10.4vw;bottom:10.4vw;width:84vw;height:28.8vw;display:flex;
+  background:var(--grid),color-mix(in srgb,var(--bg) 94%,var(--accent2));box-shadow:inset 0 0 0 1.5px var(--line),0 6px 18px rgba(0,0,0,.4)}
+.cells{flex:0 0 68%;display:flex;flex-direction:column;border-right:1px solid var(--rule)}
+.c{position:relative;min-width:0;padding:1.3vw 1.6vw 0;display:flex;flex-direction:column;justify-content:space-between}
+.c b{font-family:var(--mono);font-weight:400;font-size:clamp(7px,1.9vw,11px);letter-spacing:.14em;color:var(--faint);line-height:1}
+.c span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proj{flex:0 0 36%;border-bottom:1px solid var(--rule);padding-bottom:1vw}
+.proj span{font-family:var(--display);font-weight:600;font-size:clamp(12px,4.4vw,26px);letter-spacing:.06em;line-height:1}
+.proj i{font-style:normal;font-family:var(--mono);font-size:.62em;letter-spacing:.1em;color:var(--faint)}
+.title{flex:0 0 32%;border-bottom:1px solid var(--rule);padding-bottom:.9vw}
+.title span{font-family:var(--display);font-weight:600;font-size:clamp(11px,3.6vw,21px);letter-spacing:.08em;line-height:1}
+.foot{flex:1;flex-direction:row;padding:0}
+.foot>div{flex:1;padding:1vw 1.6vw .9vw;display:flex;flex-direction:column;justify-content:space-between;border-left:1px solid var(--rule)}
+.foot>div:first-child{border-left:0}
+.foot span{font-family:var(--mono);font-size:clamp(8px,2.5vw,14px);letter-spacing:.06em}
+/* the scale is the time, in the sheet-number cell, in yellow */
+.scale{flex:1;align-items:center;padding:1.3vw 1vw 1.4vw}
+.scale b{align-self:flex-start}
+#dscale{display:flex;align-items:baseline;white-space:nowrap;font-family:var(--display);font-weight:600;font-size:clamp(16px,6.4vw,38px);line-height:1;letter-spacing:.04em;color:var(--accent)}
+#dscale span{overflow:visible}
+#dscale small{font-size:.32em;margin-right:.3em;color:var(--faint);font-family:var(--mono);font-weight:400}
+#dscale .colon{margin:0 .04em;transform:translateY(-.06em)}
+/* plotted again each minute: the dimension line under the time draws out, end ticks first */
+.dimln{display:block;width:80%;height:7px;transform-origin:left;
+  background:linear-gradient(var(--accent),var(--accent)) center/100% 1px no-repeat,linear-gradient(var(--accent),var(--accent)) left center/1px 7px no-repeat,
+    linear-gradient(var(--accent),var(--accent)) right center/1px 7px no-repeat}
+#dscale.plot+.dimln{animation:plot calc(.26s * var(--speed)) linear both}
+@keyframes plot{from{transform:scaleX(0)}to{transform:none}}
+body.nowm .dimln{animation:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}

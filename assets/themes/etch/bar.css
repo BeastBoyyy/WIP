@@ -1,0 +1,133 @@
+/* Etch — the bar: three small copper plates, black, each in its plate mark (a hairline, a hatched bevel, a second
+   hairline) with a dot cut at each corner. The open plate is the one point of light: it comes up slowly (lamp,
+   600 ms). What you point at gets a line cut under it by the burin (320 ms). Colours, type and speed come from
+   tokens.css (the palette you edit in Rice Studio). */
+:root{
+  --plate:var(--bg); --light:var(--accent);
+  --dim:rgba(var(--ink-rgb),.52); --faint:rgba(var(--ink-rgb),.2);
+  /* the burin's hatching: hairlines a few pixels apart, and the same crossed */
+  --hatch:repeating-linear-gradient(-45deg,rgba(var(--ink-rgb),.3) 0 .8px,transparent .8px 3.2px);
+  --xhatch:repeating-linear-gradient(-45deg,rgba(var(--ink-rgb),.16) 0 .7px,transparent .7px 3.4px),repeating-linear-gradient(45deg,rgba(var(--ink-rgb),.12) 0 .7px,transparent .7px 3.4px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;color:var(--ink);font-family:var(--body);user-select:none}
+button{all:unset;box-sizing:border-box;cursor:pointer}
+
+#bar{position:absolute;top:7px;left:12px;right:16px;height:var(--bar-h);display:flex;align-items:center;gap:22px}
+/* a plate: the black copper, the outer hairline, the bevel hatched between it and the inner hairline, a dot at each
+   corner where the engraver set the dividers */
+.island{position:relative;isolation:isolate;height:100%;display:flex;align-items:center;padding:0 14px;gap:1px;
+  background:radial-gradient(ellipse at 50% -30%,rgba(var(--ink-rgb),.07),transparent 70%),var(--plate);
+  box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.62),inset 0 0 0 5px var(--plate),inset 0 0 0 6px rgba(var(--ink-rgb),.22),0 4px 14px rgba(0,0,0,.55)}
+.island::before{content:"";position:absolute;inset:1px;z-index:-1;padding:4px;pointer-events:none;background:var(--hatch);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.island::after{content:"";position:absolute;inset:9px;pointer-events:none;z-index:-1;
+  background:radial-gradient(circle,rgba(var(--ink-rgb),.55) .9px,transparent 1.3px) 0 0/3px 3px no-repeat,
+    radial-gradient(circle,rgba(var(--ink-rgb),.55) .9px,transparent 1.3px) 100% 0/3px 3px no-repeat,
+    radial-gradient(circle,rgba(var(--ink-rgb),.55) .9px,transparent 1.3px) 0 100%/3px 3px no-repeat,
+    radial-gradient(circle,rgba(var(--ink-rgb),.55) .9px,transparent 1.3px) 100% 100%/3px 3px no-repeat}
+#iRight{margin-left:auto}
+#iCenter{position:absolute;left:50%;transform:translateX(-50%);max-width:26vw}
+body.tray #iCenter,body.crowd #iCenter{visibility:hidden;pointer-events:none}
+
+/* a printer's fleuron between the groups: a lozenge on a hairline */
+.fl{position:relative;width:20px;height:9px;flex:none;margin:0 3px;
+  background:linear-gradient(90deg,transparent,rgba(var(--ink-rgb),.45) 25%,transparent 38% 62%,rgba(var(--ink-rgb),.45) 75%,transparent) center/100% 1px no-repeat}
+.fl::before{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;transform:rotate(45deg);background:rgba(var(--ink-rgb),.7)}
+
+.it{position:relative;height:calc(var(--bar-h) - 12px);padding:0 8px;display:flex;align-items:center;gap:7px;font-size:13px;white-space:nowrap}
+.k{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase}
+.num{font-family:var(--mono);font-size:11.5px}
+.cell{flex-direction:column;align-items:flex-start;justify-content:center;gap:1px}
+.cell>.k{font-size:8px;color:var(--dim);line-height:1}
+
+/* pointed at: the burin cuts a line under it, left to right; pressed: the light catches it */
+.follow::after,#ws .w::after{content:"";position:absolute;left:8px;right:8px;bottom:3px;height:1px;background:var(--ink);transform:scaleX(0);transform-origin:left;
+  transition:transform calc(.32s * var(--speed)) cubic-bezier(.4,0,.2,1)}
+.follow:hover::after,#ws .w:hover::after{transform:scaleX(1)}
+.follow:active{color:var(--light)}
+
+#overview{width:34px;padding:0;justify-content:center;color:var(--dim)} #overview:hover{color:var(--ink)}
+#overview::after{left:6px;right:6px}
+
+/* the point of light: a hot core, a warm halo, and the engraver's star of four fine rays */
+.lux{position:absolute;width:15px;height:15px;pointer-events:none;border-radius:50%;
+  background:radial-gradient(circle,#fff 0 1.1px,var(--light) 2px,rgba(var(--accent-rgb),.35) 3.6px,transparent 7.5px)}
+.lux::before,.lux::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:.7px;margin-top:-.35px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent)}
+.lux::after{transform:rotate(90deg)}
+
+/* the plates, in roman: the open one in full ink with the light come up beside it; one with work on it has three
+   short cuts under its numeral */
+#ws{display:flex;height:calc(var(--bar-h) - 12px);gap:0}
+#ws .w{position:relative;height:100%;min-width:30px;padding:0 9px;display:flex;align-items:center;justify-content:center;color:var(--dim)}
+#ws .w b{font-family:var(--display);font-weight:400;font-size:18px;line-height:1;letter-spacing:.02em}
+#ws .w .lux{right:-2px;top:2px;opacity:0;transform:scale(.3)}
+#ws .w:hover{color:var(--ink)}
+#ws .w.has::before{content:"";position:absolute;left:50%;bottom:6px;width:9px;height:3px;margin-left:-4.5px;
+  background:repeating-linear-gradient(90deg,rgba(var(--ink-rgb),.7) 0 1px,transparent 1px 4px)}
+#ws .w.on{color:var(--ink);text-shadow:0 0 10px rgba(var(--accent-rgb),.35)}
+#ws .w.on .lux{opacity:1;transform:none;animation:lamp calc(.6s * var(--speed)) ease-out both}
+@keyframes lamp{0%{opacity:0;transform:scale(.3);filter:brightness(.4)}60%{opacity:1}100%{opacity:1;transform:none;filter:none}}
+body.nowm #ws,body.nowm #overview{opacity:.35;pointer-events:none}
+
+/* the verbs, in the small capitals */
+.lk{padding:0 7px;font-family:var(--display);font-size:14px;letter-spacing:.03em;color:var(--dim)}
+.lk:hover{color:var(--ink)}
+
+/* what is being worked on: its room engraved small between two hairlines, its name in capitals, the title after */
+#title{gap:9px;color:var(--dim)}
+#tk{padding:2px 0 1px;color:var(--dim);border-top:1px solid rgba(var(--ink-rgb),.35);border-bottom:1px solid rgba(var(--ink-rgb),.35);font-size:7.5px}
+#title b{color:var(--ink);font-family:var(--display);font-weight:400;font-size:16px;letter-spacing:.02em}
+#tname{overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:14px}
+
+#weather{cursor:pointer}
+#weather .num{font-family:var(--display);font-size:14px}
+/* load: two dials, a tick cut for each twelfth */
+#rings{gap:5px;padding:0 7px}
+.ring{width:22px;height:22px;display:block}
+.ring .rim{fill:none;stroke:var(--faint);stroke-width:.6}
+.ring .on{stroke:var(--ink);stroke-width:1.5} .ring .off{stroke:var(--faint);stroke-width:1}
+#rings:hover .ring .on{stroke:var(--light)}
+/* the organ: four pipes, breathing while it plays */
+.np{max-width:210px} .np #mt{overflow:hidden;text-overflow:ellipsis;font-size:14px}
+.np em{font-style:normal;font-family:var(--display);font-size:13px}
+.pipe{width:16px;height:16px;flex:none}
+.np.playing .pipe{animation:breathe calc(1.6s * var(--speed)) ease-in-out infinite}
+@keyframes breathe{50%{opacity:.45}}
+#net{padding:0 5px 0 8px} #volb{padding:0 8px 0 5px;gap:6px}
+#net.off{color:var(--faint)}
+#net.off::before{content:"";position:absolute;left:5px;right:3px;top:50%;height:1px;background:var(--ink);transform:rotate(-30deg)}
+#volb .mx,#volb.muted .wv{display:none} #volb.muted .mx{display:inline}
+
+/* the cell: a little hatched gauge inside a hairline, filled as far as the charge goes */
+#batt[hidden]{display:none}
+#batt .bar{display:flex;align-items:center;gap:6px}
+.sb{position:relative;width:30px;height:8px;display:block;box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.5)}
+.sb::after{content:"";position:absolute;right:-3px;top:2px;width:2px;height:4px;background:rgba(var(--ink-rgb),.5)}
+#bfill{position:absolute;left:2px;top:2px;bottom:2px;width:calc((100% - 4px) * var(--p,1));background:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 2.5px)}
+#batt.low #bfill{background:repeating-linear-gradient(90deg,var(--light) 0 1px,transparent 1px 2.5px);animation:blink 1.2s steps(2) infinite}
+#batt.chg #bfill{animation:blink 1.8s ease-in-out infinite}
+@keyframes blink{50%{opacity:.35}}
+
+#trayBtn{width:24px;padding:0;justify-content:center;color:var(--dim)}
+#trayBtn::after{left:5px;right:5px}
+#trayBtn.on svg{transform:rotate(180deg)}
+#tray{display:flex;align-items:center;gap:2px;padding:0 2px} #tray[hidden]{display:none}
+#tray button{width:28px;height:28px;display:grid;place-items:center}
+#tray button:hover{box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.45)}
+#tray img{width:16px;height:16px;filter:grayscale(1) brightness(1.3) contrast(1.2)}
+
+/* the hour, in the capitals' figures; the day engraved over it, its date in roman */
+#clock{padding-right:10px}
+#clock .hm{font-family:var(--display);font-size:19px;line-height:1}
+/* power: the light itself, in an engraved ring. Pointed at, it burns up; pressed, it gutters */
+#pwr{width:40px;padding:0;justify-content:center}
+#pwr::before{content:"";position:absolute;left:50%;top:50%;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.55),inset 0 0 0 3.5px var(--plate),inset 0 0 0 4.5px rgba(var(--ink-rgb),.22)}
+#pwr::after{display:none}
+#pwr .lux{left:50%;top:50%;margin:-7.5px 0 0 -7.5px;transition:transform calc(.6s * var(--speed)) ease-out,filter calc(.6s * var(--speed)) ease-out}
+#pwr:hover .lux{transform:scale(1.45);filter:brightness(1.2)}
+#pwr:active .lux{transform:scale(.6);filter:brightness(.5);transition-duration:calc(.16s * var(--speed))}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

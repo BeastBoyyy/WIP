@@ -1,0 +1,145 @@
+/* 武蔵 Vagabond — dashboard, power seals, wallpaper picker, key sheet. Tokens from tokens.css + bar.css. */
+body:not([data-mode=dash]) #dash,body:not([data-mode=power]) #power,body:not([data-mode=wall]) #wall,body:not([data-mode=keys]) #keysheet{display:none}
+.card{background:var(--surface)}
+#dash,#wall,#keysheet{position:absolute;inset:10px;border-radius:16px;background:color-mix(in srgb,var(--bg) 70%,var(--surface));
+  border:1px solid var(--line);box-shadow:0 14px 34px rgba(0,0,0,.42)}
+#dash::after,#wall::after,#keysheet::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background-image:var(--fibre),var(--grain);background-size:240px 120px,160px;opacity:.05;mix-blend-mode:screen}
+
+/* unsheathe: drawn down out of the bar, a glint rides the cut edge */
+#dash{display:grid;grid-template-columns:236px 1fr;overflow:hidden;transform-origin:top right}
+#dash::before{content:"";position:absolute;left:0;right:0;height:1px;z-index:3;pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(var(--ink-rgb),.9) 55%,transparent)}
+#dash.open,#wall.open,#keysheet.open{animation:draw calc(.26s * var(--speed)) var(--ease) both}
+#dash.open::before{animation:glint calc(.26s * var(--speed)) var(--ease) both}
+#dash.closing,#wall.closing,#keysheet.closing{animation:sheathe .16s cubic-bezier(.55,0,1,.45) both}
+@keyframes draw{from{clip-path:inset(0 0 100% 0 round 16px);transform:translateY(-12px)}to{clip-path:inset(0 0 0 0 round 16px);transform:none}}
+@keyframes glint{from{top:0;opacity:1}to{top:100%;opacity:0}}
+@keyframes sheathe{to{clip-path:inset(0 0 100% 0 round 16px);transform:translateY(-8px)}}
+.open .rise{animation:rise .24s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#side>.rise:nth-child(1){animation-delay:.08s} #side>.rise:nth-child(2){animation-delay:.12s}
+#side>.rise:nth-child(3){animation-delay:.16s} #side>.rise:nth-child(4){animation-delay:.2s}
+
+/* workspace art: the ink washes in */
+#art{position:relative;overflow:hidden}
+#art img{width:100%;height:100%;object-fit:cover;display:block}
+.open #art img{animation:wash .5s var(--ease) both}
+@keyframes wash{from{filter:blur(8px) saturate(.4);transform:scale(1.06)}to{filter:none;transform:none}}
+#art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(var(--bg-rgb),.92));pointer-events:none}
+.cap{position:absolute;left:18px;bottom:16px;z-index:1;display:flex;align-items:baseline;gap:10px}
+.cap .k{font-size:54px;line-height:1;color:var(--ink);text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.cap span:last-child{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist)}
+#wallBtn{position:absolute;left:12px;top:12px;z-index:2;width:34px;height:34px;display:grid;place-items:center;font-size:18px;
+  color:var(--ink);background:rgba(var(--bg-rgb),.6);border:1px solid var(--line2)}
+#wallBtn:hover{border-color:var(--accent)}
+
+#side{padding:20px 24px 18px;display:flex;flex-direction:column;gap:16px;min-width:0;position:relative;z-index:1}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.big{font-size:58px;line-height:.9;color:var(--ink)}
+.date{display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-size:13px;color:var(--mist)}
+.date #jdate{font-family:var(--display);font-size:18px;color:var(--ink)}
+
+.row{display:flex;gap:22px;align-items:flex-start}
+#cal{display:grid;grid-template-columns:repeat(7,30px);gap:2px 4px;font-family:var(--mono);font-size:11.5px;color:var(--mist)}
+#cal .mh{grid-column:1/-1;font-family:var(--display);font-size:15px;color:var(--ink);margin-bottom:4px}
+#cal .wd{font-family:var(--display);font-size:13px;color:var(--stone);text-align:center}
+#cal .wd.sun,#cal .sun{color:color-mix(in srgb,var(--accent) 60%,var(--ink))}
+#cal i{font-style:normal;height:24px;display:grid;place-items:center;border-radius:4px}
+#cal i.out{opacity:.28}
+#cal i.today{background:var(--accent);color:var(--ink);transform:rotate(-4deg);filter:url(#rough)}
+
+#rings{display:grid;grid-template-columns:repeat(2,74px);gap:12px 16px;margin-left:auto}
+.ring2{display:flex;flex-direction:column;align-items:center;gap:2px} .ring2.none{visibility:hidden}
+.ring2 svg{width:62px;height:62px}
+.ring2 .track{fill:none;stroke:rgba(var(--ink-rgb),.08)}
+.ring2 .arc{fill:none;stroke:var(--ink);transition:stroke-dasharray .6s var(--ease)}
+#g-ram .arc{stroke:var(--accent2)} #g-disk .arc{stroke:color-mix(in srgb,var(--accent2) 50%,var(--ink))} #g-bat .arc{stroke:var(--accent)}
+.ring2 b{font-family:var(--display);font-weight:400;font-size:14px;color:var(--ink)}
+.ring2 span{font-family:var(--mono);font-size:10.5px;color:var(--mist)}
+.ring2 .rw{position:relative}
+.ring2 em{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--ink)}
+
+#media{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:12px;background:rgba(var(--surface-rgb),.7)}
+#media .disc{width:46px;height:46px;flex:none}
+#media.playing .disc{animation:spin 6s linear infinite}
+.mtext{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.mtext b{font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mtext span{font-size:12px;color:var(--mist);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* the song's progress is a blade being drawn */
+.blade{height:6px;margin-top:5px;background:rgba(var(--ink-rgb),.1);clip-path:polygon(0 25%,94% 15%,100% 50%,94% 85%,0 75%)}
+#mprog{display:block;height:100%;background:var(--accent2);transform-origin:left;transform:scaleX(var(--p,0));transition:transform 1s linear}
+.ctl{display:flex;gap:2px}
+.ctl button{width:30px;height:30px;display:grid;place-items:center;border-radius:8px;color:var(--mist)}
+.ctl button:hover{color:var(--ink)}
+.ctl svg{width:15px;height:15px;fill:currentColor;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round}
+#media.idle .ctl,#media.idle .blade{display:none}
+#media.idle .mtext b{font-family:var(--display);font-weight:400;color:var(--stone)}
+
+footer{margin-top:auto;display:flex;gap:12px;align-items:baseline;font-size:13.5px;color:var(--mist);border-top:1px solid var(--line);padding-top:12px}
+footer .shu{color:var(--accent);font-size:15px;flex:none} footer i{font-style:italic}
+
+/* power: a round card, an ensō drawn around four seals; armed, the ring turns red and unwinds over 3 s */
+#power{position:absolute;inset:10px;border-radius:50%;background:color-mix(in srgb,var(--bg) 70%,var(--surface));border:1px solid var(--line);
+  box-shadow:0 14px 34px rgba(0,0,0,.42);transform-origin:top right}
+#power.open{animation:pop calc(.26s * var(--speed)) var(--ease) both}
+#power.closing{animation:unpop .14s cubic-bezier(.55,0,1,.45) both}
+@keyframes pop{from{opacity:0;transform:scale(.88) translateY(-10px)}to{opacity:1;transform:none}}
+@keyframes unpop{to{opacity:0;transform:scale(.92) translateY(-6px)}}
+.pring{position:absolute;inset:0;width:100%;height:100%}
+.pring .ens{fill:none;stroke:var(--ink);stroke-opacity:.8;stroke-width:9;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:0}
+.pring .sun{fill:var(--accent)}
+#power.open .ens{animation:inkdraw .45s .05s var(--ease) both}
+@keyframes inkdraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+#power.armed .ens{stroke:var(--accent);stroke-opacity:1;animation:unwind 3s linear both}
+@keyframes unwind{to{stroke-dashoffset:1}}
+#pmid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;pointer-events:none}
+#pk{font-size:52px;line-height:1;color:var(--ink)}
+#pl{font-size:14px;letter-spacing:.12em;color:var(--ink)}
+#ph{font-style:normal;font-size:11.5px;color:var(--stone)}
+#power.armed #pk{color:var(--accent)} #power.armed #ph{color:var(--mist)}
+.pb{position:absolute;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;display:grid;place-items:center;
+  background:var(--surface);border:1px solid var(--line2);color:var(--ink);transition:background .15s,transform .15s var(--ease)}
+.pb .k{font-size:25px;line-height:1}
+.pb:hover,.pb:focus-visible{background:color-mix(in srgb,var(--surface) 80%,var(--ink));transform:scale(1.08);outline:none}
+.pb.danger:hover .k{color:color-mix(in srgb,var(--accent) 60%,var(--ink))}
+.pb.armed{background:var(--accent);transform:rotate(-5deg) scale(1.08)}
+#power.open .pb{animation:bead .26s var(--ease) backwards}
+#power.open .pb:nth-of-type(1){animation-delay:.12s} #power.open .pb:nth-of-type(2){animation-delay:.17s}
+#power.open .pb:nth-of-type(3){animation-delay:.22s} #power.open .pb:nth-of-type(4){animation-delay:.27s}
+@keyframes bead{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+
+/* wallpaper picker: katana-cut cards */
+#wall{padding:16px 20px 18px;transform-origin:top right}
+#wall header,#keysheet header{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;position:relative;z-index:1}
+#wall header b,#keysheet header b{font-size:24px;color:var(--accent)}
+#wall header span,#keysheet header span{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist)}
+#wall header i,#keysheet header i{margin-left:auto;font-style:normal;font-size:12px;color:var(--stone)}
+.cards{display:flex;flex-wrap:wrap;justify-content:center;row-gap:10px;padding:0 7px;position:relative;z-index:1}
+.wc{position:relative;width:180px;height:110px;margin:0 -7px;padding:0;clip-path:polygon(9% 0,100% 0,91% 100%,0 100%);
+  transition:transform .2s var(--ease),filter .2s}
+.wc img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.75) brightness(.8);transition:filter .2s}
+.wc:hover img,.wc.on img{filter:none}
+.wc:hover{transform:translateY(-3px)}
+.wc .cap{left:22px;bottom:7px;gap:6px;text-shadow:0 2px 10px rgba(0,0,0,.8)}
+.wc .cap b{font-size:21px;color:var(--ink)}
+.wc .cap i{font-style:normal;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.wc em{position:absolute;right:22px;top:8px;width:24px;height:24px;display:none;place-items:center;font-style:normal;font-size:14px;
+  background:var(--accent);color:var(--ink);border-radius:4px;transform:rotate(-6deg)}
+.wc.on em{display:grid}
+.wc.busy{filter:brightness(.6)}
+#wall.open .wc{animation:slash .32s var(--ease) both}
+#wall.open .wc:nth-child(2){animation-delay:.03s} #wall.open .wc:nth-child(3){animation-delay:.06s}
+#wall.open .wc:nth-child(4){animation-delay:.09s} #wall.open .wc:nth-child(5){animation-delay:.12s} #wall.open .wc:nth-child(6){animation-delay:.15s}
+@keyframes slash{from{opacity:0;transform:translateX(-24px) skewX(-8deg)}to{opacity:1;transform:none}}
+
+#keysheet{padding:16px 22px 18px;transform-origin:top left}
+#keysheet .cols{display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:22px;position:relative;z-index:1}
+#keysheet h3{display:flex;align-items:baseline;gap:7px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin:0 0 6px}
+#keysheet h3 b{font-size:17px;color:var(--accent2);letter-spacing:0}
+#keysheet h3 i{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;color:var(--stone);font-size:11px}
+#keysheet dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin-bottom:12px;font-size:12px}
+#keysheet dt{font-family:var(--mono);font-size:11px;color:var(--accent2);white-space:nowrap}
+#keysheet dd{color:var(--mist)}
+#keysheet.open .cols>div{animation:rise .24s var(--ease) both}
+#keysheet.open .cols>div:nth-child(2){animation-delay:.05s} #keysheet.open .cols>div:nth-child(3){animation-delay:.1s}

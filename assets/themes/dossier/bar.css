@@ -1,0 +1,135 @@
+/* Dossier — the bar: the top edge of a case file. Index-card strips with a red margin rule; the file's tabs stand in a
+   row and the open one is pulled forward (280 ms) with a paper clip slid onto it. Type is typed. What you point at is
+   underlined in red marker; anything wrong gets ringed or struck through in red.
+   Colours, type and speed come from tokens.css (the palette you edit in Rice Studio). */
+:root{
+  --red:var(--accent); --card:color-mix(in srgb,var(--surface) 82%,#fff); --manila:var(--bg);
+  --tab:color-mix(in srgb,var(--bg) 84%,var(--ink)); --dim:color-mix(in srgb,var(--ink) 66%,var(--bg));
+  --faint:rgba(var(--ink-rgb),.28); --rule:rgba(92,128,168,.28);
+  --pull:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;color:var(--ink);font-family:var(--body);user-select:none}
+button{all:unset;box-sizing:border-box;cursor:pointer}
+
+#bar{position:absolute;top:6px;left:10px;right:14px;height:var(--bar-h);display:flex;align-items:center;gap:22px}
+/* a strip of index card: the stock, a faint blue rule, a little fibre, and a shadow where it lifts off the screen */
+.island{position:relative;height:100%;display:flex;align-items:center;padding:0 8px;gap:1px;background:
+    linear-gradient(transparent calc(100% - 7px),var(--rule) calc(100% - 7px) calc(100% - 6px),transparent calc(100% - 6px)),
+    radial-gradient(rgba(var(--ink-rgb),.05) .6px,transparent .8px) 0 0/5px 5px,
+    linear-gradient(170deg,var(--card),color-mix(in srgb,var(--card) 92%,var(--ink)));
+  box-shadow:0 0 0 1px rgba(var(--ink-rgb),.16),0 2px 0 rgba(0,0,0,.12),0 6px 14px rgba(0,0,0,.3)}
+#iRight{margin-left:auto}
+/* the right card's corner turned down */
+#iRight::after{content:"";position:absolute;right:0;bottom:0;width:11px;height:11px;pointer-events:none;
+  background:linear-gradient(315deg,transparent 50%,color-mix(in srgb,var(--card) 80%,var(--ink)) 50%);box-shadow:-1px -1px 2px rgba(0,0,0,.12)}
+#iCenter{position:absolute;left:50%;transform:translateX(-50%) rotate(-.4deg);max-width:24vw;padding:0 10px}
+body.tray #iCenter,body.crowd #iCenter{visibility:hidden;pointer-events:none}
+
+/* the margin: a red double rule, as on an index card */
+.margin{width:4px;height:100%;margin:0 6px;flex:none;border-left:1px solid rgba(var(--accent-rgb),.6);border-right:1px solid rgba(var(--accent-rgb),.35)}
+
+.it{position:relative;height:calc(var(--bar-h) - 10px);padding:0 8px;display:flex;align-items:center;gap:7px;font-size:12.5px;white-space:nowrap}
+.k{font-family:var(--mono);font-size:9px;letter-spacing:.12em}
+.num{font-family:var(--mono);font-size:12px}
+.cell{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
+.cell>.k{font-size:8px;color:var(--dim);line-height:1}
+
+/* pointed at: a stroke of red marker drawn under it; pressed: pushed down like a key */
+.follow{background:linear-gradient(var(--red),var(--red)) no-repeat 8px calc(100% - 4px)/0 2px;
+  transition:background-size calc(.18s * var(--speed)) ease-out}
+.follow:hover{background-size:calc(100% - 16px) 2px}
+.follow:active{transform:translateY(1px) scale(.97)}
+
+#overview{width:34px;padding:0;justify-content:center}
+#overview .lid{transition:transform calc(.28s * var(--speed)) var(--pull);transform-origin:2px 9px}
+#overview:hover .lid{transform:rotate(-14deg)}
+
+/* the tabs: manila, cut on the slant, standing in a row behind a rule; the open one pulled forward and clipped */
+#ws{position:relative;display:flex;align-items:flex-end;height:100%;padding:0 4px}
+#ws::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:1.5px;background:var(--faint);z-index:1}
+#ws .w{position:relative;height:calc(var(--bar-h) - 12px);margin-left:-5px;padding:0 12px;filter:drop-shadow(0 -1px 0 rgba(var(--ink-rgb),.16));display:flex;align-items:center;color:var(--dim);
+  transform:translateY(1px);transition:transform calc(.28s * var(--speed)) var(--pull),color .15s}
+#ws .w:first-child{margin-left:0}
+#ws .w::before{content:"";position:absolute;inset:0 0 4px;z-index:-1;background:var(--tab);
+  clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 100%,0 100%);transition:background .15s}
+#ws .w .wn{font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.04em;text-transform:uppercase;line-height:1}
+#ws .w:hover{color:var(--ink);transform:translateY(-2px)}
+#ws .w.on{z-index:2;color:var(--ink);transform:translateY(-4px);filter:drop-shadow(0 -1px 0 rgba(var(--ink-rgb),.3)) drop-shadow(0 -2px 3px rgba(0,0,0,.12))}
+#ws .w.on::before{inset:0 0 -4px;background:var(--card);box-shadow:none;
+  clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 100%,0 100%)}
+/* the paper clip, slid on over the tab's left shoulder */
+#ws .w.on::after{content:"";position:absolute;left:2px;top:-7px;width:9px;height:24px;z-index:3;
+  background:linear-gradient(90deg,#4f555c,#b9bfc5 45%,#5f656c);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 21'%3E%3Cpath d='M2 15V4.5a2 2 0 0 1 4 0V17a3 3 0 0 1-6 0V3.5a3.5 3.5 0 0 1 7 0V14' fill='none' stroke='black' stroke-width='1.1'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+  filter:drop-shadow(1px 1px 0 rgba(0,0,0,.3));transform:rotate(8deg);animation:clipon calc(.28s * var(--speed)) var(--pull) both}
+@keyframes clipon{from{transform:translateY(-9px) rotate(8deg);opacity:0}}
+/* a file with something in it: a red tick under its name */
+#ws .w.has::after{content:"";position:absolute;right:6px;top:3px;width:7px;height:3.5px;
+  border-left:1.6px solid var(--red);border-bottom:1.6px solid var(--red);transform:rotate(-45deg) skewX(-10deg);opacity:.85}
+body.nowm #ws,body.nowm #overview{opacity:.45;pointer-events:none}
+body.nowm #ws .wn{text-decoration:line-through 1.5px var(--red)}
+
+/* the verbs: typed labels, each with its index number in red */
+.lk{padding:0 6px;font-family:var(--body);font-size:11.5px;letter-spacing:0;color:var(--ink)}
+.lk i{font-style:normal;font-family:var(--mono);font-size:8.5px;color:var(--red);margin-right:-1px}
+
+/* the subject on file: what the window is, stamped in red; its name typed; the window's title after */
+#title{gap:8px;color:var(--dim)}
+#tk{color:var(--red);font-family:var(--display);font-size:9.5px;letter-spacing:.1em;padding:2px 5px 1px;
+  box-shadow:inset 0 0 0 1.4px rgba(var(--accent-rgb),.85);transform:rotate(-3deg);opacity:.92}
+#title b{color:var(--ink);font-family:var(--display);font-weight:400;font-size:15px;letter-spacing:.03em}
+#tname{overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:12px}
+
+#weather{cursor:pointer}
+/* load: two rings in red marker, drawn round as far as it is busy (400 ms) */
+#rings{gap:6px;padding:0 7px}
+.ring{width:20px;height:20px;overflow:visible;display:block}
+.ring .base{fill:none;stroke:var(--faint);stroke-width:1;stroke-dasharray:1.5 2}
+.ring .mk{fill:none;stroke:var(--red);stroke-width:2.4;stroke-linecap:round;opacity:.9;transition:stroke-dasharray calc(.4s * var(--speed)) ease-out}
+/* the tape: two reels that turn while something plays */
+.np{max-width:210px} .np #mt{overflow:hidden;text-overflow:ellipsis;font-size:12px;color:var(--dim)}
+.np em{font-style:normal;color:var(--ink)}
+.tape{width:21px;height:14px;flex:none;fill:none;stroke:currentColor;stroke-width:1.3}
+.tape .reel{transform-origin:7.5px 7.5px} .tape .r2{transform-origin:16.5px 7.5px}
+.np.playing .reel{animation:turn calc(2s * var(--speed)) linear infinite}
+@keyframes turn{to{transform:rotate(360deg)}}
+#net{padding:0 5px 0 8px} #volb{padding:0 8px 0 5px;gap:6px}
+/* no line: struck through in red */
+#net.off{color:var(--dim)}
+#net.off::after{content:"";position:absolute;left:4px;right:2px;top:50%;height:2px;background:var(--red);transform:rotate(-24deg);border-radius:1px}
+#volb .mx,#volb.muted .wv{display:none} #volb.muted .mx{display:inline;stroke:var(--red)}
+
+/* the cell: a typed bracket of bars; low, the whole reading is ringed in red marker */
+#batt[hidden]{display:none}
+#batt .bar{display:flex;align-items:center;gap:6px}
+.sb{position:relative;width:28px;height:9px;display:block;box-shadow:inset 0 0 0 1px var(--ink)}
+#bfill{position:absolute;left:2px;top:2px;bottom:2px;width:calc((100% - 4px) * var(--p,1));
+  background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 3.5px)}
+#batt .num{font-size:11px}
+#batt.low::after{content:"";position:absolute;inset:-1px -4px;border:2px solid var(--red);border-radius:50%;transform:rotate(-5deg);opacity:.85;
+  clip-path:inset(0 0 0 0);animation:ringon calc(.4s * var(--speed)) ease-out both}
+@keyframes ringon{from{clip-path:inset(0 100% 0 0)}}
+#batt.chg #bfill{animation:blink 1.4s steps(2) infinite}
+@keyframes blink{50%{opacity:.35}}
+
+#trayBtn{width:24px;padding:0;justify-content:center}
+#trayBtn.on svg{transform:rotate(180deg)}
+#tray{display:flex;align-items:center;gap:2px;padding:0 2px} #tray[hidden]{display:none}
+#tray button{width:28px;height:28px;display:grid;place-items:center}
+#tray button:hover{box-shadow:inset 0 -2px 0 var(--red)}
+#tray img{width:16px;height:16px}
+
+/* the time typed, and over it the day in a red date stamp */
+#clock{padding-right:10px;gap:3px}
+#clock #day{font-size:8px;color:var(--red);padding:1px 4px 0;box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.8);transform:rotate(-2deg)}
+#clock .hm{font-family:var(--display);font-size:18px;line-height:1;letter-spacing:.02em}
+/* power: a small rubber stamp; pressed, it comes down (140 ms, a little overshoot) */
+#pwr{width:46px;padding:0;justify-content:center}
+.seal{font-family:var(--display);font-size:10px;letter-spacing:.12em;color:var(--red);padding:3px 4px 2px 5px;
+  box-shadow:inset 0 0 0 1.5px var(--red),inset 0 0 0 3px var(--card),inset 0 0 0 3.8px rgba(var(--accent-rgb),.7);transform:rotate(-8deg)}
+#pwr:hover .seal{color:var(--card);background:var(--red)}
+#pwr:active .seal{animation:stamp calc(.14s * var(--speed)) cubic-bezier(.3,1.6,.5,1)}
+@keyframes stamp{from{transform:rotate(-8deg) scale(1.35);opacity:.4}}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

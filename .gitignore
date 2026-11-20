@@ -1,0 +1,12 @@
+# build output
+/target/
+/target-art/
+
+# local runtime data: apply history, the stock snapshot, and the art each user brings (never shipped)
+data/
+
+# logs and editor files
+*.log
+.vs/
+.vscode/
+.idea/

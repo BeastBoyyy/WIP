@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+</head>
+<body>
+<!-- the bar is a 1-bit window's title bar run across the top of the screen: a 1-px frame with its 2-px drop shadow,
+     striped from end to end, and the parts knocked out of the stripes. On the left the close box (overview), the five
+     8×8 icons and four words; in the middle the window in front; on the right the readings, the hour and power -->
+<div id="bar">
+  <div class="island" id="iLeft">
+    <button class="it" id="overview" title="Overview · Ctrl+Alt+Space"><i class="box"></i></button>
+    <div id="ws" title="wheel: next / previous · right-click: send the focused window here"></div>
+    <i class="sep"></i>
+    <button class="it lk" id="lFlow" title="Find · apps, files, web · Alt+Space">FIND</button>
+    <button class="it lk" id="lFiles" title="Disk · File Explorer">DISK</button>
+    <button class="it lk" id="lTerm" title="Shell · Terminal">SHELL</button>
+    <button class="it lk" id="lKeys" title="Keys and bar actions">KEYS</button>
+  </div>
+
+  <div class="island" id="iCenter">
+    <div class="it" id="title" title="wheel: focus ← → · double-click: maximize · right-click: float · middle-click: close"><span class="k" id="tk">DESKTOP</span><b id="tapp">dither</b><span id="tname"></span></div>
+  </div>
+
+  <div class="island" id="iRight">
+    <div id="tray" hidden></div>
+    <button class="it" id="trayBtn" title="System tray"><svg class="px" width="8" height="14" viewBox="0 0 4 7" shape-rendering="crispEdges" fill="currentColor"><path d="M3 0h1v1h-1zM2 1h1v1h-1zM1 2h1v1h-1zM0 3h1v1h-1zM1 4h1v1h-1zM2 5h1v1h-1zM3 6h1v1h-1z"/></svg></button>
+    <div class="it" id="weather"><span class="k" id="wk">CLEAR</span><span class="num" id="wt">–°</span></div>
+    <button class="it np" id="media" hidden title="click: play / pause · right-click: next · middle-click: previous"><svg class="note" width="12" height="14" viewBox="0 0 6 7" shape-rendering="crispEdges" fill="currentColor"><path d="M2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM2 1h1v1h-1zM5 1h1v1h-1zM2 2h1v1h-1zM5 2h1v1h-1zM2 3h1v1h-1zM4 3h1v1h-1zM5 3h1v1h-1zM0 4h1v1h-1zM1 4h1v1h-1zM2 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM0 5h1v1h-1zM1 5h1v1h-1zM2 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1z"/></svg><span id="mt"></span></button>
+    <div class="it" id="rings"><span class="k">CPU</span><i class="cb" id="rcpu"><i></i></i><span class="k">RAM</span><i class="cb" id="rram"><i></i></i></div>
+    <div class="it" id="batt" hidden><i class="bat"><i id="bfill"></i></i><span class="num" id="bp">–</span></div>
+    <button class="it" id="net"><svg class="px" width="18" height="14" viewBox="0 0 9 7" shape-rendering="crispEdges" fill="currentColor"><path d="M1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM7 0h1v1h-1zM0 1h1v1h-1zM8 1h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM6 2h1v1h-1zM1 3h1v1h-1zM7 3h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM4 6h1v1h-1z"/></svg></button>
+    <button class="it" id="volb" title="wheel: volume · click: mute · right-click: sound settings"><svg class="px" width="18" height="14" viewBox="0 0 9 7" shape-rendering="crispEdges" fill="currentColor"><path d="M3 0h1v1h-1zM2 1h1v1h-1zM3 1h1v1h-1zM0 2h1v1h-1zM1 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM0 3h1v1h-1zM1 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM0 4h1v1h-1zM1 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM2 5h1v1h-1zM3 5h1v1h-1zM3 6h1v1h-1z"/><path class="wv" d="M6 1h1v1h-1zM7 2h1v1h-1zM5 3h1v1h-1zM7 3h1v1h-1zM7 4h1v1h-1zM6 5h1v1h-1z"/><path class="mx" d="M5 2h1v1h-1zM7 2h1v1h-1zM6 3h1v1h-1zM5 4h1v1h-1zM7 4h1v1h-1z"/></svg><span class="num" id="vol"></span></button>
+    <button class="it" id="clock"><span class="k" id="day">MON 1 JAN</span><span class="hm" id="hm">--:--</span></button>
+    <button class="it" id="pwr" title="Power · lock, sleep, restart, shut down"><svg class="px" width="14" height="14" viewBox="0 0 7 7" shape-rendering="crispEdges" fill="currentColor"><path d="M3 0h1v1h-1zM1 1h1v1h-1zM3 1h1v1h-1zM5 1h1v1h-1zM0 2h1v1h-1zM3 2h1v1h-1zM6 2h1v1h-1zM0 3h1v1h-1zM6 3h1v1h-1zM0 4h1v1h-1zM6 4h1v1h-1zM1 5h1v1h-1zM5 5h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1z"/></svg></button>
+  </div>
+</div>
+<script type="module" src="./bar.js"></script>
+</body>
+</html>

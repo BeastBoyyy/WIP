@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fresco bar</title>
+<meta name="description" content="The Fresco theme's bar: a ceiling painted one day's patch at a time.">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+</head>
+<body>
+<!-- Fresco: a fresco is painted one day's patch of wet plaster at a time (a giornata); the bar is the day's patches,
+     butted together along slanted seams with the rough under-layer showing between them. The workspaces are the
+     painter's five pigments: one only sketched in red sinopia is empty, a dry one has windows, the wet one is where you
+     are. Patches: the pigments, the tools, the window you are in, the weather and the song, the machine, the hour -->
+<div id="bar">
+  <div class="island g g1" id="iLeft">
+    <button class="it" id="overview" title="Overview (Ctrl+Alt+Space)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.4"/><path d="M12 1.5v3.2M12 19.3v3.2M1.5 12h3.2M19.3 12h3.2"/></svg></button>
+    <div id="ws" title="Wheel: next or previous; right-click: send the window here"></div>
+    <span id="pig" aria-live="polite"><b id="pigName"></b></span>
+  </div>
+  <div class="g g2">
+    <button class="it lk" id="lFlow" title="Search apps, files and the web (Alt+Space)">Search</button>
+    <button class="it lk" id="lFiles" title="File Explorer">Files</button>
+    <button class="it lk" id="lTerm" title="Terminal">Terminal</button>
+    <button class="it lk" id="lKeys" title="Every shortcut">Keys</button>
+  </div>
+
+  <div class="island g g3" id="iCenter">
+    <div class="it" id="title" title="Wheel: focus left or right; double-click: maximize; right-click: float; middle-click: close"><span id="tk">Bare wall</span><b id="tapp">Nothing open</b><span id="tname"></span></div>
+  </div>
+
+  <div class="island g g4" id="iRight">
+    <div class="it" id="weather"><span id="wk">Clear</span><span class="num" id="wt">-°</span></div>
+    <button class="it" id="media" hidden title="Click: play or pause; right-click: next; middle-click: previous"><span id="mt"></span><i class="stroke" aria-hidden="true"></i></button>
+  </div>
+  <div class="g g5">
+    <div id="tray" hidden></div>
+    <button class="it" id="trayBtn" title="Tray icons"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5"/></svg></button>
+    <div class="it" id="rings"><span class="lb">cpu</span><span class="num" id="rcpu">-</span><span class="lb">mem</span><span class="num" id="rram">-</span></div>
+    <div class="it" id="batt" hidden><i class="cell"><i id="bfill"></i></i><span class="num" id="bp">-</span></div>
+    <button class="it" id="net" title="Wi-Fi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 9.2a14 14 0 0 1 19 0M5.8 12.6a9.2 9.2 0 0 1 12.4 0M9.1 16a4.5 4.5 0 0 1 5.8 0"/><circle cx="12" cy="19.2" r="1.3"/></svg></button>
+    <button class="it" id="volb" title="Wheel: volume; click: mute; right-click: sound settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9h3.8L12 5v14l-4.7-4H3.5z"/><path class="wv" d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2"/><path class="mx" d="M16 9.5l5 5M21 9.5l-5 5"/></svg><span class="num" id="vol"></span></button>
+  </div>
+  <div class="g g6">
+    <button class="it" id="clock"><span id="hm">--:--</span><span id="day"></span></button>
+    <button class="it" id="pwr" title="Lock, sleep, restart or shut down"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v8"/><path d="M6.6 7a7.5 7.5 0 1 0 10.8 0"/></svg></button>
+  </div>
+</div>
+<script type="module" src="./bar.js"></script>
+</body>
+</html>

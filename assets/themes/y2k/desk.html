@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./desk.css">
+</head>
+<body>
+<!-- on the wallpaper, under every window: a desktop buddy. A little glossy window called clock.exe, the time inside it in
+     chrome with a blinking cursor after it, the day under, the folder you are in and the weather on a status strip -->
+<main id="desk">
+  <header class="tb"><svg class="fi" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm0 2a5 5 0 1 0 0 10A5 5 0 0 0 8 3zM7 4.5h2V8h2.5v2H7z"/></svg><b>clock.exe</b><i class="dots"><i></i><i></i><i></i></i></header>
+  <div class="face"><span id="dhm">--:--</span><i class="cur"></i></div>
+  <div id="dday"></div>
+  <div class="status"><span id="dws"></span><span id="dwx"></span></div>
+</main>
+<script type="module" src="./desk.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+/* Ghost Signal — the dashboard, power, feeds and keymap: panes of HUD glass on a faint grid, a bracket at each corner.
+   A pane opens as a glitch slice (a thin band that tears open, 200 ms) and folds back to a line closing (120 ms). The
+   radar turns and the waveform moves only while the pane is open and something is playing. Tokens from tokens.css +
+   bar.css. */
+body:not([data-mode=dash]) #dash,body:not([data-mode=power]) #power,body:not([data-mode=wall]) #wall,body:not([data-mode=keys]) #keysheet{display:none}
+:root{--hair:rgba(var(--ink-rgb),.16);--rule:rgba(var(--ink-rgb),.32)}
+.pane{position:absolute;inset:8px 14px 16px 8px;isolation:isolate;color:var(--ink);overflow:hidden;
+  background:repeating-linear-gradient(transparent 0 2px,rgba(0,0,0,.16) 2px 3px),
+    linear-gradient(90deg,rgba(var(--ink-rgb),.035) 1px,transparent 1px) 0 0/32px 32px,linear-gradient(rgba(var(--ink-rgb),.035) 1px,transparent 1px) 0 0/32px 32px,
+    linear-gradient(rgba(var(--surface-rgb),.95),rgba(var(--bg-rgb),.97));
+  box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.18),0 18px 40px rgba(0,0,0,.6)}
+.pane>.br{width:18px;height:14px;border-color:var(--ink);z-index:5}
+.pane>.br.tl{border-width:2px 0 0 2px}.pane>.br.tr{border-width:2px 2px 0 0}.pane>.br.bl{border-width:0 0 2px 2px}.pane>.br.bri{border-width:0 2px 2px 0}
+.pane.open{animation:slice var(--lock) steps(5) both}
+@keyframes slice{0%{clip-path:inset(49% 0 49% 0);transform:translateX(6px)}40%{clip-path:inset(20% 0 62% 0);transform:translateX(-4px)}
+  60%{clip-path:inset(0 0 30% 0);transform:translateX(3px)}80%{clip-path:inset(0);transform:translateX(-1px)}100%{clip-path:inset(0);transform:none}}
+.pane.closing{animation:fold calc(.12s * var(--speed)) ease-in both}
+@keyframes fold{to{clip-path:inset(50% 0 50% 0);opacity:.4}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:24px;padding:0 10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  color:var(--ink);box-shadow:inset 0 0 0 1px var(--rule)}
+.btn:hover{color:var(--amb);box-shadow:inset 0 0 0 1px var(--amb);background:rgba(var(--accent-rgb),.06)}
+.btn:active{background:rgba(var(--accent-rgb),.2)}
+
+/* the header strip: the channel, a recording light, LIVE */
+.hd{display:flex;align-items:center;gap:10px;height:26px;padding:0 22px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);
+  border-bottom:1px solid var(--hair)}
+#hdr{color:var(--ink)}
+.rec{width:6px;height:6px;margin-left:auto;border-radius:50%;background:var(--warn);box-shadow:0 0 6px rgba(var(--muted-rgb),.8)}
+.open .rec{animation:blink calc(1.2s * var(--speed)) steps(2) infinite}
+
+#dash{display:grid;grid-template-columns:520px 1fr;grid-template-rows:26px 1fr}
+#dash .hd{grid-column:1/-1}
+/* the left: the feed, a reticle locking on as it opens; its code, name and log line; the readouts */
+#art{padding:14px 12px 14px 20px;display:flex;flex-direction:column;gap:11px;min-width:0}
+.port{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#000;box-shadow:0 0 0 1px var(--rule)}
+.port img{width:100%;height:100%;object-fit:cover;display:block}
+.lockon{position:absolute;left:50%;top:50%;width:70px;height:70px;margin:-35px;pointer-events:none;opacity:0;--c:var(--amb);
+  background:linear-gradient(var(--c),var(--c)) 0 0/12px 1.5px,linear-gradient(var(--c),var(--c)) 0 0/1.5px 12px,linear-gradient(var(--c),var(--c)) 100% 0/12px 1.5px,linear-gradient(var(--c),var(--c)) 100% 0/1.5px 12px,
+    linear-gradient(var(--c),var(--c)) 0 100%/12px 1.5px,linear-gradient(var(--c),var(--c)) 0 100%/1.5px 12px,linear-gradient(var(--c),var(--c)) 100% 100%/12px 1.5px,linear-gradient(var(--c),var(--c)) 100% 100%/1.5px 12px;
+  background-repeat:no-repeat}
+.open .lockon{animation:lock calc(.6s * var(--speed)) cubic-bezier(.2,.8,.3,1) calc(.2s * var(--speed)) both}
+@keyframes lock{0%{opacity:0;transform:scale(2.2)}30%{opacity:1;transform:scale(1)}70%{opacity:1}100%{opacity:0;transform:scale(1)}}
+.cap{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:auto auto;align-items:baseline;column-gap:10px;row-gap:2px;min-width:0}
+#artK{color:var(--amb);padding:1px 5px 0;box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.6)}
+#artEn{font-family:var(--display);font-weight:600;font-size:21px;letter-spacing:.06em}
+#log{grid-column:1/3;font-size:14px;font-weight:500;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#wallBtn{grid-column:3;grid-row:1/3;align-self:center}
+/* the readouts: the radar and three gauges, each with its figure in the middle */
+#rings{margin-top:auto;padding-top:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border-top:1px solid var(--hair)}
+.ring2{display:flex;align-items:center;gap:8px;min-width:0} .ring2.none{visibility:hidden}
+.dial{position:relative;width:60px;height:60px;flex:none}
+.dial svg{width:100%;height:100%;display:block;overflow:visible}
+.dial .trk{fill:none;stroke:rgba(var(--ink-rgb),.14);stroke-width:3}
+.dial .val{fill:none;stroke:var(--ink);stroke-width:3}
+.dial .tk{stroke:rgba(var(--ink-rgb),.45);stroke-width:1}
+.dial .rg{fill:none;stroke:rgba(var(--ink-rgb),.22);stroke-width:.8}
+.dial .sweep{fill:rgba(var(--ink-rgb),.22);transform-origin:32px 32px;transform-box:view-box}
+.open .dial .sweep{animation:sweep calc(2.4s * var(--speed)) linear infinite}
+@keyframes sweep{to{transform:rotate(360deg)}}
+.dial .blip{fill:var(--amb)}
+.dial em{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-family:var(--mono);font-size:15px}
+#g-cpu .dial em{color:var(--amb)}
+.rt{display:flex;flex-direction:column;min-width:0}
+.rt b{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.14em}
+.rt span{font-size:12px;font-weight:500;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* the right: the time to the second, the date and the day and week of the year */
+#side{padding:14px 20px 16px 16px;display:flex;flex-direction:column;gap:12px;min-width:0;border-left:1px solid var(--hair)}
+.time{padding-bottom:10px;border-bottom:1px solid var(--hair)}
+.big{font-family:var(--display);font-weight:600;font-size:64px;line-height:1;letter-spacing:.03em;font-variant-numeric:tabular-nums}
+.date{display:flex;justify-content:space-between;gap:8px;margin-top:4px;font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+#edate{color:var(--amb)}
+/* the month: today bracketed in amber */
+#cal{display:grid;grid-template-columns:repeat(7,1fr);align-content:start;text-align:center;font-family:var(--mono)}
+#cal .mh{grid-column:1/-1;text-align:left;font-size:11px;letter-spacing:.14em;color:var(--dim);margin-bottom:4px}
+#cal .wd{font-size:9.5px;letter-spacing:.06em;color:var(--dim);padding-bottom:3px;border-bottom:1px solid var(--hair)}
+#cal i{font-style:normal;height:26px;display:grid;place-items:center;font-size:13px}
+#cal i.out{color:rgba(var(--ink-rgb),.22)}
+#cal i.today{color:var(--amb);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.75);background:rgba(var(--accent-rgb),.08)}
+/* the audio channel: a scope of bars, still unless it plays; the track; the time gone; the controls */
+#media{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:6px 10px;padding:9px 10px;box-shadow:inset 0 0 0 1px var(--hair)}
+.scope{grid-column:1/-1;display:flex;align-items:center;gap:2px;height:26px}
+.scope i{flex:1;height:100%;background:rgba(var(--ink-rgb),.55);transform:scaleY(.06)}
+#media.playing .scope i{animation:sc1 calc(.7s * var(--speed)) ease-in-out infinite alternate}
+#media.playing .scope i:nth-child(3n+1){animation-name:sc2;animation-duration:calc(.55s * var(--speed))}
+#media.playing .scope i:nth-child(4n+2){animation-name:sc3;animation-duration:calc(.9s * var(--speed))}
+#media.playing .scope i:nth-child(5n){animation-delay:-.2s}
+#media.playing .scope i:nth-child(7n+3){animation-delay:-.45s}
+@keyframes sc1{from{transform:scaleY(.15)}to{transform:scaleY(.8)}}
+@keyframes sc2{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+@keyframes sc3{from{transform:scaleY(.08)}to{transform:scaleY(.55)}}
+.credit{display:flex;flex-direction:column;gap:1px;min-width:0}
+.credit .k{font-size:9px}
+#mt{font-family:var(--display);font-weight:600;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ma{font-size:13px;font-weight:500;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rule{position:relative;height:2px;margin-top:5px;background:var(--hair)}
+#mprog{position:absolute;inset:0;background:var(--amb);transform-origin:left;transform:scaleX(var(--p,0));transition:transform 1s linear}
+.ctl{display:flex;gap:4px;align-self:center}
+.ctl .btn{width:28px;height:26px;padding:0}
+.ctl svg{width:11px;height:11px;fill:currentColor}
+#media.idle .ctl,#media.idle .rule{display:none}
+#media.idle #mt{color:var(--dim)}
+/* the message: a code, the words */
+footer{margin-top:auto;display:flex;align-items:baseline;gap:10px;padding-top:9px;border-top:1px solid var(--hair)}
+footer .k{color:var(--amb)}
+.saying{font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:.08em;text-transform:uppercase}
+.saying::after{content:"_";margin-left:3px;color:var(--amb)}
+.open .saying::after{animation:blink calc(1s * var(--speed)) steps(2) infinite}
+
+/* power: the question, a countdown that runs out red while one is armed, four targets */
+#power{display:flex;flex-direction:column;padding:22px 22px 20px}
+#pmid{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:74px;text-align:center;pointer-events:none}
+#pk{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:.16em;color:var(--ink)}
+#pl{font-size:15px;font-weight:500;color:var(--dim)}
+#ph{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--dim)}
+#power.armed #pk{color:var(--warn)}
+.fuse{display:block;height:2px;margin:6px 0 18px;background:var(--hair)}
+#power.armed .fuse{background:linear-gradient(var(--warn),var(--warn)) 0 0/100% 100% no-repeat,var(--hair);animation:burn 3s linear both}
+@keyframes burn{to{background-size:0 100%,auto}}
+.brands{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pb{position:relative;height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--dim);box-shadow:inset 0 0 0 1px var(--hair)}
+.pb svg{width:40px;height:40px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.pb::before{content:"";position:absolute;inset:0;opacity:0;transform:scale(1.2);transition:opacity var(--lock),transform var(--lock) cubic-bezier(.2,.8,.3,1);
+  background:linear-gradient(var(--c,var(--amb)),var(--c,var(--amb))) 0 0/10px 2px,linear-gradient(var(--c,var(--amb)),var(--c,var(--amb))) 0 0/2px 10px,
+    linear-gradient(var(--c,var(--amb)),var(--c,var(--amb))) 100% 0/10px 2px,linear-gradient(var(--c,var(--amb)),var(--c,var(--amb))) 100% 0/2px 10px,
+    linear-gradient(var(--c,var(--amb)),var(--c,var(--amb))) 0 100%/10px 2px,linear-gradient(var(--c,var(--amb)),var(--c,var(--amb))) 0 100%/2px 10px,
+    linear-gradient(var(--c,var(--amb)),var(--c,var(--amb))) 100% 100%/10px 2px,linear-gradient(var(--c,var(--amb)),var(--c,var(--amb))) 100% 100%/2px 10px;
+  background-repeat:no-repeat}
+.pb:hover,.pb:focus-visible{color:var(--amb)}
+.pb:hover::before,.pb:focus-visible::before,.pb.armed::before{opacity:1;transform:none}
+.pb.armed{color:var(--warn);--c:var(--warn);background:rgba(var(--muted-rgb),.1)}
+.pb .k{color:inherit}
+
+/* the feeds: six, the one on the screen marked LIVE with its red light */
+#wall{display:flex;flex-direction:column}
+#wall .hd>span,#keysheet .hd>span{font-family:var(--body);font-size:13px;font-weight:500;letter-spacing:0;color:var(--dim)}
+#wall .hd .k,#keysheet .hd .k{color:var(--ink)}
+#wall .hd i,#keysheet .hd i{margin-left:auto;font-style:normal;color:var(--amb)}
+.cards{flex:1;display:flex;justify-content:center;align-items:center;gap:14px;padding:0 16px}
+.wc{position:relative;width:132px;display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.wc img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;box-shadow:0 0 0 1px var(--rule);filter:saturate(.8) brightness(.85);transition:filter var(--lock)}
+.wc:hover img,.wc.on img{filter:none;box-shadow:0 0 0 1px var(--ink)}
+.wc .cap{display:flex;align-items:baseline;gap:7px}
+.wc .cap b{font-size:9.5px;color:var(--amb)}
+.wc .cap i{font-style:normal;font-family:var(--display);font-weight:600;font-size:13.5px;letter-spacing:.06em}
+.wc em{position:absolute;left:5px;top:5px;display:none;align-items:center;gap:4px;padding:1px 5px 0;font-style:normal;font-size:9px;color:var(--ink);background:rgba(var(--bg-rgb),.8)}
+.wc em::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--warn)}
+.wc.on em{display:flex}
+.wc.busy{opacity:.5}
+
+/* the keymap: three columns, each section under its code */
+#keysheet .cols{display:grid;grid-template-columns:.95fr .95fr 1.3fr;gap:14px;padding:12px 20px}
+#keysheet h3{display:flex;align-items:baseline;gap:8px;margin:0 0 4px;padding-bottom:4px;border-bottom:1px solid var(--rule);
+  font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.08em}
+#keysheet h3 b{color:var(--amb)}
+#keysheet h3 i{font-style:normal;margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--dim)}
+#keysheet dl{display:grid;grid-template-columns:auto 1fr;gap:0 10px;margin-bottom:8px}
+#keysheet dt,#keysheet dd{padding:1px 0}
+#keysheet dt{font-family:var(--mono);font-size:11px;white-space:nowrap;align-self:center;color:var(--ink)}
+#keysheet dd{font-size:13px;font-weight:500;line-height:1.25;color:var(--dim)}

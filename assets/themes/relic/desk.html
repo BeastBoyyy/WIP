@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Relic desk</title>
+<meta name="description" content="The Relic theme's desk: a vanitas shelf lit by one candle that burns down with the day.">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./desk.css">
+</head>
+<body>
+<!-- on the wallpaper, under every window: a tall candle burning down with the day, the hour in italic beside it, how
+     much candle is left, and a museum label for the object you are with -->
+<main id="desk">
+  <i class="candle" aria-hidden="true"><i class="wax"></i><i class="flw"><i class="fl"></i></i></i>
+  <div class="txt">
+    <div id="dhm">--:--</div>
+    <div id="dleft"></div>
+    <div class="label"><b id="dobj"></b><span id="dmeans"></span><small><span id="dday"></span> <span id="dwx"></span></small></div>
+  </div>
+</main>
+<script type="module" src="./desk.js"></script>
+</body>
+</html>

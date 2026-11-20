@@ -1,0 +1,42 @@
+/* Hallmark · shape: a candle and the hour on the wall of the room · genre: atmospheric · theme: custom · job: try · idea: "A tall candle on the wallpaper burns down with the day, the hour beside it and a museum label for the object you are with" · vibe: "a still life in a dark room, one flame"
+ * paper: oklch(0.17 0.02 60) · accent: oklch(0.75 0.12 80) · display: Castoro Italic · body: Castoro · hero: the candle and the hour · nav: none · footer: none · imagery: none · signature: the candle whose wax is the day still left
+ * axes: dark/serif-italic/chromatic-gilt · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V4 · weakest: V, bone italic can sink into a pale painting; a soft dark shadow is laid under the hour and the label is its own paper */
+/* Hallmark · waive 29 · the flame's own glow · a candle has to give light */
+
+/* Relic: the desk. It ignores the mouse and wakes once a minute; the flame flickers (4 s, the one ambient loop), the wax
+   goes down a little each minute, and a new minute comes up out of the dark (420 ms). Game mode and reduced motion hold
+   the flame still. */
+:root{--sh:rgba(0,0,0,.6);--core:#fff8e6;--dark:var(--bg);--bone:var(--ink);--gilt:var(--accent);--oxblood:var(--accent2);--umber:var(--muted);--ease-out:cubic-bezier(.22,1,.36,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;overflow-x:clip;background:transparent;font:400 15px/1.2 var(--body);color:var(--bone);font-synthesis:none;
+  user-select:none;-webkit-font-smoothing:antialiased}
+#desk{position:absolute;left:44px;bottom:48px;display:flex;align-items:flex-end;gap:26px}
+.candle{position:relative;flex:none;width:18px;height:190px;margin-bottom:10px;filter:drop-shadow(0 6px 10px var(--sh))}
+/* the holder: a small dark dish with a gilt rim */
+.candle::after{content:"";position:absolute;left:-14px;right:-14px;bottom:-6px;height:10px;border-radius:50%;
+  background:radial-gradient(closest-side,color-mix(in oklch,var(--dark),var(--bone) 12%),var(--dark));box-shadow:inset 0 1px 0 color-mix(in oklch,var(--gilt) 60%,transparent)}
+.candle .wax{position:absolute;inset:0;transform-origin:bottom;transform:scaleY(var(--wax,.6));border-radius:2px 2px 0 0;
+  background:linear-gradient(90deg,color-mix(in oklch,var(--bone),var(--umber) 35%),var(--bone) 42%,color-mix(in oklch,var(--bone),var(--dark) 45%));
+  transition:transform calc(2s * var(--speed)) var(--ease-out)}
+.candle .flw{position:absolute;left:50%;bottom:100%;width:0;height:0;transform:translateY(calc((1 - var(--wax,.6)) * 190px));
+  transition:transform calc(2s * var(--speed)) var(--ease-out)}
+.candle .fl{position:absolute;left:-8px;bottom:-2px;width:16px;height:30px;border-radius:50% 50% 45% 45%/62% 62% 38% 38%;transform-origin:50% 100%;
+  background:radial-gradient(55% 48% at 50% 74%,var(--core),var(--gilt) 52%,color-mix(in oklch,var(--oxblood),transparent 25%) 88%);
+  box-shadow:0 0 34px 10px color-mix(in oklch,var(--gilt) 32%,transparent);animation:flicker calc(4s * var(--speed)) ease-in-out infinite}
+.candle .fl::after{content:"";position:absolute;left:7px;bottom:0;width:2px;height:7px;border-radius:1px;background:var(--dark)}
+@keyframes flicker{0%,100%{transform:none}22%{transform:scale(.88,1.08) rotate(-3deg)}48%{transform:scale(1.04,.94) rotate(2deg)}71%{transform:scale(.94,1.1) rotate(-1deg)}}
+.txt{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+#dhm{font:400 132px/.82 var(--display);font-variant-numeric:lining-nums tabular-nums;color:var(--bone);padding-right:8px;
+  text-shadow:0 2px 0 var(--sh),0 10px 30px var(--sh)}
+#dhm.lit{animation:wake calc(420ms * var(--speed)) var(--ease-out) both}
+@keyframes wake{from{opacity:0;transform:translateY(6px)}}
+#dleft{font:400 21px/1 var(--display);color:var(--gilt);text-shadow:0 2px 8px var(--sh)}
+/* the museum label: a small card of bone paper with the object, what it stands for, the day and the weather */
+.label{display:flex;flex-direction:column;gap:4px;margin-top:6px;min-width:220px;max-width:320px;padding:11px 15px 12px;
+  background:var(--bone);color:color-mix(in oklch,var(--dark) 78%,var(--bone));box-shadow:0 8px 20px var(--sh)}
+#dobj{font:400 21px/1 var(--display);color:var(--dark)}
+#dmeans{font-size:13px}
+.label small{margin-top:3px;font:400 12.5px/1.2 var(--display);color:color-mix(in oklch,var(--dark) 55%,var(--bone))}
+body.nowm .candle .fl{animation:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}}

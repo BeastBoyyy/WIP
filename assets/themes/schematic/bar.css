@@ -1,0 +1,138 @@
+/* Schematic — the bar: a title block along the top edge of the drawing. Three panels of ruled cells on the sheet's grid,
+   each with yellow registration ticks in its corners, and a dimension line run between them. The open sheet is traced
+   round by the plotter's pen (260 ms); whatever you point at is measured off underneath (300 ms); the rest snaps (120 ms).
+   Colours, type and speed come from tokens.css (the palette you edit in Rice Studio). */
+:root{
+  --ease:cubic-bezier(.2,.9,.3,1);
+  --sheet:color-mix(in srgb,var(--surface) 92%,var(--accent2));
+  --line:rgba(var(--ink-rgb),.55); --rule:rgba(var(--ink-rgb),.24);
+  --dim:color-mix(in srgb,var(--ink) 64%,var(--surface)); --faint:color-mix(in srgb,var(--ink) 42%,var(--surface));
+  --cons:var(--accent2); --mark:var(--accent);
+  --grid:linear-gradient(rgba(var(--accent2-rgb),.075) 1px,transparent 1px) 0 0/8px 8px,linear-gradient(90deg,rgba(var(--accent2-rgb),.075) 1px,transparent 1px) 0 0/8px 8px;
+  --tick:linear-gradient(var(--mark),var(--mark));
+  --ticks:var(--tick) left 3px top 3px/7px 1px no-repeat,var(--tick) left 3px top 3px/1px 7px no-repeat,
+    var(--tick) right 3px top 3px/7px 1px no-repeat,var(--tick) right 3px top 3px/1px 7px no-repeat,
+    var(--tick) left 3px bottom 3px/7px 1px no-repeat,var(--tick) left 3px bottom 3px/1px 7px no-repeat,
+    var(--tick) right 3px bottom 3px/7px 1px no-repeat,var(--tick) right 3px bottom 3px/1px 7px no-repeat;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;color:var(--ink);font-family:var(--body);user-select:none}
+button{all:unset;cursor:pointer}
+
+#bar{position:absolute;top:6px;left:10px;right:10px;height:var(--bar-h);display:flex;align-items:center;gap:22px}
+/* the dimension line, run the whole width; it shows in the gaps, its arrowheads on the panels' edges */
+#bar::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(var(--accent2-rgb),.6)}
+/* a panel: the sheet's grid, a heavy outer rule and a thin inner one, yellow ticks in the corners */
+.island{position:relative;height:100%;display:flex;align-items:center;padding:0 10px;gap:1px;
+  background:var(--ticks),var(--grid),var(--sheet);
+  box-shadow:inset 0 0 0 1px var(--line),inset 0 0 0 3px var(--sheet),inset 0 0 0 4px var(--rule),0 4px 12px rgba(0,0,0,.45)}
+.island::before,.island::after{content:"";position:absolute;top:50%;width:8px;height:6px;margin-top:-3px;background:var(--cons)}
+.island::before{right:100%;clip-path:polygon(100% 50%,0 0,0 100%)}
+.island::after{left:100%;clip-path:polygon(0 50%,100% 0,100% 100%)}
+#iLeft::before,#iRight::after{display:none}
+#iCenter{position:absolute;left:50%;transform:translateX(-50%);max-width:20vw;transition:opacity calc(.12s * var(--speed))}
+#iRight{margin-left:auto}
+body.tray #iCenter,body.crowd #iCenter{opacity:0;pointer-events:none}
+
+.it{height:calc(var(--bar-h) - 10px);padding:0 8px;display:flex;align-items:center;gap:7px;font-size:13.5px;white-space:nowrap}
+/* a cell rule, top to bottom of the panel */
+.sep{width:1px;align-self:stretch;margin:4px 5px;background:var(--rule)}
+.k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em}
+.num{font-family:var(--mono);font-size:12px;color:var(--dim)}
+/* a title-block cell: its small label on top, the reading under it */
+.cell{flex-direction:column;align-items:flex-start;justify-content:center;gap:1px}
+.cell>.k{font-size:8px;color:var(--faint);line-height:1}
+
+/* pointed at, a thing is measured off: a dimension line draws out under it, ticks at both ends */
+.follow{position:relative;color:var(--dim);transition:color calc(.12s * var(--speed))}
+.follow::after{content:"";position:absolute;left:7px;right:7px;bottom:2px;height:5px;pointer-events:none;
+  background:var(--tick) center/100% 1px no-repeat,var(--tick) left center/1px 5px no-repeat,var(--tick) right center/1px 5px no-repeat;
+  transform:scaleX(0);transition:transform calc(.3s * var(--speed)) var(--ease)}
+.follow:hover{color:var(--ink)}
+.follow:hover::after{transform:none}
+
+#overview{width:34px;padding:0;justify-content:center}
+.target .ring{fill:none;stroke:currentColor;stroke-width:1.3}
+.target .dot{fill:var(--mark)}
+.target .hair{stroke:currentColor;stroke-width:1.3;transition:transform calc(.12s * var(--speed)) var(--ease);transform-origin:12px 12px}
+#overview:hover .hair{transform:rotate(45deg);stroke:var(--mark)}
+
+/* the sheets: number over name. The open one is traced round by the pen and its number goes yellow; a sheet with work
+   on it carries a revision triangle in its corner */
+#ws{position:relative;display:flex;height:calc(var(--bar-h) - 10px);gap:2px}
+#ws .w{position:relative;height:100%;padding:0 9px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0;color:var(--faint);
+  transition:color calc(.12s * var(--speed))}
+#ws .w .no{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;line-height:1.1}
+#ws .w .wn{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;line-height:1.05}
+#ws .w:hover{color:var(--ink)}
+#ws .w.has{color:var(--dim)}
+#ws .w.has::after{content:"";position:absolute;right:3px;top:3px;width:6px;height:5px;background:var(--cons);clip-path:polygon(50% 0,100% 100%,0 100%)}
+#ws .w.on{color:var(--ink)}
+#ws .w.on .no{color:var(--mark)}
+.plot{position:absolute;inset:1px;width:calc(100% - 2px);height:calc(100% - 2px);pointer-events:none;overflow:visible}
+.plot rect{fill:none;stroke:var(--mark);stroke-width:1.2;stroke-dasharray:100 100;stroke-dashoffset:100}
+#ws .w.on .plot rect{animation:plot calc(.26s * var(--speed)) linear forwards}
+@keyframes plot{to{stroke-dashoffset:0}}
+body.nowm #ws,body.nowm #overview{opacity:.35;pointer-events:none} body.nowm #tk{color:var(--faint)!important;border-color:var(--faint)!important}
+
+/* the verbs: numbered callouts, a balloon and a word */
+.lk{padding:0 6px;gap:5px;font-family:var(--body);font-size:12.5px;letter-spacing:.07em;text-transform:uppercase}
+.bn{width:14px;height:14px;display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;
+  font-style:normal;font-family:var(--mono);font-size:8.5px;line-height:1;transition:background calc(.12s * var(--speed)),color calc(.12s * var(--speed))}
+.lk:hover .bn{background:var(--mark);border-color:var(--mark);color:var(--bg)}
+
+/* the part in hand: its tag in a yellow box, its name, the window's title */
+#title{font-size:13.5px;color:var(--dim);overflow:hidden;gap:9px}
+#title b{color:var(--ink);font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.05em;text-transform:uppercase}
+#tk{color:var(--mark);font-size:9px;padding:2px 6px 1px;border:1px solid rgba(var(--accent-rgb),.8)}
+#tname{overflow:hidden;text-overflow:ellipsis;min-width:0;font-family:var(--body);font-size:13px}
+
+#weather{cursor:pointer} #weather .num{font-size:13px;color:var(--ink)}
+/* load: two scale rules, processor over memory; the run fills in blue, a yellow pointer rides on top */
+.rules{display:flex;flex-direction:column;gap:3px;padding-top:2px}
+.ring{width:46px;height:9px;overflow:visible;display:block}
+.ring .base{stroke:var(--line);stroke-width:.8}
+.ring .tick{stroke:var(--line);stroke-width:.7}
+.ring .fill{fill:var(--cons);transition:width .6s var(--ease)}
+.ring .ptr{fill:var(--mark);transition:transform .6s var(--ease)}
+.np{max-width:190px} .np #mt{overflow:hidden;text-overflow:ellipsis}
+.np em{font-style:normal;color:var(--ink)}
+/* the plotter: the pen traces its wave while something plays */
+.pen{width:24px;height:17px;flex:none;overflow:visible}
+.pen .paper{stroke:var(--rule);stroke-width:1}
+.pen .trace{fill:none;stroke:var(--cons);stroke-width:1.4;stroke-dasharray:100 100;stroke-dashoffset:0}
+.pen .nib{fill:currentColor}
+.np.playing .trace{animation:trace calc(1.8s * var(--speed)) linear infinite}
+.np.playing .nib{color:var(--mark)}
+@keyframes trace{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+#net{padding:0 5px 0 8px} #volb{padding:0 8px 0 5px;gap:6px}
+#net.off,#volb.muted{color:var(--mark)}
+#volb .mx,#volb.muted .wv{display:none} #volb.muted .mx{display:inline}
+
+/* the cell: a scale bar of four parts, filled in blue to the charge that is left */
+#batt[hidden]{display:none}
+#batt .bar{display:flex;align-items:center;gap:6px}
+.sb{position:relative;width:28px;height:7px;display:block;border:1px solid var(--line);
+  background:repeating-linear-gradient(90deg,transparent 0 6px,var(--rule) 6px 7px)}
+#bfill{position:absolute;left:0;top:0;bottom:0;width:calc(100% * var(--p,1));background:var(--cons);transition:width .8s var(--ease)}
+#batt .num{font-size:11px}
+#batt.low #bfill{background:var(--mark);animation:blink 1.2s steps(2) infinite} #batt.chg #bfill{background:repeating-linear-gradient(90deg,var(--cons) 0 3px,transparent 3px 5px)}
+@keyframes blink{50%{opacity:.35}}
+
+#trayBtn{width:24px;padding:0;justify-content:center}
+#trayBtn svg{transition:transform calc(.12s * var(--speed)) var(--ease)} #trayBtn.on svg{transform:rotate(180deg)} #trayBtn.on{color:var(--mark)}
+#tray{display:flex;align-items:center;gap:2px;padding:0 2px} #tray[hidden]{display:none}
+#tray button{width:28px;height:28px;display:grid;place-items:center;animation:trayin calc(.12s * var(--speed)) var(--ease) both}
+#tray button:hover{box-shadow:inset 0 0 0 1px var(--mark)}
+#tray img{width:16px;height:16px}
+@keyframes trayin{from{opacity:0;transform:translateX(6px)}to{opacity:1;transform:none}}
+
+#clock{padding-right:10px}
+#clock .hm{font-family:var(--display);font-size:19px;font-weight:600;line-height:1;letter-spacing:.06em;color:var(--ink)}
+#clock:hover .hm{color:var(--mark)}
+/* power: the revision stamp; pointed at, it is brought down onto the sheet */
+#pwr{width:32px;padding:0;justify-content:center}
+#pwr svg{transition:transform calc(.12s * var(--speed)) var(--ease)}
+#pwr:hover{color:var(--mark)} #pwr:hover svg{transform:rotate(-8deg) scale(.92)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important} #ws .w.on .plot rect{stroke-dashoffset:0}}

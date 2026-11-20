@@ -1,0 +1,180 @@
+/* Xerox — the zine spread, the stickers, the back issues and the how-to. Photocopy paper and toner, one cyan, headings
+   cut out a letter at a time. Each panel comes off the copier: the lamp passes over it (400 ms), it jitters (60 ms),
+   and the staples go in (120 ms). Tokens from tokens.css + bar.css. */
+body:not([data-mode=dash]) #dash,body:not([data-mode=power]) #power,body:not([data-mode=wall]) #wall,body:not([data-mode=keys]) #keysheet{display:none}
+:root{--fade:rgba(var(--ink-rgb),.55);--hair:rgba(var(--ink-rgb),.2);--label:#161618;--news:#D8CFB0}
+/* a sheet of copier paper, toner all over it, the copier's grey creeping in from the edges */
+#dash,#wall,#keysheet,#power{position:absolute;inset:8px 14px 16px 8px;color:var(--ink);overflow:hidden;background:
+    var(--speck),
+    radial-gradient(ellipse at 50% 50%,transparent 60%,rgba(var(--ink-rgb),.14)),
+    var(--bg);
+  box-shadow:0 0 0 1px rgba(var(--ink-rgb),.25),2px 3px 0 rgba(0,0,0,.25),0 18px 36px rgba(0,0,0,.45)}
+
+/* off the copier: shown at once, the lamp sweeping over it, then a jitter as it lands */
+#dash.open,#wall.open,#keysheet.open,#power.open{animation:land calc(.06s * var(--speed)) steps(2) calc(.38s * var(--speed)) both}
+@keyframes land{0%{transform:translate(2px,-1px)}50%{transform:translate(-1px,1px)}100%{transform:none}}
+#dash.closing,#wall.closing,#keysheet.closing,#power.closing{animation:out calc(.12s * var(--speed)) steps(3) both}
+@keyframes out{to{opacity:0;transform:translateY(6px)}}
+#dash::after,#wall::after,#keysheet::after,#power::after{content:"";position:absolute;top:0;bottom:0;left:0;width:90px;z-index:20;pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(210,245,255,.55) 35%,rgba(255,255,255,.95) 50%,rgba(210,245,255,.55) 65%,transparent)}
+#dash.open::after,#wall.open::after,#keysheet.open::after,#power.open::after{animation:pass calc(.4s * var(--speed)) linear both}
+@keyframes pass{0%{opacity:1;transform:translateX(-90px)}95%{opacity:1}100%{opacity:0;transform:translateX(1000px)}}
+
+/* letters cut out of other magazines (voice.js cuts them) */
+.cut{display:inline-block;padding:1px 3px 0;margin:0 1px;line-height:1.05;transform:translateY(var(--y,0)) rotate(var(--r,0));box-shadow:1px 2px 0 rgba(0,0,0,.25)}
+.cut.f0{font-family:var(--display);font-weight:400} .cut.f1{font-family:var(--body);font-weight:700} .cut.f2{font-family:var(--mono);font-weight:700}
+.cut.s0{background:#fbfaf6;color:var(--ink)} .cut.s1{background:var(--ink);color:var(--bg)} .cut.s2{background:var(--accent);color:var(--ink)} .cut.s3{background:var(--news);color:var(--ink)}
+i.sp{display:inline-block;width:.35em}
+/* a label-maker strip */
+.dymo{display:inline-block;padding:3px 7px 2px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#f2f0ea;background:var(--label);
+  text-shadow:0 1px 0 rgba(0,0,0,.6);box-shadow:1px 1px 0 rgba(0,0,0,.3)}
+
+#dash{display:grid;grid-template-columns:392px 1fr}
+/* the gutter: the fold, and two staples through it */
+#dash>#side::before{content:"";position:absolute;left:-10px;top:0;bottom:0;width:20px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(var(--ink-rgb),.16) 48%,rgba(255,255,255,.25) 52%,transparent)}
+.staple{position:absolute;left:392px;z-index:5;width:5px;height:26px;margin-left:-2px;border-radius:1px;
+  background:linear-gradient(90deg,#6f757b,#e3e6e9 45%,#7d838a);box-shadow:1px 1px 0 rgba(0,0,0,.35)}
+.staple::before,.staple::after{content:"";position:absolute;left:1px;width:3px;height:2px;background:rgba(0,0,0,.45)}
+.staple::before{top:-1px} .staple::after{bottom:-1px}
+.s1{top:70px} .s2{bottom:70px}
+body.copy #dash.open .staple{animation:staple calc(.12s * var(--speed)) cubic-bezier(.3,1.5,.5,1) calc(.42s * var(--speed)) both}
+body.copy #dash.open .s2{animation-delay:calc(.5s * var(--speed))}
+@keyframes staple{from{transform:translateY(-10px) scale(1.4);opacity:0}}
+
+/* the left page: the cover photocopied large, a coarse screen over it, the cyan block printed off register */
+#art{position:relative;padding:22px 20px 22px 22px}
+.port{position:relative;height:100%;overflow:hidden;background:var(--ink);box-shadow:0 0 0 1px rgba(var(--ink-rgb),.4)}
+.port img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.7) brightness(1.06)}
+.screen{position:absolute;inset:0;background:radial-gradient(circle,transparent 1.1px,var(--bg) 2.3px) 0 0/4px 4px;opacity:.42;mix-blend-mode:lighten}
+.over{position:absolute;left:-12%;top:58%;width:70%;height:22%;background:var(--accent);mix-blend-mode:multiply;opacity:.85;transform:rotate(-4deg)}
+.cap{position:absolute;left:30px;right:28px;bottom:36px;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.cap .k{padding:3px 7px 2px;font-size:10px;letter-spacing:.12em;color:#f2f0ea;background:var(--label);transform:rotate(-2deg)}
+#artCut{font-size:30px;line-height:1.1;max-width:100%}
+#artEn{display:none}
+#wallBtn{position:absolute;right:12px;top:12px;z-index:3;width:62px;height:62px;display:grid;place-items:center;text-align:center;border-radius:50%;
+  font-family:var(--body);font-weight:700;font-size:10px;line-height:1.05;letter-spacing:.04em;color:var(--ink);background:var(--speck),var(--accent);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.7),2px 3px 0 rgba(0,0,0,.3);transform:rotate(14deg)}
+#wallBtn:hover{background:var(--ink);color:var(--bg);transform:rotate(8deg) translateY(-2px);animation:none}
+
+#side{position:relative;padding:24px 26px 18px 26px;display:flex;flex-direction:column;gap:12px;min-width:0}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:3px solid var(--ink)}
+.run{display:flex;flex-direction:column}
+.lbl{font-family:var(--mono);font-size:10px;color:var(--fade)}
+.big{font-family:var(--display);font-size:72px;line-height:.9}
+.date{display:flex;flex-direction:column;align-items:flex-end;gap:6px;padding-bottom:4px;text-align:right}
+.date #jdate{font-family:var(--mono);font-weight:700;font-size:12.5px;letter-spacing:.04em}
+.date #edate{padding:3px 7px 2px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#f2f0ea;background:var(--label);transform:rotate(1.5deg)}
+
+.row{display:flex;gap:16px;align-items:stretch}
+/* the month, typed; today cut out on cyan */
+#cal{display:grid;grid-template-columns:repeat(7,23px);gap:0 3px;align-content:start;font-family:var(--mono);font-size:11px;color:rgba(var(--ink-rgb),.8)}
+#cal .mh{grid-column:1/-1;font-family:var(--display);font-size:17px;margin-bottom:3px}
+#cal .wd{font-size:9px;color:var(--fade);text-align:center;padding:2px 0 3px;border-bottom:2px solid var(--ink)}
+#cal i{font-style:normal;height:21px;display:grid;place-items:center;position:relative}
+#cal i.out{opacity:.22}
+#cal i.today{font-weight:700;color:var(--ink);background:var(--accent);transform:rotate(-5deg);box-shadow:1px 2px 0 rgba(0,0,0,.25)}
+/* four rings of halftone dots, the reading stamped in the middle */
+#rings{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 10px;align-content:center;padding-left:14px;border-left:2px dotted var(--hair)}
+.ring2{display:flex;align-items:center;gap:8px;min-width:0} .ring2.none{display:none}
+.dot{position:relative;width:54px;height:54px;flex:none}
+.dot svg{width:100%;height:100%}
+.dot .on{fill:var(--ink)} .dot .off{fill:var(--hair)}
+#g-cpu .dot .on{fill:var(--accent)}
+.dot em{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-family:var(--display);font-size:18px}
+.rt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.rt b{font-family:var(--body);font-weight:700;font-size:12px}
+.rt span{font-family:var(--mono);font-size:9.5px;color:var(--fade);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* the stereo: a strip of white paper taped on, the song in the cut-up face, the time gone in dots */
+#media{position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px 10px;background:var(--speck),#fbfaf6;transform:rotate(-.8deg);
+  box-shadow:1px 2px 0 rgba(0,0,0,.2),0 0 0 1px rgba(var(--ink-rgb),.15)}
+#media .tape{position:absolute;left:44%;top:-7px;width:60px;height:15px;transform:rotate(3deg);background:linear-gradient(rgba(255,255,255,.3),transparent),rgba(232,226,200,.65);
+  clip-path:polygon(0 0,100% 0,96% 25%,100% 50%,96% 75%,100% 100%,0 100%,4% 75%,0 50%,4% 25%)}
+.credit{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.role{align-self:flex-start;padding:2px 6px 1px;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;color:#f2f0ea;background:var(--label)}
+.credit b{font-family:var(--display);font-weight:400;font-size:21px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.credit #ma{font-family:var(--mono);font-size:11px;color:var(--fade);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rule{position:relative;height:7px;margin-top:5px;background:radial-gradient(circle,var(--hair) 1.6px,transparent 2px) 0 50%/7px 7px repeat-x}
+#mprog{position:absolute;inset:0;background:radial-gradient(circle,var(--ink) 2.3px,transparent 2.7px) 0 50%/7px 7px repeat-x;
+  clip-path:inset(0 calc(100% - var(--p,0) * 100%) 0 0);transition:clip-path 1s linear}
+.ctl{display:flex;gap:2px}
+.ctl button{width:30px;height:30px;display:grid;place-items:center}
+.ctl svg{width:13px;height:13px;fill:currentColor}
+#media.idle .ctl,#media.idle .rule{display:none}
+#media.idle .credit b{font-size:17px;color:var(--fade)}
+
+/* the line written in by hand, and the small print */
+footer{margin-top:auto;display:flex;gap:12px;align-items:flex-end;justify-content:space-between}
+footer .saying{min-width:0;font-family:var(--display);font-size:22px;transform:rotate(-1.5deg);transform-origin:left}
+footer .saying i{font-style:normal;line-height:1.3;padding-bottom:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone;
+  background:linear-gradient(var(--accent),var(--accent)) 0 100%/100% 4px no-repeat}
+footer .mark{font-family:var(--mono);font-size:9px;color:var(--fade);white-space:nowrap}
+
+/* power: four stickers. Pointed at, one starts to peel; armed, it is slapped back down inverted, and the lamp crawls
+   along the strip under the heading for the 3 s it waits */
+#power{padding:18px 26px 22px;display:flex;flex-direction:column;align-items:center}
+#pmid{display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:none;min-height:86px}
+#pcut{font-size:15px;margin-bottom:4px}
+#pk{font-family:var(--display);font-weight:400;font-size:26px;line-height:1}
+#pl{font-family:var(--mono);font-size:12px;color:rgba(var(--ink-rgb),.75)}
+#ph{font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--fade)}
+#power.armed #pk{background:var(--accent);padding:0 6px}
+.fuse{display:block;position:relative;width:100%;height:10px;margin:4px 0 14px;background:radial-gradient(circle,var(--hair) 2px,transparent 2.4px) 0 50%/9px 10px repeat-x}
+.fuse::after{content:"";position:absolute;top:-4px;bottom:-4px;left:0;width:22px;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(210,245,255,.8) 40%,#fff 50%,rgba(210,245,255,.8) 60%,transparent);box-shadow:0 0 10px rgba(79,163,199,.6)}
+#power.armed .fuse::after{animation:crawl 3s linear both}
+@keyframes crawl{from{opacity:1;transform:translateX(0)}to{opacity:1;transform:translateX(370px)}}
+.brands{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;width:100%;justify-items:center}
+.pb{position:relative;height:64px;min-width:150px;display:grid;place-items:center;transition:transform calc(.12s * var(--speed)) ease-out}
+.pb .k{font-family:var(--body);font-weight:700;font-size:13px;letter-spacing:.06em}
+.pb::before{content:"";position:absolute;inset:0;z-index:-1;box-shadow:2px 3px 0 rgba(0,0,0,.28)}
+.pb[data-a=lock]{transform:rotate(-5deg)} .pb[data-a=lock]::before{background:var(--speck),var(--accent);border-radius:32px}
+.pb[data-a=sleep]{transform:rotate(3deg);color:var(--bg)} .pb[data-a=sleep]::before{background:var(--speck),var(--ink)}
+.pb[data-a=restart]{transform:rotate(4deg)} .pb[data-a=restart]::before{background:var(--speck),#fbfaf6;box-shadow:none;
+  clip-path:polygon(50% 0,58% 22%,78% 6%,74% 30%,100% 24%,84% 46%,100% 62%,76% 66%,84% 92%,60% 78%,50% 100%,40% 78%,16% 92%,24% 66%,0 62%,16% 46%,0 24%,26% 30%,22% 6%,42% 22%);
+  filter:drop-shadow(2px 3px 0 rgba(0,0,0,.28))}
+.pb[data-a=off]{transform:rotate(-3deg)} .pb[data-a=off]::before{background:var(--speck),var(--accent);clip-path:polygon(0 8%,100% 0,97% 100%,3% 92%)}
+.pb:hover,.pb:focus-visible{transform:rotate(-9deg) translate(-2px,-4px)}
+.pb:hover::before{box-shadow:5px 8px 4px rgba(0,0,0,.28)}
+.pb.armed{color:var(--bg);animation:slap calc(.12s * var(--speed)) ease-out both}
+.pb.armed::before{background:var(--speck),var(--ink)}
+.pb.armed[data-a=sleep]{color:var(--ink)} .pb.armed[data-a=sleep]::before{background:var(--speck),var(--accent)}
+
+/* the back issues: six covers photocopied small, a staple through each; the one up on the wall wears a sticker */
+#wall{padding:14px 24px 12px}
+#wall header,#keysheet header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+#wcut,#kcut{font-size:15px}
+#wall header>span:nth-child(2),#keysheet header>span:nth-child(2){font-family:var(--mono);font-size:12px;color:rgba(var(--ink-rgb),.75)}
+#wall header i,#keysheet header i{margin-left:auto;font-style:normal;font-family:var(--mono);font-size:10px;color:var(--fade)}
+.cards{display:flex;justify-content:center;gap:16px}
+.wc{position:relative;box-sizing:border-box;width:128px;height:150px;padding:6px 6px 40px;background:var(--speck),#fbfaf6;
+  box-shadow:1px 2px 0 rgba(0,0,0,.25),0 0 0 1px rgba(var(--ink-rgb),.12)}
+.wc:nth-child(odd){transform:rotate(-2deg)} .wc:nth-child(even){transform:rotate(1.5deg)}
+.wc::before{content:"";position:absolute;left:50%;top:-4px;z-index:3;width:22px;height:4px;margin-left:-11px;background:linear-gradient(#e3e6e9,#7d838a);box-shadow:1px 1px 0 rgba(0,0,0,.35)}
+.wc img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.6)}
+.wc:hover{animation:jit calc(.06s * var(--speed)) steps(2) 3}
+.wc:hover img,.wc.on img{filter:grayscale(1) contrast(2)}
+.wc .cap{position:absolute;left:8px;right:8px;bottom:5px;gap:0;align-items:flex-start}
+.wc .cap b{padding:1px 5px 0;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:#f2f0ea;background:var(--label);transform:none}
+.wc .cap i{font-family:var(--display);font-style:normal;font-size:15px;line-height:1.1}
+.wc em{position:absolute;right:-12px;top:-12px;z-index:4;width:46px;height:46px;display:none;place-items:center;text-align:center;border-radius:50%;
+  font-style:normal;font-family:var(--body);font-weight:700;font-size:9px;line-height:1;color:var(--ink);background:var(--speck),var(--accent);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.7),2px 2px 0 rgba(0,0,0,.3);transform:rotate(14deg);animation:slap calc(.12s * var(--speed)) ease-out both}
+.wc.on em{display:grid}
+.wc.busy{filter:brightness(.6)}
+
+/* the how-to: three photocopied pages taped up, the keys in bold */
+#keysheet{padding:14px 22px 14px}
+#keysheet .cols{display:grid;grid-template-columns:.95fr .95fr 1.3fr;gap:14px}
+#keysheet .cols>div{position:relative;padding:12px 13px 4px;background:var(--speck),#fbfaf6;box-shadow:1px 2px 0 rgba(0,0,0,.22),0 0 0 1px rgba(var(--ink-rgb),.12)}
+#keysheet .cols>div:nth-child(1){transform:rotate(-.6deg)} #keysheet .cols>div:nth-child(2){transform:rotate(.4deg)} #keysheet .cols>div:nth-child(3){transform:rotate(-.3deg)}
+#keysheet .cols>div::before{content:"";position:absolute;left:40%;top:-7px;width:54px;height:14px;transform:rotate(-3deg);background:rgba(232,226,200,.7);
+  clip-path:polygon(0 0,100% 0,96% 25%,100% 50%,96% 75%,100% 100%,0 100%,4% 75%,0 50%,4% 25%)}
+#keysheet h3{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:16px;font-weight:400;margin:0 0 4px;padding-bottom:3px;border-bottom:2px solid var(--ink)}
+#keysheet h3 b{padding:2px 5px 1px;font-size:8.5px;font-weight:400;color:#f2f0ea;background:var(--label)}
+#keysheet h3 i{font-family:var(--mono);font-style:normal;color:var(--fade);font-size:9.5px}
+#keysheet dl{display:grid;grid-template-columns:auto 1fr;gap:0 9px;margin-bottom:5px;font-size:10.5px}
+#keysheet dt,#keysheet dd{padding:1px 0;border-bottom:1px dotted var(--hair)}
+#keysheet dt{font-family:var(--mono);font-weight:700;font-size:10px;white-space:nowrap}
+#keysheet dd{font-family:var(--body);color:rgba(var(--ink-rgb),.8)}

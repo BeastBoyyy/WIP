@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./desk.css">
+</head>
+<body>
+<!-- on the wallpaper, under every window: a HUD readout in brackets. The date as coordinates, the time to the second,
+     a heartbeat trace that beats once as each minute turns, the channel and the weather -->
+<main id="desk">
+  <i class="br tl"></i><i class="br tr"></i><i class="br bl"></i><i class="br bri"></i>
+  <div class="row"><span class="k">POS</span><span id="dco"></span></div>
+  <div class="clock"><span id="dhm">--:--</span><span id="dss">--</span><span class="k">LOCAL</span></div>
+  <svg id="beat" viewBox="0 0 300 40" preserveAspectRatio="none"><path class="base" d="M0 24H96l6-4 5 4h18l5 10 7-32 7 30 5-8h16l7-6 7 6H300"/><path class="pulse" pathLength="100" d="M0 24H96l6-4 5 4h18l5 10 7-32 7 30 5-8h16l7-6 7 6H300"/></svg>
+  <div class="row"><span class="k">CH</span><span id="dws"></span><span class="k">WX</span><span id="dwx"></span></div>
+</main>
+<script type="module" src="./desk.js"></script>
+</body>
+</html>

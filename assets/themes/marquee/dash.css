@@ -1,0 +1,149 @@
+/* Marquee — the one-sheet, the end cards, the lobby and the script. Paper, black and one red; hard cuts, a frame of
+   flash, and the credits slide up (350 ms). Tokens from tokens.css + bar.css. */
+body:not([data-mode=dash]) #dash,body:not([data-mode=power]) #power,body:not([data-mode=wall]) #wall,body:not([data-mode=keys]) #keysheet{display:none}
+:root{--dim:color-mix(in srgb,var(--ink) 70%,var(--bg));--fade:color-mix(in srgb,var(--ink) 45%,var(--bg));--hair:rgba(var(--ink-rgb),.18)}
+/* a sheet of poster paper, a black keyline inside the edge and a hard offset shadow */
+#dash,#wall,#keysheet,#power{position:absolute;inset:8px 14px 14px 8px;color:var(--ink);background:var(--bg);
+  box-shadow:inset 0 0 0 6px var(--bg),inset 0 0 0 7.5px var(--ink),6px 6px 0 var(--ink),0 18px 40px rgba(0,0,0,.45)}
+
+#dash{display:grid;grid-template-columns:300px 1fr;overflow:hidden}
+/* it does not open, it is cut to: two frames of a wipe, then a frame of white over the picture */
+#dash.open,#wall.open,#keysheet.open,#power.open{animation:cutin calc(.1s * var(--speed)) steps(2,end) both}
+@keyframes cutin{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+#dash.closing,#wall.closing,#keysheet.closing,#power.closing{animation:cutout calc(.1s * var(--speed)) steps(2,end) both}
+@keyframes cutout{to{clip-path:inset(0 0 0 100%)}}
+.flashf{position:absolute;inset:0;background:var(--bg);opacity:0;pointer-events:none}
+body.roll #dash.open .flashf{animation:flash calc(.06s * var(--speed)) steps(1,end) calc(.1s * var(--speed)) both}
+/* the credits slide up into place */
+body.roll #dash.open .rise{animation:credit calc(.35s * var(--speed)) cubic-bezier(.2,.8,.2,1) both}
+body.roll #side>.rise:nth-child(2){animation-delay:calc(.05s * var(--speed))} body.roll #side>.rise:nth-child(3){animation-delay:calc(.1s * var(--speed))}
+body.roll #side>.rise:nth-child(4){animation-delay:calc(.15s * var(--speed))}
+@keyframes credit{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+/* the poster: the picture, a red act band at the top, the title knocked out of a black band at the foot */
+#art{position:relative;padding:20px 8px 20px 20px}
+.port{position:relative;height:100%;overflow:hidden;background:var(--ink)}
+.port img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{position:absolute;left:20px;right:8px;bottom:20px;z-index:2;display:flex;flex-direction:column;align-items:flex-start}
+.cap .k{order:-1;margin:0 0 6px 12px;padding:3px 8px 2px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--bg);background:var(--accent);
+  box-shadow:0 0 0 2px var(--ink),4px 4px 0 2px var(--ink)}
+#artEn{align-self:stretch;padding:8px 12px 10px;font-family:var(--display);font-size:34px;line-height:1;letter-spacing:.03em;text-transform:uppercase;
+  color:var(--bg);background:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#wallBtn{position:absolute;right:16px;top:28px;z-index:3;padding:4px 9px 3px;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;
+  color:var(--bg);background:var(--accent)}
+#wallBtn:hover{background:var(--ink)}
+
+#side{padding:22px 24px 16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+/* the running time, big, and the bill under the date */
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:2.5px solid var(--ink)}
+.run{display:flex;flex-direction:column}
+.lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;color:var(--accent)}
+.big{font-family:var(--display);font-size:66px;line-height:.9;letter-spacing:.02em;color:var(--ink)}
+.date{display:flex;flex-direction:column;align-items:flex-end;gap:5px;padding-bottom:4px;text-align:right}
+.date #jdate{font-family:var(--body);font-size:15px;font-weight:500;letter-spacing:.08em;color:var(--ink)}
+.date #edate{font-family:var(--display);font-size:13px;letter-spacing:.1em;padding:3px 8px 2px;color:var(--bg);background:var(--ink)}
+
+.row{display:flex;gap:14px;align-items:stretch}
+/* the month's programme: today cut in white on red */
+#cal{display:grid;grid-template-columns:repeat(7,25px);gap:0 3px;align-content:start;font-family:var(--mono);font-size:11.5px;color:var(--dim)}
+#cal .mh{grid-column:1/-1;font-family:var(--display);font-size:16px;letter-spacing:.08em;color:var(--ink);margin-bottom:2px}
+#cal .wd{font-size:8.5px;color:var(--fade);text-align:center;padding:2px 0 3px;border-bottom:1px solid var(--ink)}
+#cal .wd.sun,#cal .sun{color:var(--accent)}
+#cal i{font-style:normal;height:22px;display:grid;place-items:center;position:relative}
+#cal i.out{opacity:.25}
+#cal i.today{color:var(--bg);background:var(--accent);clip-path:polygon(3px 0,100% 0,calc(100% - 3px) 100%,0 100%)}
+/* four countdown leaders, the reading in the middle */
+#rings{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;align-content:center;padding-left:14px;border-left:1px solid var(--hair)}
+.ring2{display:flex;align-items:center;gap:10px;min-width:0} .ring2.none{display:none}
+.lead{position:relative;width:58px;height:58px;flex:none}
+.lead svg{width:100%;height:100%;overflow:visible}
+.lead .o{fill:none;stroke:var(--ink);stroke-width:2}
+.lead .i{fill:none;stroke:var(--ink);stroke-width:.8;opacity:.5}
+.lead .x{stroke:var(--ink);stroke-width:.8;opacity:.45}
+.lead .wedge{fill:var(--ink);opacity:.14;transition:d .6s}
+#g-cpu .lead .wedge{fill:var(--accent);opacity:.35}
+.lead em{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-family:var(--display);font-size:21px;color:var(--ink)}
+.rt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.rt b{font-family:var(--display);font-weight:400;font-size:13px;letter-spacing:.1em;color:var(--ink)}
+.rt span{font-family:var(--mono);font-size:9.5px;color:var(--fade);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#g-cpu .rt b{color:var(--accent)}
+
+/* the score, as a credit: the role small, the name tall, the reel running under it */
+#media{display:flex;align-items:center;gap:14px;padding:10px 14px;color:var(--bg);background:var(--ink)}
+.credit{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.role{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--accent)}
+.credit b{font-family:var(--display);font-weight:400;font-size:21px;line-height:1.1;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.credit #ma{font-family:var(--body);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:rgba(var(--bg-rgb),.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* the reel: a strip of frames, exposed in red as the song runs */
+.rule{position:relative;height:8px;margin-top:6px;background:repeating-linear-gradient(90deg,rgba(var(--bg-rgb),.22) 0 10px,transparent 10px 12px)}
+#mprog{position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--accent) 0 10px,transparent 10px 12px);
+  clip-path:inset(0 calc(100% - var(--p,0) * 100%) 0 0);transition:clip-path 1s linear}
+.ctl{display:flex;gap:2px}
+.ctl button{width:30px;height:30px;display:grid;place-items:center;color:var(--bg)}
+.ctl button:hover{background:var(--accent);color:var(--bg)}
+.ctl svg{width:13px;height:13px;fill:currentColor}
+#media.idle .ctl,#media.idle .rule{display:none}
+#media.idle .credit b{font-size:17px;color:rgba(var(--bg-rgb),.6)}
+
+/* the tag line, and the rating box */
+footer{margin-top:auto;display:flex;gap:12px;align-items:center;justify-content:space-between}
+footer .saying{min-width:0;font-family:var(--display);font-size:17px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+footer .saying i{font-style:normal;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+footer .saying i::before{content:"“";color:var(--accent)} footer .saying i::after{content:"”";color:var(--accent)}
+footer .mark{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;color:var(--fade);white-space:nowrap;padding:2px 5px 1px;box-shadow:inset 0 0 0 1px var(--fade)}
+
+/* power: four end cards. Pointed at, a card is inverted to red; armed, it holds red with a frame of white, and the strip
+   under the heading runs out over the 3 s it waits */
+#power{padding:20px 26px 24px;display:flex;flex-direction:column;align-items:center}
+#pmid{display:flex;flex-direction:column;align-items:center;gap:2px;pointer-events:none;min-height:66px}
+#pk{font-family:var(--display);font-size:30px;letter-spacing:.08em;line-height:1;color:var(--ink)}
+#pl{font-family:var(--body);font-size:14px;letter-spacing:.04em;color:var(--dim)}
+#ph{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--fade)}
+#power.armed #pk{color:var(--accent)}
+.fuse{display:block;position:relative;width:100%;height:6px;margin:6px 0 14px;background:repeating-linear-gradient(90deg,var(--hair) 0 10px,transparent 10px 12px)}
+.fuse::after{content:"";position:absolute;inset:0;transform:scaleX(0);transform-origin:left;background:repeating-linear-gradient(90deg,var(--accent) 0 10px,transparent 10px 12px)}
+#power.armed .fuse::after{animation:burn 3s steps(30,end) both}
+@keyframes burn{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.brands{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;width:100%}
+.pb{position:relative;height:52px;display:grid;place-items:center;color:var(--bg);background:var(--ink)}
+.pb::before{position:absolute;left:8px;top:5px;font-family:var(--mono);font-size:7.5px;letter-spacing:.16em;opacity:.55}
+.pb:nth-child(1)::before{content:"REEL 1"} .pb:nth-child(2)::before{content:"REEL 2"} .pb:nth-child(3)::before{content:"REEL 3"} .pb:nth-child(4)::before{content:"REEL 4"}
+.pb .k{font-family:var(--display);font-size:19px;letter-spacing:.1em}
+.pb:hover,.pb:focus-visible{background:var(--accent)}
+.pb.armed{background:var(--accent);box-shadow:inset 0 0 0 3px var(--ink),inset 0 0 0 5px var(--bg)}
+.pb.armed::after{content:"";position:absolute;inset:0;background:var(--bg);opacity:0;animation:flash calc(.06s * var(--speed)) steps(1,end) both}
+
+/* the lobby: five lobby cards and yours; the one up on the wall carries the NOW SHOWING snipe */
+#wall{padding:14px 24px 12px}
+#wall header{margin-bottom:10px}
+#wall header,#keysheet header{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+#wall header b,#keysheet header b{font-size:9.5px;color:var(--bg);background:var(--accent);padding:3px 7px 2px}
+#wall header span,#keysheet header span{font-family:var(--display);font-size:20px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
+#wall header i,#keysheet header i{margin-left:auto;font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--fade)}
+.cards{display:flex;justify-content:center;gap:14px}
+.wc{position:relative;box-sizing:border-box;width:130px;height:138px;padding:5px 5px 34px;background:var(--ink)}
+.wc img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.5) brightness(.8)}
+.wc:hover img,.wc.on img{filter:none}
+.wc:hover{background:var(--accent)}
+.wc .cap{left:8px;right:8px;bottom:6px;flex-direction:column;align-items:flex-start;gap:0}
+.wc .cap b{margin:0;padding:0;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;color:var(--accent);background:none}
+.wc:hover .cap b{color:var(--bg)}
+.wc .cap i{font-family:var(--display);font-style:normal;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--bg)}
+.wc em{position:absolute;left:-6px;right:-6px;top:16px;padding:3px 0 2px;display:none;text-align:center;font-style:normal;font-family:var(--display);font-size:11px;letter-spacing:.14em;
+  color:var(--bg);background:var(--accent);box-shadow:3px 3px 0 var(--ink);transform:rotate(-5deg)}
+.wc.on em{display:block}
+.wc.busy{filter:brightness(.6)}
+
+/* the script: three pages in Courier, the keys in red like a character's name */
+#keysheet{padding:16px 22px 14px}
+#keysheet header{margin-bottom:10px}
+#keysheet .cols{display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:14px}
+#keysheet .cols>div{position:relative;padding:11px 13px 4px;background:color-mix(in srgb,var(--bg) 60%,#fff);box-shadow:inset 0 0 0 1px var(--hair),3px 3px 0 var(--hair)}
+#keysheet h3{display:flex;align-items:baseline;gap:8px;font-family:var(--display);font-size:15px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);
+  margin:0 0 4px;padding-bottom:3px;border-bottom:1.5px solid var(--ink)}
+#keysheet h3 b{font-size:8.5px;color:var(--accent);font-weight:400}
+#keysheet h3 i{font-family:var(--mono);font-style:normal;letter-spacing:0;text-transform:none;color:var(--fade);font-size:9.5px}
+#keysheet dl{display:grid;grid-template-columns:auto 1fr;gap:0 10px;margin-bottom:6px;font-size:11.5px}
+#keysheet dt,#keysheet dd{padding:1.5px 0;border-bottom:1px dotted var(--hair)}
+#keysheet dt{font-family:var(--mono);font-size:10.5px;color:var(--accent);white-space:nowrap}
+#keysheet dd{font-family:var(--body);letter-spacing:.02em;color:var(--dim)}

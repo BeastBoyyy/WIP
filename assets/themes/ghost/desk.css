@@ -1,0 +1,26 @@
+/* Ghost Signal — on the wallpaper: a HUD readout in four brackets. The seconds step once a second (nothing else does);
+   the heartbeat trace runs once as each minute turns; nothing moves at all while a game is on. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden}
+#desk{position:absolute;left:56px;bottom:10%;width:340px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:6px;pointer-events:none;
+  color:var(--ink);font-family:var(--body);background:linear-gradient(rgba(var(--bg-rgb),.78),rgba(var(--bg-rgb),.6))}
+.br{position:absolute;width:16px;height:13px;border:0 solid var(--ink)}
+.br.tl{left:0;top:0;border-width:2px 0 0 2px}.br.tr{right:0;top:0;border-width:2px 2px 0 0}.br.bl{left:0;bottom:0;border-width:0 0 2px 2px}.br.bri{right:0;bottom:0;border-width:0 2px 2px 0}
+.k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--accent)}
+.row{display:flex;align-items:baseline;gap:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;white-space:nowrap}
+.row .k+span{margin-right:10px}
+/* the time: hours and minutes large, the seconds smaller in amber beside them */
+.clock{display:flex;align-items:baseline;gap:6px}
+#dhm{font-family:var(--display);font-weight:600;font-size:64px;line-height:.95;letter-spacing:.03em;font-variant-numeric:tabular-nums}
+#dss{font-family:var(--display);font-weight:600;font-size:28px;color:var(--accent);font-variant-numeric:tabular-nums;min-width:34px}
+.clock .k{margin-left:auto;align-self:flex-start;margin-top:6px;color:rgba(var(--ink-rgb),.5)}
+/* the trace: a faint line always, a bright pulse running along it once a minute */
+#beat{display:block;width:100%;height:34px;overflow:visible}
+#beat path{fill:none;vector-effect:non-scaling-stroke}
+#beat .base{stroke:rgba(var(--ink-rgb),.28);stroke-width:1}
+#beat .pulse{stroke:var(--ink);stroke-width:1.6;stroke-dasharray:14 100;stroke-dashoffset:14;opacity:0;filter:drop-shadow(0 0 3px rgba(var(--ink-rgb),.7))}
+#beat.go .pulse{animation:pulse calc(1.2s * var(--speed)) linear both}
+@keyframes pulse{0%{opacity:1;stroke-dashoffset:14}95%{opacity:1}100%{opacity:0;stroke-dashoffset:-100}}
+body.nowm #desk{opacity:.5}
+body.nowm #beat .pulse{animation:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

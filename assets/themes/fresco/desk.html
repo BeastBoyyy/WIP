@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fresco desk</title>
+<meta name="description" content="The Fresco theme's desk: a ceiling painted one day's patch at a time.">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./desk.css">
+</head>
+<body>
+<!-- on the wallpaper, under every window: a fresh patch of plaster set into the wall, the rough layer showing round its
+     edge. The hour is cut into it in the Roman face; under it a stroke of the wet pigment, the day, the pigment you are
+     in, the weather, and how much working light is left before eight -->
+<main id="desk">
+  <div class="patch">
+    <div id="dhm">--:--</div>
+    <i class="stroke" aria-hidden="true"></i>
+    <div id="dday"></div>
+    <div class="row"><b id="dpig"></b><span id="dwx"></span></div>
+    <div id="dleft"></div>
+  </div>
+</main>
+<script type="module" src="./desk.js"></script>
+</body>
+</html>

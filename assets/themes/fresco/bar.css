@@ -1,0 +1,155 @@
+/* Hallmark · shape: a run of plaster patches butted along slanted seams · genre: editorial · theme: custom · job: try · idea: "A fresco is painted one day's patch of wet plaster at a time; the bar is the day's patches, and the pigment you work in is still wet" · vibe: "lime plaster, wet pigment, Roman light"
+ * paper: oklch(0.96 0.003 180) · accent: oklch(0.53 0.15 255) · display: Marcellus · body: Alegreya Sans · hero: the workspace tiles, sinopia sketch to dry to wet · nav: the patches · footer: none · imagery: none in the bar · signature: the wet tile soaking in its pigment
+ * axes: light/roman-serif/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H4 E4 S5 R4 V5 · weakest: H, the six patches read alike at a glance; the pigment tiles and the clock take the two strongest weights and everything else steps down to body text */
+/* Hallmark · waive 29 · the trowel sheen crosses the wet tile once · wet plaster shines for a moment when the trowel passes */
+
+/* Fresco: the bar. Tokens first: the palette you edit in Rice Studio (tokens.css) mixed into plaster, pigments and the
+   rough arriccio that shows in the seams. Motion: pigment soaks in (700 ms, ease-out), a trowel sheen crosses the wet
+   tile once, the old tile dries slowly (1.2 s); a new window's name settles out of a blur (420 ms). One small loop: the
+   wet stroke under a playing song (3.2 s). Reduced motion keeps the colours and drops the movement. */
+:root{
+  --plaster:var(--surface); --dry:var(--bg); --wet:var(--accent); --sinopia:var(--accent2);
+  --arriccio:color-mix(in oklch,var(--muted) 72%,var(--accent2));
+  --soft:color-mix(in oklch,var(--ink) 64%,var(--plaster));
+  --faint:color-mix(in oklch,var(--ink) 16%,transparent);
+  /* the painter's five pots: the sky, the green earth under flesh, the red of the first drawing, lead-tin yellow, rose lake */
+  --p0:var(--accent); --p1:oklch(0.6 0.075 145); --p2:var(--accent2); --p3:oklch(0.8 0.13 86); --p4:oklch(0.56 0.15 6);
+  --pig:var(--p0);
+  --dur-micro:calc(120ms * var(--speed)); --dur-short:calc(220ms * var(--speed)); --dur-long:calc(420ms * var(--speed));
+  --dur-soak:calc(700ms * var(--speed)); --dur-dry:calc(1200ms * var(--speed));
+  --ease-out:cubic-bezier(.22,1,.36,1); --ease-in:cubic-bezier(.55,0,1,.45); --ease-io:cubic-bezier(.65,0,.35,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;overflow-x:clip;background:transparent;color:var(--ink);font-family:var(--body);font-size:14px;
+  font-synthesis:none;user-select:none;-webkit-font-smoothing:antialiased}
+/* the shadow under the strip sits on the page, so the ragged mask on the strip cannot clip it */
+body{filter:drop-shadow(0 2px 3px color-mix(in oklch,var(--ink) 22%,transparent))}
+button{all:unset;box-sizing:border-box;cursor:pointer}
+svg{display:block;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.num{font-variant-numeric:lining-nums tabular-nums}
+[hidden]{display:none!important}
+
+/* the strip: the arriccio under-layer, full width, with a lime edge that is a little ragged along the bottom */
+#bar{position:absolute;inset:0 0 auto 0;height:calc(var(--bar-h) + 8px);display:flex;align-items:stretch;background:var(--arriccio);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 48' preserveAspectRatio='none'%3E%3Cpath d='M0 0H300V46.5L288 47.6 271 45.8 255 47.2 240 46.1 222 47.8 205 46 190 47.4 171 45.9 156 47.5 139 46.3 121 47.9 104 46.2 88 47.3 70 45.7 55 47.6 37 46.4 20 47.7 0 46.5Z'/%3E%3C/svg%3E") 0 0/300px 100% repeat-x}
+
+/* a giornata: one patch of the day's plaster. Each patch's ends are cut on a slant, and each seam is parallel and 3 px
+   wide, so the rough layer shows through as a fine slanted line. Each day's mix of lime came out a touch different */
+.g{position:relative;display:flex;align-items:center;gap:4px;height:100%;background:var(--plaster);flex:none;
+  animation:lay var(--dur-long) var(--ease-out) both}
+.g1{clip-path:polygon(0 0,100% 0,calc(100% - 8px) 100%,0 100%);padding:0 18px 0 12px}
+.g2{clip-path:polygon(8px 0,calc(100% - 10px) 0,100% 100%,0 100%);margin-left:-5px;padding:0 20px 0 18px;
+  background:color-mix(in oklch,var(--plaster),var(--dry) 45%);animation-delay:40ms}
+.g3{clip-path:polygon(0 0,100% 0,calc(100% - 6px) 100%,10px 100%);margin-left:-7px;padding:0 18px 0 22px;flex:1 1 0;min-width:0;
+  justify-content:center;animation-delay:80ms}
+.g4{clip-path:polygon(6px 0,calc(100% - 8px) 0,100% 100%,0 100%);margin-left:-3px;padding:0 18px 0 16px;
+  background:color-mix(in oklch,var(--plaster),var(--dry) 25%);animation-delay:120ms}
+.g5{clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,8px 100%);margin-left:-5px;padding:0 20px 0 16px;
+  background:color-mix(in oklch,var(--plaster),var(--dry) 60%);animation-delay:160ms}
+.g6{clip-path:polygon(10px 0,100% 0,100% 100%,0 100%);margin-left:-7px;padding:0 10px 0 20px;animation-delay:200ms}
+@keyframes lay{from{opacity:0;transform:translateY(-10px)}}
+
+.it{position:relative;display:flex;align-items:center;gap:6px;height:32px;padding:0 7px;color:var(--ink);border-radius:2px;
+  transition:background-color var(--dur-short) var(--ease-out),color var(--dur-short) var(--ease-out)}
+button.it:hover{background:color-mix(in oklch,var(--ink) 7%,transparent)}
+button.it:active{transform:translateY(1px)}
+button:focus-visible,.w:focus-visible{outline:2px solid var(--wet);outline-offset:-2px}
+.it svg{width:18px;height:18px}
+
+/* the oculus: the ceiling's round opening, for the overview */
+#overview{padding:0 8px;color:var(--soft)}
+#overview:hover{color:var(--ink)}
+#overview circle:last-child{transition:transform var(--dur-long) var(--ease-out);transform-origin:12px 12px}
+#overview:hover circle:last-child{transform:scale(1.35)}
+
+/* the pigments. Empty: only the sinopia sketch, a thin red-brown line and a red numeral. Has windows: dry pigment, pale
+   and matte. Yours: wet pigment, full and a shade darker, soaked in from the middle, then a trowel sheen crosses it */
+#ws{display:flex;gap:3px;margin-left:2px}
+.w{position:relative;display:grid;place-items:center;width:30px;height:32px;overflow:hidden;cursor:pointer;color:var(--sinopia);
+  font-family:var(--display);font-size:15px;line-height:1;box-shadow:inset 0 0 0 1px color-mix(in oklch,var(--sinopia) 55%,transparent);
+  transition:background-color var(--dur-dry) var(--ease-out),color var(--dur-short) var(--ease-out),box-shadow var(--dur-short) var(--ease-out)}
+.w.p0{--pig:var(--p0)}.w.p1{--pig:var(--p1)}.w.p2{--pig:var(--p2)}.w.p3{--pig:var(--p3)}.w.p4{--pig:var(--p4)}
+.w span{position:relative;z-index:2}
+.w::before{content:"";position:absolute;inset:-35%;border-radius:50%;z-index:0;background:color-mix(in oklch,var(--pig),black 10%);
+  transform:scale(0);opacity:0;transition:transform var(--dur-soak) var(--ease-out),opacity var(--dur-dry) var(--ease-out)}
+.w::after{content:"";position:absolute;inset:0 -60%;z-index:1;opacity:0;pointer-events:none;
+  background:linear-gradient(100deg,transparent 35%,color-mix(in oklch,white 55%,transparent) 50%,transparent 65%)}
+.w.has{color:var(--ink);background:color-mix(in oklch,var(--pig) 42%,var(--plaster));box-shadow:none}
+.w.on{color:var(--plaster);box-shadow:none;background:color-mix(in oklch,var(--pig) 42%,var(--plaster))}
+.w.on::before{transform:scale(1);opacity:1}
+.w.on.p3{color:var(--ink)}
+.w.trowel::after{animation:trowel calc(900ms * var(--speed)) var(--ease-io) calc(260ms * var(--speed)) both}
+@keyframes trowel{from{opacity:1;transform:translateX(-60%)}to{opacity:1;transform:translateX(60%)}}
+.w:hover:not(.on){box-shadow:inset 0 0 0 1px var(--ink);color:var(--ink)}
+/* the wet pigment's name, beside the tiles, with a stroke of it underneath */
+#pig{position:relative;min-width:96px;height:32px;display:flex;align-items:center;padding:0 2px 0 10px}
+#pigName{font:400 15px/1 var(--display);color:var(--ink);white-space:nowrap}
+#pig::after{content:"";position:absolute;left:10px;right:8px;bottom:7px;height:2px;background:var(--pig);transform-origin:left;
+  transition:background-color var(--dur-long) var(--ease-out)}
+#pig.new #pigName{animation:settle var(--dur-long) var(--ease-out) both}
+#pig.new::after{animation:stroke var(--dur-soak) var(--ease-out) both}
+@keyframes settle{from{opacity:0;transform:translateY(5px);filter:blur(2px)}}
+@keyframes stroke{from{transform:scaleX(0)}}
+
+/* the tools: words, and a stroke of the wet pigment drawn under the one you point at */
+.lk{padding:0 8px;color:var(--soft)}
+.lk::after{content:"";position:absolute;left:8px;right:8px;bottom:5px;height:2px;background:var(--pig);transform:scaleX(0);transform-origin:left;
+  transition:transform var(--dur-short) var(--ease-out)}
+.lk:hover{color:var(--ink);background:none}
+.lk:hover::after,.lk:focus-visible::after{transform:scaleX(1)}
+
+/* the window you are in: what kind of thing, its name in the Roman face, then its own title */
+#title{display:flex;align-items:baseline;gap:8px;min-width:0;max-width:100%;height:auto;padding:0}
+#tk{flex:none;color:var(--soft);font-size:12.5px}
+#tapp{flex:none;font:400 17px/1 var(--display);letter-spacing:.01em;white-space:nowrap}
+#tname{min-width:0;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tapp.ink,#hm.ink{animation:settle var(--dur-long) var(--ease-out) both}
+
+/* weather and the song: a wet stroke runs under a playing song */
+#wk{color:var(--soft)}
+#media{max-width:240px;padding:0 8px}
+#mt{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mt em{font-style:normal;color:var(--soft)}
+#media .stroke{position:absolute;left:8px;right:8px;bottom:5px;height:2px;overflow:hidden;opacity:0;transition:opacity var(--dur-long) var(--ease-out)}
+#media .stroke::before{content:"";position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,var(--pig),transparent);transform:translateX(-100%)}
+#media.playing .stroke{opacity:1}
+#media.playing .stroke::before{animation:run calc(3.2s * var(--speed)) var(--ease-io) infinite}
+@keyframes run{to{transform:translateX(260%)}}
+body.nowm #media .stroke::before{animation:none}
+
+/* the machine: tray, figures, battery, network, volume */
+#tray{display:flex;align-items:center;gap:1px}
+#tray button{display:grid;place-items:center;width:26px;height:28px;border-radius:2px}
+#tray button:hover{background:color-mix(in oklch,var(--ink) 8%,transparent)}
+#tray img{width:16px;height:16px}
+#trayBtn{width:22px;padding:0;justify-content:center;color:var(--soft)}
+#trayBtn svg{width:12px;height:12px;transition:transform var(--dur-short) var(--ease-out)}
+#trayBtn.on svg{transform:rotate(180deg)}
+#rings{gap:5px;cursor:pointer}
+.lb{color:var(--soft);font-size:12.5px}
+#rings .num{min-width:2ch;margin-right:4px}
+#rings .num.hot{color:var(--sinopia)}
+#batt{gap:6px}
+.cell{position:relative;width:22px;height:11px;border-radius:2px;box-shadow:inset 0 0 0 1.5px var(--soft);overflow:hidden}
+.cell::after{content:"";position:absolute;right:-3px;top:3px;width:2px;height:5px;background:var(--soft)}
+#bfill{position:absolute;inset:2.5px;background:var(--p1);transform-origin:left;transform:scaleX(var(--p,1));transition:transform var(--dur-long) var(--ease-out)}
+#batt.low #bfill{background:var(--sinopia)}
+#batt.chg #bfill{background:var(--p3)}
+#net{padding:0 6px}
+#net.off{color:var(--soft);opacity:.55}
+#volb .mx{display:none}
+#volb.muted .wv{display:none}
+#volb.muted .mx{display:block;color:var(--sinopia)}
+#vol{min-width:2ch}
+
+/* the hour: Roman numerals' face, the day under it, and the end of the day's work */
+#clock{flex-direction:column;align-items:flex-end;justify-content:center;gap:2px;height:40px;padding:0 10px}
+#hm{font:400 21px/1 var(--display);font-variant-numeric:lining-nums tabular-nums}
+#day{color:var(--soft);font-size:12px;line-height:1}
+#pwr{width:32px;padding:0;justify-content:center;color:var(--soft)}
+#pwr:hover{color:var(--plaster);background:var(--sinopia)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+}

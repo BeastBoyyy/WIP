@@ -1,0 +1,114 @@
+
+.bar{--bg:{{bg}};--surface:{{surface}};--ink:{{ink}};--accent:{{accent}};--accent2:{{accent2}};--muted:{{muted}};
+ --fd:'{{font_display}}';--fb:'{{font_body}}';--fm:'{{font_mono}}';--t:{{ease}};
+ height:{{height}}px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 10px;box-sizing:border-box;
+ font:13px var(--fb),sans-serif;color:var(--ink);position:relative;user-select:none;overflow:hidden}
+.bar *{box-sizing:border-box}
+.isl{display:flex;align-items:center;gap:14px;height:100%;padding:0 14px;position:relative;white-space:nowrap}
+.ws{display:flex;gap:4px;height:100%;align-items:center}
+.w{all:unset;cursor:pointer;min-width:26px;height:26px;padding:0 6px;display:inline-flex;align-items:center;justify-content:center;position:relative;
+ font:16px var(--fd),serif;color:var(--muted);transition:color var(--t),background var(--t),transform var(--t)}
+.w.occ{color:var(--ink)} .w.on{color:var(--accent)} .w:hover{transform:translateY(-1px)}
+.it{display:flex;align-items:baseline;gap:5px;position:relative} .it b{font-weight:400}
+.lbl{display:none} .clk b{font:17px var(--fd),serif}
+.fx{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:inherit}
+
+/* Ronin: ink islands, a tilted hanko for the active workspace */
+.s-islands{padding:5px 6px}
+.s-islands .isl{background:color-mix(in srgb,var(--surface) 90%,transparent);border-radius:12px;border:1px solid color-mix(in srgb,var(--ink) 9%,transparent)}
+.s-islands .w.on{background:var(--accent);color:var(--ink);border-radius:4px;transform:rotate(-4deg)}
+.s-islands .w:hover{text-shadow:0 0 8px var(--accent2)}
+.s-islands .clk b{font-size:19px}
+
+/* Fresco: a floating gilded cartouche with a slow god-ray */
+.s-cartouche{width:72%;margin:3px auto 0;border-radius:999px;background:linear-gradient(var(--surface),color-mix(in srgb,var(--surface) 80%,var(--accent)));
+ border:2px solid var(--accent);box-shadow:inset 0 0 0 4px var(--surface),inset 0 0 0 5px var(--accent),0 6px 18px rgba(59,42,30,.35);font-size:15px;letter-spacing:.06em}
+.s-cartouche .w{font-size:15px;letter-spacing:.1em} .s-cartouche .w.on{color:var(--muted);text-decoration:underline 2px var(--accent);text-underline-offset:5px}
+.s-cartouche .isl.c{font-family:var(--fd);font-size:13px;letter-spacing:.25em;color:var(--accent)}
+.s-cartouche .isl.c::before,.s-cartouche .isl.c::after{content:'\25C6';color:var(--accent);font-size:9px}
+.s-cartouche .fx::after{content:'';position:absolute;inset:0 -60%;background:linear-gradient(100deg,transparent 42%,rgba(255,244,214,.75) 50%,transparent 58%);
+ transform:translateX(-45%);animation:ray 9s ease-in-out infinite;mix-blend-mode:soft-light}
+@keyframes ray{to{transform:translateX(45%)}}
+
+/* Relic: a torn strip of grainy paper, the active workspace is a pasted scrap of sky */
+.s-collage{background:{{noise}},var(--surface);clip-path:{{torn}};padding-bottom:9px}
+.s-collage .w{font:italic 15px var(--fb),serif}
+.s-collage .w.on{background:linear-gradient(#8EC1E0,#d7eaf4);color:var(--bg);box-shadow:2px 2px 0 rgba(0,0,0,.35);transform:rotate(-2.5deg)}
+.s-collage .isl.c{font:13px var(--fm),monospace;letter-spacing:.08em;color:var(--accent2)}
+.s-collage .clk b{font:italic 19px var(--fd),serif}
+
+/* Inferno: oil-dark bar, a burning rule, embers drifting up */
+.s-ember{background:linear-gradient(180deg,#0e0704,var(--surface));border-bottom:2px solid;border-image:linear-gradient(90deg,transparent,var(--accent),var(--accent2),var(--accent),transparent) 1}
+.s-ember .w.on{color:var(--accent2);text-shadow:0 0 10px var(--accent),0 0 2px var(--accent2)}
+.s-ember .clk b{color:var(--accent2);text-shadow:0 0 12px var(--accent)}
+.s-ember .fx::before,.s-ember .fx::after{content:'';position:absolute;inset:0;
+ background:radial-gradient(circle at 12% 90%,var(--accent2) 0 1px,transparent 2px),radial-gradient(circle at 37% 80%,var(--accent) 0 1px,transparent 2px),
+  radial-gradient(circle at 63% 95%,var(--accent2) 0 1px,transparent 2px),radial-gradient(circle at 88% 85%,var(--accent) 0 1.2px,transparent 2px);
+ animation:rise 4.5s linear infinite;opacity:0}
+.s-ember .fx::after{animation-delay:2.2s;transform:translateX(18px)}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:.9}100%{transform:translateY(-40px);opacity:0}}
+
+/* Schematic: a blueprint grid, callout labels on every item, an orange split line */
+.s-callout{background:linear-gradient(color-mix(in srgb,var(--ink) 8%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ink) 8%,transparent) 1px,transparent 1px),var(--bg);
+ background-size:12px 12px;border-bottom:1px solid var(--ink);text-transform:uppercase;font:12px var(--fm),monospace;letter-spacing:.08em}
+.s-callout .lbl{display:block;position:absolute;top:-1px;left:0;font:8.5px var(--fm),monospace;letter-spacing:.14em;color:var(--accent)}
+.s-callout .isl > .lbl{left:14px;top:2px} .s-callout .it{padding-top:12px}
+.s-callout .lbl::after{content:'';display:inline-block;width:16px;margin-left:4px;vertical-align:middle;border-top:1px solid var(--accent)}
+.s-callout .ws{padding-top:10px} .s-callout .w{font:13px var(--fd),sans-serif;height:22px}
+.s-callout .w.on{outline:1px dashed var(--accent);color:var(--accent)}
+.s-callout .isl.c{padding-top:10px} .s-callout .isl.c::before,.s-callout .isl.c::after{content:'';position:absolute;top:0;bottom:0;width:12px;background:{{zig}} center/12px 100% no-repeat}
+.s-callout .isl.c::before{left:-14px} .s-callout .isl.c::after{right:-14px}
+.s-callout .clk b{font:15px var(--fm),monospace;color:var(--accent)}
+
+/* Marquee: poster credits, the clock is a red headline block */
+.s-credits{background:var(--surface);border-bottom:3px solid var(--ink);padding:0 0 0 10px;text-transform:uppercase;font:13px var(--fb),sans-serif;letter-spacing:.14em}
+.s-credits .w{font:18px var(--fd),sans-serif} .s-credits .w.on{color:var(--accent)}
+.s-credits .it + .it::before{content:'\00B7';margin-right:10px;color:var(--muted)}
+.s-credits .isl.c::before{content:'';width:20px;height:20px;background:{{star}} center/contain no-repeat}
+.s-credits .isl.r{padding-right:0} .s-credits .clk{align-self:stretch;align-items:center;background:var(--accent);color:#fff;padding:0 16px;margin-left:4px}
+.s-credits .clk b{font:26px var(--fd),sans-serif;letter-spacing:.02em}
+
+/* Dossier: case-file beige, thin red annotation rules with typed labels */
+.s-dossier{background:{{noise}},var(--surface);border-bottom:1px solid var(--accent);font:12px var(--fb),monospace}
+.s-dossier .lbl{display:block;position:absolute;top:3px;left:0;font:8px var(--fm),monospace;color:var(--accent);letter-spacing:.1em}
+.s-dossier .lbl::before{content:'';position:absolute;left:-26px;top:5px;width:22px;border-top:1px solid var(--accent)}
+.s-dossier .isl > .lbl{left:14px} .s-dossier .it{padding-top:11px} .s-dossier .ws,.s-dossier .isl.c{padding-top:10px}
+.s-dossier .w{font:19px var(--fd),sans-serif} .s-dossier .w.on{color:var(--accent);box-shadow:inset 0 -2px var(--accent)}
+.s-dossier .clk b{font:22px var(--fd),sans-serif;color:var(--accent)}
+
+/* Xerox: toner-noisy paper, slab type, a halftone edge */
+.s-xerox{background:{{noise}},{{noise}},var(--surface);font:600 12px var(--fb),sans-serif;text-transform:uppercase;letter-spacing:.06em;padding-bottom:9px}
+.s-xerox .fx{top:auto;height:7px;background:radial-gradient(var(--ink) 1.1px,transparent 1.5px) 0 0/6px 6px}
+.s-xerox .w{font:15px var(--fd),serif} .s-xerox .w.on{background:var(--ink);color:var(--surface)}
+.s-xerox .clk b{font:20px var(--fd),serif}
+
+/* Etch: black hatching, hairlines, one point of light */
+.s-etch{background:repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 1px,transparent 1px 4px),var(--bg);border-bottom:1px solid var(--ink);font:12px var(--fb),monospace}
+.s-etch .w{font:17px var(--fd),serif} .s-etch .w.on{color:var(--ink);box-shadow:0 0 0 1px var(--ink);border-radius:50%}
+.s-etch .fx::before{content:'';position:absolute;left:50%;top:50%;width:90px;height:90px;translate:-50% -50%;
+ background:radial-gradient(circle,rgba(255,255,255,.9) 0 2px,rgba(255,255,255,.25) 4px,transparent 45px);animation:breathe 6s ease-in-out infinite}
+@keyframes breathe{50%{opacity:.4}}
+.s-etch .isl.c{z-index:1;font:14px var(--fd),serif;letter-spacing:.2em}
+
+/* Dither: 1-bit, a Bayer-dot edge, light beams under the active workspace */
+.s-dither{background:#000;color:#fff;font:18px var(--fb),monospace;image-rendering:pixelated}
+.s-dither .fx{top:auto;height:4px;background:conic-gradient(#fff 25%,#000 0 50%,#fff 0 75%,#000 0) 0 0/2px 2px}
+.s-dither .w{font:20px var(--fd),monospace;color:#777} .s-dither .w.occ{color:#fff} .s-dither .w.on{background:#fff;color:#000}
+.s-dither .w.on::after{content:'';position:absolute;left:50%;top:100%;width:1px;height:60px;background:linear-gradient(#fff,transparent)}
+.s-dither .clk b{font:22px var(--fd),monospace}
+
+/* Ghost Signal: clipped HUD glass, scanlines, bracketed workspace, a flicker */
+.s-hud{background:linear-gradient(90deg,color-mix(in srgb,var(--surface) 92%,transparent),color-mix(in srgb,var(--bg) 75%,transparent));
+ clip-path:polygon(0 0,100% 0,100% 62%,calc(100% - 16px) 100%,16px 100%,0 62%);border-top:1px solid var(--accent2);font:15px var(--fb),sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.s-hud .fx{background:repeating-linear-gradient(0deg,color-mix(in srgb,var(--ink) 9%,transparent) 0 1px,transparent 1px 3px);animation:flick 7s steps(1) infinite}
+@keyframes flick{0%,96%,100%{opacity:1}97%{opacity:.3}98%{opacity:.85}}
+.s-hud .w{font:14px var(--fm),monospace} .s-hud .w.on{color:var(--accent)} .s-hud .w.on::before{content:'['} .s-hud .w.on::after{content:']'}
+.s-hud .it b{color:var(--accent)} .s-hud .clk b{font:18px var(--fd),sans-serif;color:var(--ink);text-shadow:0 0 8px var(--ink)}
+
+/* Y2K Blue: glossy media-player chrome, bevelled buttons */
+.s-chrome{background:linear-gradient(#5b86ff,var(--surface) 46%,#0f1da8 54%,#2a46f0);border-bottom:2px solid #08105a;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.65);font:11px var(--fb),monospace;color:#fff;padding:4px 8px}
+.s-chrome .isl{background:rgba(0,0,40,.35);border:1px solid rgba(255,255,255,.35);border-radius:4px;height:calc(100% - 4px);box-shadow:inset 1px 1px 3px rgba(0,0,0,.5)}
+.s-chrome .w{height:22px;font:15px var(--fd),monospace;color:#fff;background:linear-gradient(#a9c1ff,#4a6cf0 50%,#3355e0);border:1px solid #0b1170;border-radius:3px;box-shadow:inset 0 1px rgba(255,255,255,.7)}
+.s-chrome .w.on{background:linear-gradient(#ff9ad6,var(--accent) 50%,#b8207c)}
+.s-chrome .clk b{font:20px var(--fm),monospace;color:#cfe0ff;text-shadow:0 0 6px var(--accent2)}

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+</head>
+<body>
+<!-- a glossy gel pill across the top of the screen, a chrome rim round it and a sheen over its top half. On the left the
+     star (overview), the five folders as little glossy icons, and four friendly buttons; in the middle the window you
+     are in; on the right the weather, music, meters, battery, network, volume, the clock and power. Pointed at, a thing
+     gets a pixel sparkle; pressed, it squishes like gel -->
+<div id="bar">
+  <div class="island" id="iLeft">
+    <button class="it" id="overview" title="overview · Ctrl+Alt+Space">
+      <svg width="20" height="20" viewBox="0 0 16 16" shape-rendering="crispEdges"><path fill="currentColor" d="M7 1h2v4h1v1h4v2h-4v1H9v4H7V9H6V8H2V6h4V5h1z"/><path fill="#fff" opacity=".85" d="M7 6h1v1H7z"/></svg>
+    </button>
+    <div id="ws" title="wheel: next / previous · right-click: send the window here"></div>
+    <i class="sl"></i>
+    <button class="it lk" id="lFlow" title="search · apps, files, the web · Alt+Space"><svg class="li" viewBox="0 0 16 16"><path d="M6.5 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 1.6a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8zM9.6 10.7l1.1-1.1 3.6 3.6-1.1 1.1z"/></svg>search</button>
+    <button class="it lk" id="lFiles" title="my files · File Explorer"><svg class="li" viewBox="0 0 16 16"><path d="M1 3h5l1.5 1.5H15V13H1z"/></svg>files</button>
+    <button class="it lk" id="lTerm" title="dos box · Terminal"><svg class="li" viewBox="0 0 16 16"><path d="M1 2h14v12H1zm1.5 3v7.5h11V5zM4 6.5l2.5 2L4 10.5zM7.5 10h4v1h-4z"/></svg>dos</button>
+    <button class="it lk" id="lKeys" title="keys · every shortcut"><svg class="li" viewBox="0 0 16 16"><path d="M1 4h14v9H1zm2 2v1.5h1.5V6zm3 0v1.5h1.5V6zm3 0v1.5h1.5V6zm3 0v1.5h1.5V6zM4 10v1.5h8V10z"/></svg>keys</button>
+  </div>
+
+  <div class="island" id="iCenter">
+    <div class="it" id="title" title="wheel: focus ← → · double-click: maximize · right-click: float · middle-click: close"><span class="k" id="tk">desktop</span><b id="tapp">nothing open</b><span id="tname"></span></div>
+  </div>
+
+  <div class="island" id="iRight">
+    <div id="tray" hidden></div>
+    <button class="it" id="trayBtn" title="tray"><svg width="10" height="12" viewBox="0 0 10 12" shape-rendering="crispEdges"><path fill="currentColor" d="M6 1h2v2H6zM4 3h2v2H4zM2 5h2v2H2zM4 7h2v2H4zM6 9h2v2H6z"/></svg></button>
+    <div class="it" id="weather"><span class="k" id="wk">sunny</span><span class="num" id="wt">–°</span></div>
+    <button class="it np" id="media" hidden title="click: play / pause · right-click: next · middle-click: previous">
+      <i class="cd"></i><span id="mt"></span>
+    </button>
+    <i class="sl"></i>
+    <div class="it" id="rings"><span class="k">cpu</span><span class="num" id="rcpu">--</span><span class="k">mem</span><span class="num" id="rram">--</span></div>
+    <div class="it" id="batt" hidden><i class="cell"><i id="bfill"></i></i><span class="num" id="bp">–</span></div>
+    <button class="it" id="net"><svg width="16" height="14" viewBox="0 0 16 14" shape-rendering="crispEdges" fill="currentColor"><path d="M0 10h3v4H0zM4.3 7h3v7h-3zM8.6 4h3v10h-3zM12.9 0h3v14h-3z"/></svg></button>
+    <button class="it" id="volb" title="wheel: volume · click: mute · right-click: sound settings">
+      <svg width="14" height="14" viewBox="0 0 16 16" shape-rendering="crispEdges" fill="currentColor"><path d="M1 5h3l4-3v12l-4-3H1z"/><path class="wv" d="M10 5h1.5v6H10zM12.5 3H14v10h-1.5z"/><path class="mx" d="M10 5h1.5v1.5H10zM13 5h1.5v1.5H13zM11.5 6.5H13V8h-1.5zM11.5 8H13v1.5h-1.5zM10 9.5h1.5V11H10zM13 9.5h1.5V11H13z"/></svg><span class="num" id="vol"></span>
+    </button>
+    <i class="sl"></i>
+    <button class="it" id="clock"><span class="hm" id="hm">--:--</span><span class="k" id="day">mon 1 jan</span></button>
+    <button class="it" id="pwr" title="power · lock, sleep, restart, shut down"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v8"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg></button>
+  </div>
+</div>
+<script type="module" src="./bar.js"></script>
+</body>
+</html>

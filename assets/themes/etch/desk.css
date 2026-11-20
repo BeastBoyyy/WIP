@@ -1,0 +1,40 @@
+/* Etch — on the wallpaper: a pocket watch engraved on the plate. Black enamel, white lines, its chain running off; the
+   hands step once a minute (160 ms, like a press) and nothing else moves, and nothing at all while a game is on. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden}
+#desk{position:absolute;inset:0;pointer-events:none;color:var(--ink);font-family:var(--body)}
+#watch{position:absolute;left:58px;bottom:calc(10% + 74px);width:360px;filter:drop-shadow(0 10px 18px rgba(0,0,0,.6))}
+.case{display:block;width:100%;height:auto;overflow:visible}
+.case *{vector-effect:non-scaling-stroke}
+.h0{stroke:var(--ink);stroke-width:1.6;fill:none} .h1{stroke:rgba(var(--ink-rgb),.8);stroke-width:.8;fill:none} .h2{stroke:rgba(var(--ink-rgb),.4);stroke-width:.6;fill:none}
+.g{fill:none;stroke:rgba(var(--ink-rgb),.2);stroke-width:.5}
+.face text{fill:var(--ink);font-family:var(--display);font-size:13px;text-anchor:middle;dominant-baseline:central}
+/* the case: a rim, the hatched band of the bezel, the enamel */
+.rim{fill:var(--bg);stroke:rgba(var(--ink-rgb),.85);stroke-width:1.2}
+#hx line{stroke:rgba(var(--ink-rgb),.38);stroke-width:.7}
+.hatch{fill:url(#hx);stroke:rgba(var(--ink-rgb),.5);stroke-width:.6}
+.enamel{fill:var(--bg)}
+.bow{fill:none;stroke:rgba(var(--ink-rgb),.85);stroke-width:3.2}
+.crown{fill:var(--bg);stroke:rgba(var(--ink-rgb),.85);stroke-width:1}
+.chain ellipse{fill:none;stroke:rgba(var(--ink-rgb),.72);stroke-width:1.3}
+/* the hands, blued steel in a print: white lines with an open ring near the tip */
+.hand{stroke:var(--ink);stroke-width:2.4;stroke-linecap:round;fill:none} .hand.thin{stroke-width:1}
+.pomme{fill:var(--bg);stroke:var(--ink);stroke-width:1.4}
+#hh,#mh{transform:rotate(var(--a,0deg));transform-origin:100px 100px;transform-box:view-box;transition:transform calc(.16s * var(--speed)) cubic-bezier(.3,1.6,.5,1)}
+.pin{fill:var(--ink)} .jewel{fill:var(--accent)}
+/* the one point of light: a glint on the crystal */
+.lux{position:absolute;left:67px;top:119px;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle,#fff 0 1.4px,var(--accent) 2.6px,rgba(var(--accent-rgb),.3) 5px,transparent 11px)}
+.lux::before,.lux::after{content:"";position:absolute;left:-8px;right:-8px;top:50%;height:.8px;margin-top:-.4px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent)}
+.lux::after{transform:rotate(90deg)}
+/* the plaque under it: the day in capitals, a fleuron, the plate, the weather */
+#plaque{position:absolute;left:64px;bottom:10%;width:230px;padding:10px 12px 9px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;
+  background:var(--bg);box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.6),inset 0 0 0 4px var(--bg),inset 0 0 0 5px rgba(var(--ink-rgb),.2),0 8px 16px rgba(0,0,0,.5)}
+#dday{font-family:var(--display);font-size:15px;letter-spacing:.03em}
+.fl{position:relative;width:60px;height:7px;background:linear-gradient(90deg,transparent,rgba(var(--ink-rgb),.45) 25%,transparent 42% 58%,rgba(var(--ink-rgb),.45) 75%,transparent) center/100% 1px no-repeat}
+.fl::before{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-2px 0 0 -2px;transform:rotate(45deg);background:rgba(var(--ink-rgb),.7)}
+#dno{font-size:14px}
+#dwx{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(var(--ink-rgb),.55)}
+body.nowm #watch,body.nowm #plaque{opacity:.55}
+body.nowm #hh,body.nowm #mh{transition:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

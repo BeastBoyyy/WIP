@@ -1,0 +1,613 @@
+import { Slider, ComboBox, LineEdit, ScrollView, Switch } from "std-widgets.slint";
+
+// Design tokens, structured after Meta's Astryx roles (colour roles, radius steps,
+// a 1.2 type scale from 14px, three shadows, three motion speeds, overlay states).
+// The values are Rice Studio's own.
+export global Ui {
+    // colour roles
+    in-out property <color> accent: #c8402e;
+    in-out property <color> on-accent: #0f0e0c;
+    out property <color> text-primary: #f2eee6;
+    out property <color> text-secondary: #a39e95;
+    out property <color> text-disabled: #f2eee659;
+    out property <color> border: #ffffff22;
+    out property <color> border-emphasized: #ffffff40;
+    out property <color> canvas: #07080a;
+    out property <color> surface: #0b0c0fd9;
+    out property <color> surface-muted: #ffffff10;
+    out property <color> overlay-hover: #ffffff0d;
+    out property <color> overlay-pressed: #ffffff1a;
+    out property <color> overlay-hover-dark: #0000000d;
+    out property <color> overlay-pressed-dark: #0000001f;
+    out property <color> focus: #f2eee6;
+    // radius steps
+    out property <length> radius-inner: 6px;
+    out property <length> radius-element: 10px;
+    out property <length> radius-container: 12px;
+    out property <length> radius-page: 28px;
+    // type: 14px base, ratio 1.2
+    out property <string> head: "Space Grotesk";
+    out property <string> body: "Inter";
+    out property <length> text-sm: 12px;
+    out property <length> text-base: 14px;
+    out property <length> text-md: 17px;
+    out property <length> text-lg: 20px;
+    out property <length> text-xl: 24px;
+    out property <length> text-4xl: 42px;
+    out property <length> text-display: 72px;
+    // shadows
+    out property <length> shadow-low: 8px;
+    out property <length> shadow-med: 20px;
+    out property <length> shadow-high: 40px;
+    out property <color> shadow-color: #00000080;
+    // motion
+    out property <duration> fast: 125ms;
+    out property <duration> medium: 300ms;
+    out property <duration> slow: 700ms;
+}
+
+// Hover and pressed tint laid over any control, so every control reacts the same way.
+component Overlay inherits Rectangle {
+    in property <bool> hover;
+    in property <bool> down;
+    in property <bool> dark;
+    background: self.down ? (self.dark ? Ui.overlay-pressed-dark : Ui.overlay-pressed)
+        : self.hover ? (self.dark ? Ui.overlay-hover-dark : Ui.overlay-hover) : transparent;
+    animate background { duration: Ui.fast; }
+}
+
+// Keyboard focus ring, drawn outside the control so it never looks like the selected state.
+component Ring inherits Rectangle {
+    in property <bool> on;
+    x: -4px;
+    y: -4px;
+    border-width: 2px;
+    border-color: Ui.focus;
+    visible: self.on;
+}
+
+component Btn inherits Rectangle {
+    in property <string> text;
+    in property <bool> primary;
+    in property <bool> enabled: true;
+    callback clicked;
+    height: 42px;
+    min-width: label.preferred-width + 40px;
+    border-radius: self.height / 2;
+    background: !root.enabled ? Ui.surface-muted : root.primary ? Ui.accent : Ui.surface-muted;
+    border-width: root.primary && root.enabled ? 0px : 1px;
+    border-color: ta.has-hover && root.enabled ? Ui.border-emphasized : Ui.border;
+    animate background, border-color { duration: Ui.fast; }
+    Overlay { border-radius: root.border-radius; hover: ta.has-hover && root.enabled; down: ta.pressed && root.enabled; }
+    Ring { width: root.width + 8px; height: root.height + 8px; border-radius: root.border-radius + 4px; on: fs.has-focus; }
+    label := Text {
+        text: root.text;
+        color: !root.enabled ? Ui.text-disabled : root.primary ? Ui.on-accent : Ui.text-primary;
+        font-weight: 600;
+        font-size: Ui.text-base;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+    fs := FocusScope {
+        ta := TouchArea {
+            enabled: root.enabled;
+            mouse-cursor: root.enabled ? pointer : not-allowed;
+            clicked => { root.clicked(); }
+        }
+        enabled: root.enabled;
+        key-pressed(e) => {
+            if (e.text == Key.Return || e.text == " ") { root.clicked(); return accept; }
+            reject
+        }
+    }
+}
+
+component Chip inherits Rectangle {
+    in property <string> text;
+    in property <bool> active;
+    callback clicked;
+    height: 32px;
+    min-width: t.preferred-width + 28px;
+    border-radius: self.height / 2;
+    background: root.active ? Ui.text-primary : Ui.surface-muted;
+    border-width: 1px;
+    border-color: root.active ? transparent : ta.has-hover ? Ui.border-emphasized : Ui.border;
+    animate background, border-color { duration: Ui.fast; }
+    Overlay { border-radius: root.border-radius; hover: ta.has-hover; down: ta.pressed; dark: root.active; }
+    Ring { width: root.width + 8px; height: root.height + 8px; border-radius: root.border-radius + 4px; on: fs.has-focus; }
+    t := Text {
+        text: root.text;
+        color: root.active ? Ui.on-accent : Ui.text-primary;
+        font-size: Ui.text-base;
+        font-weight: root.active ? 600 : 400;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+    fs := FocusScope {
+        ta := TouchArea { mouse-cursor: pointer; clicked => { root.clicked(); } }
+        key-pressed(e) => {
+            if (e.text == Key.Return || e.text == " ") { root.clicked(); return accept; }
+            reject
+        }
+    }
+}
+
+component Tab inherits Rectangle {
+    in property <string> text;
+    in property <bool> active;
+    callback clicked;
+    border-radius: self.height / 2;
+    Overlay { border-radius: root.border-radius; hover: ta.has-hover && !root.active; down: ta.pressed && !root.active; }
+    Ring { width: root.width + 8px; height: root.height + 8px; border-radius: root.border-radius + 4px; on: fs.has-focus; }
+    Text {
+        text: root.text;
+        font-weight: 600;
+        font-size: Ui.text-base;
+        color: root.active ? Ui.on-accent : ta.has-hover ? Ui.text-primary : Ui.text-secondary;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+        animate color { duration: Ui.medium; }
+    }
+    fs := FocusScope {
+        ta := TouchArea { mouse-cursor: pointer; clicked => { root.clicked(); } }
+        key-pressed(e) => {
+            if (e.text == Key.Return || e.text == " ") { root.clicked(); return accept; }
+            reject
+        }
+    }
+}
+
+component Swatch inherits Rectangle {
+    in property <color> fill;
+    in property <bool> active;
+    callback clicked;
+    width: 38px;
+    height: 38px;
+    border-radius: self.height / 2;
+    background: root.fill;
+    border-width: root.active ? 3px : 1px;
+    border-color: root.active ? Ui.text-primary : ta.has-hover ? Ui.border-emphasized : Ui.border;
+    animate border-width, border-color { duration: Ui.fast; }
+    Overlay { border-radius: root.border-radius; hover: ta.has-hover; down: ta.pressed; }
+    Ring { width: root.width + 8px; height: root.height + 8px; border-radius: root.border-radius + 4px; on: fs.has-focus; }
+    fs := FocusScope {
+        ta := TouchArea { mouse-cursor: pointer; clicked => { root.clicked(); } }
+        key-pressed(e) => {
+            if (e.text == Key.Return || e.text == " ") { root.clicked(); return accept; }
+            reject
+        }
+    }
+}
+
+component Heading inherits Text {
+    font-family: Ui.head;
+    font-weight: 600;
+    font-size: Ui.text-xl;
+    color: Ui.text-primary;
+}
+component Label inherits Text {
+    color: Ui.text-secondary;
+    font-size: Ui.text-sm;
+}
+
+component Panel inherits Rectangle {
+    in property <bool> shown;
+    width: 380px;
+    background: Ui.surface;
+    border-radius: Ui.radius-page;
+    border-width: 1px;
+    border-color: Ui.border;
+    drop-shadow-blur: Ui.shadow-high;
+    drop-shadow-color: Ui.shadow-color;
+    opacity: root.shown ? 1 : 0;
+    visible: self.opacity > 0.01;
+    animate opacity { duration: Ui.medium; easing: ease-out; }
+    TouchArea { }
+    @children
+}
+
+export component AppWindow inherits Window {
+    title: "Rice Studio";
+    preferred-width: 1440px;
+    preferred-height: 900px;
+    min-width: 1100px;
+    min-height: 700px;
+    background: Ui.canvas;
+    default-font-family: Ui.body;
+    default-font-size: Ui.text-base;
+    forward-focus: keys;
+
+    in property <image> stage;
+    in property <image> overlay;
+    in property <bool> overlay-on;
+    in property <bool> hovering;
+    in-out property <int> page;
+
+    in property <int> current;
+    in property <int> count: 10;
+    in property <[string]> name-chars;
+    in property <string> tagline;
+    in property <string> display-font;
+    in property <float> reveal: 1;
+    in property <[string]> variants;
+    in property <int> variant;
+
+    in property <[color]> swatches;
+    in property <[string]> swatch-names;
+    in property <int> swatch: 3;
+    in property <string> swatch-hex;
+    in-out property <float> hue;
+    in-out property <float> sat;
+    in-out property <float> val;
+    in property <[string]> fonts;
+    in-out property <int> font-display;
+    in-out property <int> font-body;
+    in-out property <int> font-mono;
+    in property <[string]> styles;
+    in-out property <int> style-index;
+    in-out property <float> bar-height: 46;
+    in property <string> workspaces;
+    in property <[string]> motions;
+    in-out property <int> motion-index;
+    in property <[string]> clocks;
+    in-out property <int> clock-index;
+
+    in property <[image]> thumbs;
+    in property <int> image-count;
+    in property <[string]> layouts;
+    in-out property <int> layout-index;
+    in property <[string]> treatments;
+    in-out property <int> treatment-index;
+    in-out property <float> strength: 0.85;
+
+    in property <string> status;
+    in property <bool> busy;
+    in property <bool> can-undo;
+    in-out property <bool> start-with-windows;
+    in property <bool> hotkey-taken;
+
+    callback hover-at(float, float);
+    callback press(float, float);
+    callback wheel(float);
+    callback go(int);
+    callback step(int);
+    callback pick-variant(int);
+    callback pick-swatch(int);
+    callback set-hex(string);
+    callback set-hsv(float, float, float);
+    callback set-font(int, int);
+    callback set-style(int);
+    callback set-height(float);
+    callback set-workspaces(string);
+    callback set-motion(int);
+    callback set-clock(int);
+    callback reset();
+    callback add-images();
+    callback clear-images();
+    callback set-layout(int);
+    callback set-treatment(int);
+    callback set-strength(float);
+    callback apply();
+    callback undo();
+    callback set-start(bool);
+    callback turn-off();
+
+    Image { source: root.stage; width: parent.width; height: parent.height; image-fit: fill; }
+
+    keys := FocusScope {
+        key-pressed(e) => {
+            if (e.text == Key.Escape) { root.go(0); return accept; }
+            if (root.page == 0) {
+                if (e.text == Key.LeftArrow || e.text == Key.UpArrow) { root.step(-1); return accept; }
+                if (e.text == Key.RightArrow || e.text == Key.DownArrow) { root.step(1); return accept; }
+                if (e.text == Key.Return) { root.go(1); return accept; }
+            }
+            if (e.text == "1") { root.go(0); return accept; }
+            if (e.text == "2") { root.go(1); return accept; }
+            if (e.text == "3") { root.go(2); return accept; }
+            if (e.text == "4") { root.go(3); return accept; }
+            reject
+        }
+        stage-ta := TouchArea {
+            mouse-cursor: root.hovering ? pointer : default;
+            changed mouse-x => { root.hover-at(self.mouse-x / self.width, self.mouse-y / self.height); }
+            changed mouse-y => { root.hover-at(self.mouse-x / self.width, self.mouse-y / self.height); }
+            clicked => {
+                keys.focus();
+                root.press(self.mouse-x / self.width, self.mouse-y / self.height);
+            }
+            scroll-event(e) => {
+                root.wheel(e.delta-y / 1px);
+                accept
+            }
+        }
+    }
+
+    // wordmark
+    Text {
+        x: 32px;
+        y: 28px;
+        text: "Rice Studio";
+        font-family: Ui.head;
+        font-weight: 600;
+        font-size: Ui.text-lg;
+        color: Ui.text-primary;
+    }
+
+    // page navigation with a sliding highlight
+    nav := Rectangle {
+        property <length> tab: root.width < 1240px ? 96px : 120px;
+        x: max(180px, min((root.width - self.width) / 2, root.width - actions.width - self.width - 56px));
+        y: 18px;
+        width: 4 * self.tab + 8px;
+        height: 44px;
+        border-radius: self.height / 2;
+        background: Ui.surface;
+        border-width: 1px;
+        border-color: Ui.border;
+        drop-shadow-blur: Ui.shadow-low;
+        drop-shadow-color: Ui.shadow-color;
+        Rectangle {
+            x: 4px + root.page * nav.tab;
+            y: 4px;
+            width: nav.tab;
+            height: 36px;
+            border-radius: self.height / 2;
+            background: Ui.accent;
+            animate x { duration: Ui.slow; easing: cubic-bezier(0.16, 1, 0.3, 1); }
+            animate background { duration: Ui.medium; }
+        }
+        for label[i] in ["Gallery", "Customize", "Wallpapers", "Claude"]: Tab {
+            x: 4px + i * nav.tab;
+            y: 4px;
+            width: nav.tab;
+            height: 36px;
+            text: label;
+            active: root.page == i;
+            clicked => { root.go(i); }
+        }
+    }
+
+    actions := HorizontalLayout {
+        x: root.width - self.width - 28px;
+        y: 19px;
+        width: self.preferred-width;
+        height: 42px;
+        spacing: 10px;
+        Btn {
+            text: "Undo";
+            enabled: root.can-undo && !root.busy;
+            clicked => { root.undo(); }
+        }
+        Btn {
+            text: root.busy ? "Applying" : "Apply to desktop";
+            primary: true;
+            enabled: !root.busy;
+            clicked => { root.apply(); }
+        }
+    }
+
+    // status line under the navigation
+    status-pill := Rectangle {
+        property <bool> on: root.status != "";
+        x: (root.width - self.width) / 2;
+        y: self.on ? 76px : 64px;
+        width: st.preferred-width + 36px;
+        height: 36px;
+        border-radius: self.height / 2;
+        background: Ui.surface;
+        border-width: 1px;
+        border-color: Ui.border;
+        drop-shadow-blur: Ui.shadow-med;
+        drop-shadow-color: Ui.shadow-color;
+        opacity: self.on ? 1 : 0;
+        animate opacity, y { duration: Ui.medium; easing: ease-out; }
+        st := Text { text: root.status; color: Ui.text-primary; font-size: Ui.text-base; horizontal-alignment: center; vertical-alignment: center; }
+    }
+
+    // gallery: the focused theme's name, set letter by letter in its own display face
+    gallery := VerticalLayout {
+        x: 56px;
+        width: min(680px, root.width * 0.52);
+        height: self.preferred-height;
+        y: root.height - self.height - 44px + (root.page == 0 ? 0px : 30px);
+        spacing: 12px;
+        opacity: root.page == 0 ? 1 : 0;
+        visible: self.opacity > 0.01;
+        animate opacity { duration: Ui.medium; }
+        animate y { duration: Ui.slow; easing: cubic-bezier(0.16, 1, 0.3, 1); }
+        Text { text: "\{root.current + 1} of \{root.count}"; color: Ui.text-secondary; font-size: Ui.text-base; }
+        HorizontalLayout {
+            alignment: start;
+            height: 96px;
+            for ch[i] in root.name-chars: Rectangle {
+                property <float> k: max(0, min(1, root.reveal * (1 + root.name-chars.length * 0.08) - i * 0.08));
+                property <float> e: 1 - (1 - self.k) * (1 - self.k) * (1 - self.k);
+                clip: true;
+                width: g.preferred-width;
+                height: 96px;
+                g := Text {
+                    y: (1 - parent.e) * 96px;
+                    height: 96px;
+                    text: ch;
+                    font-family: root.display-font;
+                    font-size: Ui.text-display;
+                    color: Ui.text-primary;
+                    opacity: parent.e;
+                    vertical-alignment: center;
+                }
+            }
+        }
+        Text { text: root.tagline; font-size: Ui.text-md; color: Ui.text-primary; opacity: 0.85; }
+        if root.variants.length > 1: HorizontalLayout {
+            spacing: 8px;
+            alignment: start;
+            for v[i] in root.variants: Chip {
+                text: v;
+                active: root.variant == i;
+                clicked => { root.pick-variant(i); }
+            }
+        }
+        HorizontalLayout {
+            spacing: 10px;
+            alignment: start;
+            padding-top: 6px;
+            Btn { text: "Customize"; primary: true; clicked => { root.go(1); } }
+            Btn { text: "Add wallpapers"; clicked => { root.go(2); } }
+        }
+        Text { text: "Scroll, click a card or use the arrow keys to browse."; color: Ui.text-secondary; font-size: Ui.text-sm; }
+    }
+
+    // customize
+    Panel {
+        shown: root.page == 1;
+        x: root.width - 408px + (root.page == 1 ? 0px : 48px);
+        y: 84px;
+        height: root.height - 112px;
+        animate x { duration: Ui.slow; easing: cubic-bezier(0.16, 1, 0.3, 1); }
+        ScrollView {
+            VerticalLayout {
+                alignment: start;
+                padding: 24px;
+                spacing: 10px;
+                Heading { text: "Make it yours"; }
+                Text { text: "Every change shows on the desk as you make it."; color: Ui.text-secondary; wrap: word-wrap; }
+                Label { text: "Colours"; }
+                HorizontalLayout {
+                    spacing: 8px;
+                    alignment: start;
+                    for c[i] in root.swatches: Swatch {
+                        fill: c;
+                        active: root.swatch == i;
+                        clicked => { root.pick-swatch(i); }
+                    }
+                }
+                Label { text: "\{root.swatch-names[root.swatch]}, hex"; }
+                LineEdit { text: root.swatch-hex; accepted(t) => { root.set-hex(t); } }
+                Label { text: "Hue"; }
+                Slider { minimum: 0; maximum: 360; value <=> root.hue; changed(v) => { root.set-hsv(v, root.sat, root.val); } }
+                Label { text: "Saturation"; }
+                Slider { minimum: 0; maximum: 1; value <=> root.sat; changed(v) => { root.set-hsv(root.hue, v, root.val); } }
+                Label { text: "Brightness"; }
+                Slider { minimum: 0; maximum: 1; value <=> root.val; changed(v) => { root.set-hsv(root.hue, root.sat, v); } }
+                Label { text: "Display font"; }
+                ComboBox { model: root.fonts; current-index <=> root.font-display; selected => { root.set-font(0, self.current-index); } }
+                Label { text: "Body font"; }
+                ComboBox { model: root.fonts; current-index <=> root.font-body; selected => { root.set-font(1, self.current-index); } }
+                Label { text: "Mono font"; }
+                ComboBox { model: root.fonts; current-index <=> root.font-mono; selected => { root.set-font(2, self.current-index); } }
+                Label { text: "Bar style"; }
+                ComboBox { model: root.styles; current-index <=> root.style-index; selected => { root.set-style(self.current-index); } }
+                Label { text: "Bar height, \{round(root.bar-height)} pixels"; }
+                Slider { minimum: 32; maximum: 72; value <=> root.bar-height; changed(v) => { root.set-height(v); } }
+                Label { text: "Workspace labels, separated by spaces"; }
+                LineEdit { text: root.workspaces; edited(t) => { root.set-workspaces(t); } }
+                Label { text: "Motion"; }
+                ComboBox { model: root.motions; current-index <=> root.motion-index; selected => { root.set-motion(self.current-index); } }
+                Label { text: "Desktop clock"; }
+                ComboBox { model: root.clocks; current-index <=> root.clock-index; selected => { root.set-clock(self.current-index); } }
+                HorizontalLayout {
+                    padding-top: 8px;
+                    alignment: start;
+                    Btn { text: "Reset to the original"; clicked => { root.reset(); } }
+                }
+                Rectangle { height: 6px; }
+                Heading { text: "This computer"; font-size: Ui.text-md; }
+                Switch {
+                    text: "Start with Windows";
+                    checked <=> root.start-with-windows;
+                    toggled => { root.set-start(self.checked); }
+                }
+                Text {
+                    text: root.hotkey-taken
+                        ? "Another program already uses Ctrl+Alt+Shift+Q, so that key does not reach Rice Studio. The button below still turns everything off."
+                        : "Ctrl+Alt+Shift+Q turns everything off and puts Windows back the way it was, even if this window is closed.";
+                    color: Ui.text-secondary;
+                    font-size: Ui.text-sm;
+                    wrap: word-wrap;
+                }
+                HorizontalLayout {
+                    alignment: start;
+                    Btn { text: "Turn everything off"; enabled: !root.busy; clicked => { root.turn-off(); } }
+                }
+            }
+        }
+    }
+
+    // wallpapers
+    Panel {
+        shown: root.page == 2;
+        x: root.width - 408px + (root.page == 2 ? 0px : 48px);
+        y: 84px;
+        height: root.height - 112px;
+        animate x { duration: Ui.slow; easing: cubic-bezier(0.16, 1, 0.3, 1); }
+        ScrollView {
+            VerticalLayout {
+                alignment: start;
+                padding: 24px;
+                spacing: 10px;
+                Heading { text: "Your wallpapers"; }
+                Text {
+                    text: "Rice Studio does not ship wallpapers. Add your own pictures and the theme restyles them to match. Images at 4K look best.";
+                    color: Ui.text-secondary;
+                    wrap: word-wrap;
+                }
+                HorizontalLayout {
+                    spacing: 10px;
+                    alignment: start;
+                    Btn { text: "Add images"; primary: true; clicked => { root.add-images(); } }
+                    Btn { text: "Clear"; enabled: root.image-count > 0; clicked => { root.clear-images(); } }
+                }
+                if root.image-count > 0: HorizontalLayout {
+                    spacing: 8px;
+                    alignment: start;
+                    for img in root.thumbs: Rectangle {
+                        width: 74px;
+                        height: 48px;
+                        border-radius: Ui.radius-element;
+                        clip: true;
+                        border-width: 1px;
+                        border-color: Ui.border;
+                        Image { source: img; width: parent.width; height: parent.height; image-fit: cover; }
+                    }
+                }
+                if root.image-count > 0: Label { text: root.image-count == 1 ? "1 image" : "\{root.image-count} images"; }
+                Label { text: "Layout"; }
+                ComboBox { model: root.layouts; current-index <=> root.layout-index; selected => { root.set-layout(self.current-index); } }
+                Label { text: "Treatment"; }
+                ComboBox { model: root.treatments; current-index <=> root.treatment-index; selected => { root.set-treatment(self.current-index); } }
+                Label { text: "Strength, \{round(root.strength * 100)} percent"; }
+                Slider { minimum: 0; maximum: 1; value <=> root.strength; changed(v) => { root.set-strength(v); } }
+            }
+        }
+    }
+
+    // claude
+    VerticalLayout {
+        x: 56px;
+        width: min(620px, root.width * 0.5);
+        height: self.preferred-height;
+        y: root.height - self.height - 56px + (root.page == 3 ? 0px : 30px);
+        spacing: 12px;
+        opacity: root.page == 3 ? 1 : 0;
+        visible: self.opacity > 0.01;
+        animate opacity { duration: Ui.medium; }
+        animate y { duration: Ui.slow; easing: cubic-bezier(0.16, 1, 0.3, 1); }
+        Heading { text: "Claude, on your desktop"; font-size: Ui.text-4xl; }
+        Text {
+            text: "Describe the desktop you want and Claude builds it here, through your own Claude account. No API keys and nothing extra to pay.";
+            color: Ui.text-primary;
+            font-size: Ui.text-md;
+            wrap: word-wrap;
+        }
+        Text { text: "The connector arrives in a later build. Until then, pick a theme in the gallery."; color: Ui.text-secondary; wrap: word-wrap; }
+    }
+
+    Image {
+        source: root.overlay;
+        width: parent.width;
+        height: parent.height;
+        image-fit: fill;
+        visible: root.overlay-on;
+    }
+}

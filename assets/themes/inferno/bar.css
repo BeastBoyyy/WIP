@@ -1,0 +1,133 @@
+/* Hallmark · shape: one band of firelight with everything cut out of it in black · genre: atmospheric · theme: custom · job: try · idea: "Everything is a black shape against fire; the light comes from below, and what you touch catches" · vibe: "pitch silhouettes on a wall of flame"
+ * paper: oklch(0.6 0.19 40) · accent: oklch(0.84 0.15 75) · display: UnifrakturCook · body: Grenze · hero: the five rivers by their blackletter initials · nav: the band · footer: none · imagery: none in the bar · signature: the black slab that rises behind what you point at
+ * axes: mid/blackletter/chromatic-ember · posture: drenched · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H4 E4 S5 R3 V5 · weakest: R, fire invites glow on everything; the glow is kept to the lit initial and the band's lower lip, the rest is flat black on flame */
+/* Hallmark · waive 29 · one glow, on the white-hot initial of the river you are in · a lit letter in a fire band has to throw light */
+
+/* Inferno: the bar. The ground is the fire, darkest at the top, brightest along the lower lip where the light comes up;
+   every mark is pitch black. Motion: the heat drifts sideways under everything (16 s, the one ambient loop); a black slab
+   rises behind what you point at (220 ms, ease-out) and two sparks go up from it (600 ms); the river you go to flares
+   once (420 ms); a playing song's flame flickers (1.6 s). Game mode and reduced motion keep it still. */
+:root{
+  --pitch:var(--bg); --fire:var(--surface); --flame:var(--accent2); --hot:var(--accent); --ash:var(--ink); --char:var(--muted);
+  --smoke:color-mix(in oklch,var(--pitch) 62%,transparent);
+  --dur-micro:calc(120ms * var(--speed)); --dur-short:calc(220ms * var(--speed)); --dur-long:calc(420ms * var(--speed));
+  --ease-out:cubic-bezier(.22,1,.36,1); --ease-in:cubic-bezier(.55,0,1,.45); --ease-io:cubic-bezier(.65,0,.35,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;overflow-x:clip;background:transparent;color:var(--pitch);font:600 14px/1 var(--body);
+  font-synthesis:none;user-select:none;-webkit-font-smoothing:antialiased}
+button{all:unset;box-sizing:border-box;cursor:pointer}
+svg{display:block;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.num{font-variant-numeric:lining-nums tabular-nums}
+[hidden]{display:none!important}
+
+/* the band: fire from top to bottom, the white-hot lip along the lower edge throwing a little light below the bar */
+#bar{position:absolute;inset:0 0 auto 0;height:calc(var(--bar-h) + 8px);display:flex;align-items:center;gap:14px;padding:0 10px;overflow:hidden;
+  background:linear-gradient(color-mix(in oklch,var(--fire),var(--pitch) 30%),var(--flame) 34%,color-mix(in oklch,var(--flame),var(--hot) 45%));
+  box-shadow:inset 0 -2px 0 color-mix(in oklch,var(--hot),white 30%)}
+body::after{content:"";position:absolute;left:0;right:0;top:calc(var(--bar-h) + 8px);height:6px;pointer-events:none;
+  background:linear-gradient(color-mix(in oklch,var(--flame) 55%,transparent),transparent)}
+/* the heat: tongues of brighter light along the bottom, drifting sideways */
+.heat{position:absolute;left:-40%;width:180%;top:0;bottom:0;pointer-events:none;opacity:.55;
+  background:radial-gradient(34px 26px at 50% 100%,color-mix(in oklch,var(--hot) 70%,transparent),transparent) 0 0/96px 100%,
+    radial-gradient(52px 34px at 50% 100%,color-mix(in oklch,var(--hot) 45%,transparent),transparent) 30px 0/158px 100%;
+  animation:drift calc(16s * var(--speed)) var(--ease-io) infinite alternate}
+@keyframes drift{to{transform:translateX(22%)}}
+body.nowm .heat{animation:none}
+
+.island{position:relative;z-index:1;display:flex;align-items:center;gap:2px;height:100%}
+#iRight{margin-left:auto}
+/* the window's name sits between the islands, in the flow, so it shrinks before it ever collides */
+#iCenter{flex:1 1 0;min-width:0;justify-content:center;overflow:hidden}
+
+/* anything you can press: a black slab rises behind it from the floor, the word turns white-hot, sparks go up */
+.it{position:relative;display:flex;align-items:center;gap:6px;height:34px;padding:0 8px;isolation:isolate;
+  transition:color var(--dur-short) var(--ease-out)}
+button.it::before,.w::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--pitch);transform:scaleY(0);transform-origin:bottom;
+  transition:transform var(--dur-short) var(--ease-out)}
+button.it::after,.w .sp{content:"";position:absolute;left:50%;bottom:6px;width:2px;height:2px;border-radius:50%;opacity:0;pointer-events:none;
+  background:var(--hot);box-shadow:-7px 4px 0 var(--flame),6px 2px 0 var(--hot),-2px 8px 0 color-mix(in oklch,var(--hot),white 40%)}
+button.it:hover,button.it:focus-visible{color:var(--hot)}
+button.it:hover::before,button.it:focus-visible::before{transform:scaleY(1)}
+button.it:hover::after{animation:sparks calc(620ms * var(--speed)) var(--ease-out) both}
+@keyframes sparks{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-26px)}}
+button.it:active{transform:translateY(1px)}
+button:focus-visible,.w:focus-visible{outline:2px solid var(--pitch);outline-offset:1px}
+.it svg{width:19px;height:19px}
+
+/* the gate: overview */
+#overview svg{fill:currentColor;stroke:none;width:18px;height:20px}
+
+/* the rivers. Empty: smoke, half there. With windows: solid black. Yours: the black slab stands behind it and its
+   initial burns white-hot, the one glow on the bar; going there makes it flare */
+#ws{display:flex;gap:1px;margin:0 2px 0 4px}
+.w{position:relative;display:grid;place-items:center;width:30px;height:36px;cursor:pointer;isolation:isolate;color:var(--smoke);
+  font:700 23px/1 var(--display);transition:color var(--dur-short) var(--ease-out)}
+.w .g{position:relative;top:1px}
+.w.has{color:var(--pitch)}
+.w.on{color:var(--hot);text-shadow:0 0 7px color-mix(in oklch,var(--flame) 85%,transparent)}
+.w.on::before{transform:scaleY(1)}
+.w:hover:not(.on){color:var(--pitch)}
+.w:hover:not(.on)::before{transform:scaleY(.14)}
+.w.flare .g{animation:flare var(--dur-long) var(--ease-out) both}
+.w.flare .sp{animation:sparks calc(700ms * var(--speed)) var(--ease-out) calc(80ms * var(--speed)) both}
+@keyframes flare{0%{transform:scale(1.35);filter:brightness(1.6)}100%{transform:none}}
+/* the river's name and what it is the river of */
+#river{display:flex;align-items:baseline;gap:6px;min-width:168px;padding:0 10px 0 8px}
+#riverName{font:700 18px/1 var(--display)}
+#riverOf{font-size:12.5px;opacity:.78}
+#river.new > *{animation:rise var(--dur-long) var(--ease-out) both}
+#river.new #riverOf{animation-delay:60ms}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}}
+.lk{padding:0 9px}
+
+/* the window you are in */
+#title{gap:8px;align-items:baseline;min-width:0;height:auto}
+#tk{flex:none;font-size:12px;opacity:.72}
+#tapp{flex:none;font:700 21px/1 var(--display);white-space:nowrap}
+#tname{min-width:0;font-size:13px;opacity:.78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tapp.lit{animation:rise var(--dur-long) var(--ease-out) both}
+
+/* the right: weather, song, machine, hour */
+#wk{opacity:.78}
+#media{max-width:230px}
+#mt{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mt em{font-style:normal}
+.flame{display:none;align-items:flex-end;gap:2px;height:14px}
+.flame i{width:3px;height:100%;background:currentColor;transform-origin:bottom;transform:scaleY(.5)}
+#media.playing .flame{display:flex}
+#media.playing .flame i{animation:flick calc(1.6s * var(--speed)) var(--ease-io) infinite}
+#media.playing .flame i:nth-child(2){animation-delay:-.5s}#media.playing .flame i:nth-child(3){animation-delay:-1.1s}
+@keyframes flick{0%,100%{transform:scaleY(.45)}35%{transform:scaleY(1)}60%{transform:scaleY(.7)}80%{transform:scaleY(.9)}}
+body.nowm #media .flame i{animation:none}
+#tray{display:flex;align-items:center;gap:1px}
+#tray button{display:grid;place-items:center;width:26px;height:30px;transition:background-color var(--dur-short) var(--ease-out)}
+#tray button:hover{background:var(--pitch)}
+#tray img{width:16px;height:16px}
+#trayBtn{padding:0 6px}
+#trayBtn svg{width:12px;height:12px;transition:transform var(--dur-short) var(--ease-out)}
+#trayBtn.on svg{transform:rotate(180deg)}
+#rings{gap:5px;cursor:pointer}
+.lb{font-size:12.5px;opacity:.72}
+#rings .num{min-width:2ch;margin-right:4px}
+#rings .num.hot{color:var(--hot);text-shadow:0 0 1px var(--pitch),0 1px 0 var(--pitch)}
+.cell{position:relative;width:22px;height:11px;box-shadow:inset 0 0 0 1.8px var(--pitch)}
+.cell::after{content:"";position:absolute;right:-3px;top:3px;width:2px;height:5px;background:var(--pitch)}
+#bfill{position:absolute;inset:3px;background:var(--pitch);transform-origin:left;transform:scaleX(var(--p,1));transition:transform var(--dur-long) var(--ease-out)}
+#batt.low #bfill{background:var(--hot)}
+#net.off{opacity:.4}
+#volb .sp{fill:currentColor}
+#volb .mx{display:none}
+#volb.muted .wv{display:none}
+#volb.muted .mx{display:block}
+#vol{min-width:2ch}
+#clock{gap:9px;align-items:baseline;padding:0 10px}
+#day{order:-1;font-size:12.5px;opacity:.78}
+#hm{font:700 25px/1 var(--display);font-variant-numeric:lining-nums tabular-nums}
+#hm.lit{animation:rise var(--dur-long) var(--ease-out) both}
+#pwr{padding:0 7px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+}

@@ -1,0 +1,29 @@
+/* Hallmark · shape: the hour burning on the wall · genre: atmospheric · theme: custom · job: try · idea: "The hour is a fire on the wallpaper, black-shadowed so it reads on any painting" · vibe: "pitch silhouettes on a wall of flame"
+ * paper: oklch(0.14 0.02 35) · accent: oklch(0.84 0.15 75) · display: UnifrakturCook · body: Grenze · hero: the burning hour · nav: none · footer: none · imagery: none · signature: fire moving up through the blackletter numerals
+ * axes: dark/blackletter/chromatic-ember · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R4 V4 · weakest: E, fire-filled letters can lose their edges on a red painting; a pitch shadow is laid under them */
+/* Hallmark · waive 2b · the hour's numerals are filled with moving fire · the desk's one element is the hour, and in this theme time burns */
+
+/* Inferno: the desk. It ignores the mouse and wakes once a minute; the fire moves up through the numerals slowly (10 s,
+   the one ambient loop), and a new minute comes up out of the floor (420 ms). Game mode and reduced motion keep it still. */
+:root{--sh:rgba(0,0,0,.6);--pitch:var(--bg);--flame:var(--accent2);--hot:var(--accent);--ash:var(--ink);--ease-out:cubic-bezier(.22,1,.36,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;overflow-x:clip;background:transparent;font:600 15px/1.2 var(--body);color:var(--ash);font-synthesis:none;
+  user-select:none;-webkit-font-smoothing:antialiased}
+#desk{position:absolute;left:40px;bottom:46px;display:flex;flex-direction:column;gap:8px;
+  filter:drop-shadow(0 3px 0 var(--pitch)) drop-shadow(0 8px 18px var(--sh))}
+#dhm{font:700 150px/.8 var(--display);font-variant-numeric:lining-nums tabular-nums;padding:0 6px 10px 0;
+  background:linear-gradient(0deg,var(--flame) 0%,var(--hot) 30%,color-mix(in oklch,var(--hot),white 35%) 46%,var(--flame) 70%,var(--hot) 100%) 0 0/100% 260%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:burn calc(10s * var(--speed)) linear infinite}
+@keyframes burn{to{background-position:0 -260%}}
+#dhm.lit{animation:burn calc(10s * var(--speed)) linear infinite,rise calc(420ms * var(--speed)) var(--ease-out) both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+.river{display:flex;align-items:baseline;gap:10px}
+/* the small words sit on cut-out black slabs so they read on white plaster or red paint alike */
+#dof,.row span{background:var(--pitch);padding:3px 8px 4px;border-radius:2px}
+#driver{font:700 30px/1 var(--display);color:var(--hot)}
+#dof{font-size:15px}
+.row span:empty{display:none}
+.row{display:flex;gap:6px;font-size:14px}
+body.nowm #dhm{animation:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}}

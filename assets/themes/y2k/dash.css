@@ -1,0 +1,168 @@
+/* Y2K Blue — the dashboard, power, wallpaper and shortcuts: windows of a 2001 media-player skin. Glossy blue title bars
+   with three gel dots, a pale body with a faint pixel-star pattern, chrome bezels and gel buttons. A window zooms in and
+   bounces (360 ms, springy) and shrinks away (200 ms). The visualiser moves only while something plays. Tokens from
+   tokens.css + bar.css. */
+body:not([data-mode=dash]) #dash,body:not([data-mode=power]) #power,body:not([data-mode=wall]) #wall,body:not([data-mode=keys]) #keysheet{display:none}
+:root{--line:rgba(var(--bg-rgb),.16);--well:rgba(var(--bg-rgb),.07);--deep:var(--bg)}
+.win{position:absolute;inset:8px 14px 16px 8px;isolation:isolate;overflow:hidden;color:var(--deep);border-radius:16px;
+  border:2px solid transparent;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' shape-rendering='crispEdges'%3E%3Cpath fill='%236C8CFF' opacity='.13' d='M11 9h1v1h-1zM10 10h3v1h-3zM11 11h1v1h-1zM35 33h1v1h-1zM34 34h3v1h-3zM35 35h1v1h-1z'/%3E%3C/svg%3E") padding-box,
+    linear-gradient(#f4f6ff,#dfe5ff) padding-box,var(--chrome) border-box;
+  box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 1px rgba(var(--bg-rgb),.5)}
+.win.open{animation:zoomin var(--bounce) var(--spring) both}
+@keyframes zoomin{0%{opacity:0;transform:scale(.55)}60%{opacity:1;transform:scale(1.03)}100%{transform:none}}
+.win.closing{animation:zoomout calc(.2s * var(--speed)) ease-in both}
+@keyframes zoomout{to{opacity:0;transform:scale(.8)}}
+
+/* the title bar: blue gel with a sheen, an icon, the name in the pixel face, three gel dots at the end */
+.tb{position:relative;display:flex;align-items:center;gap:8px;height:30px;padding:0 10px 0 12px;color:#fff;
+  background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,.06) 50%,transparent 51%),linear-gradient(var(--peri),var(--surface) 60%,var(--bg));
+  box-shadow:inset 0 -1px 0 rgba(var(--bg-rgb),.6);text-shadow:0 1px 0 rgba(var(--bg-rgb),.6)}
+.tb b{font-family:var(--display);font-weight:400;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb .fi,#aicon .fi{width:16px;height:16px;fill:#fff;opacity:1}
+#aicon,.ico{display:grid;place-items:center}
+.dots{display:flex;gap:6px;margin-left:auto;flex:none}
+.dots i{width:13px;height:13px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.6),0 1px 2px rgba(var(--bg-rgb),.6);
+  background:linear-gradient(rgba(255,255,255,.75),rgba(255,255,255,0) 55%),var(--c)}
+.dots i:nth-child(1){--c:#f2c23a}.dots i:nth-child(2){--c:#5cd67a}.dots i:nth-child(3){--c:var(--mag)}
+
+/* gel buttons */
+.gel{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:26px;padding:0 13px;border-radius:999px;color:#fff;
+  font-family:var(--display);font-size:13px;text-shadow:0 1px 0 rgba(var(--bg-rgb),.6);
+  background:linear-gradient(rgba(255,255,255,.6),rgba(255,255,255,.05) 50%,transparent 51%),linear-gradient(var(--peri),var(--surface));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),0 1px 3px rgba(var(--bg-rgb),.5);transition:transform var(--press) ease-out}
+.gel:hover{background:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,.1) 50%,transparent 51%),linear-gradient(var(--mag),rgba(var(--accent-rgb),.8))}
+.gel:active{transform:scale(.92,.86)}
+
+#dash{display:grid;grid-template-columns:500px 1fr;grid-template-rows:30px 1fr}
+#dash .tb{grid-column:1/-1}
+/* the left: the picture in a chrome bezel, its name and line, the meters */
+#art{padding:14px 12px 14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.bezel{padding:5px;border-radius:12px;background:var(--chrome);box-shadow:0 3px 8px rgba(var(--bg-rgb),.35)}
+.port{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:8px;background:var(--bg);box-shadow:inset 0 0 0 1px rgba(var(--bg-rgb),.8)}
+.port img{width:100%;height:100%;object-fit:cover;display:block}
+.port::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:8px;
+  background:linear-gradient(160deg,rgba(255,255,255,.28),rgba(255,255,255,0) 38%)}
+.cap{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:auto auto;align-items:baseline;column-gap:9px;row-gap:1px;min-width:0;padding:0 2px}
+#artK{padding:2px 9px 1px;border-radius:999px;color:#fff;font-size:11px;font-weight:600;
+  background:linear-gradient(rgba(255,255,255,.5),rgba(255,255,255,0) 55%),var(--mag)}
+#artEn{font-family:var(--display);font-weight:400;font-size:21px;color:var(--surface)}
+#about{grid-column:1/3;font-size:13.5px;font-weight:500;color:rgba(var(--bg-rgb),.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#wallBtn{grid-column:3;grid-row:1/3;align-self:center}
+/* the meters: gel capsules filling with blue, the figure on them */
+#rings{margin-top:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:10px 2px 0;border-top:1px dashed var(--line)}
+.ring2{display:flex;flex-direction:column;gap:3px;min-width:0} .ring2.none{visibility:hidden}
+.ring2 b{font-family:var(--display);font-weight:400;font-size:13px;color:var(--surface)}
+.cap2{position:relative;height:20px;border-radius:999px;overflow:hidden;background:rgba(var(--bg-rgb),.12);box-shadow:inset 0 1px 3px rgba(var(--bg-rgb),.45),0 1px 0 #fff}
+.cap2 i{position:absolute;left:0;top:0;bottom:0;width:calc(100% * var(--p,0));min-width:20px;border-radius:999px;transition:width calc(.6s * var(--speed)) var(--spring);
+  background:linear-gradient(rgba(255,255,255,.65),rgba(255,255,255,.05) 50%,transparent 51%),linear-gradient(var(--peri),var(--surface))}
+#g-cpu .cap2 i{background:linear-gradient(rgba(255,255,255,.65),rgba(255,255,255,.05) 50%,transparent 51%),linear-gradient(rgba(var(--accent-rgb),.75),var(--mag))}
+.cap2 em{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-style:normal;
+  font-family:var(--display);font-size:13px;color:var(--deep)}
+.ring2 span{font-size:11.5px;font-weight:500;color:rgba(var(--bg-rgb),.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* the right: a big chrome clock, the date */
+#side{padding:14px 16px 14px 12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.time{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.big{font-family:var(--display);font-size:68px;line-height:.9;letter-spacing:.01em;
+  background:linear-gradient(#fff 0,#e5ebff 30%,#7b89c8 47%,#1d2a8c 51%,#4c66e8 62%,#c4d0ff 85%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 0 var(--bg)) drop-shadow(0 0 1px var(--bg))}
+.date{display:flex;flex-direction:column;align-items:flex-end;gap:1px;padding-bottom:4px;text-align:right}
+#jdate{font-family:var(--display);font-size:15px;color:var(--surface)}
+#edate{font-size:12px;font-weight:500;color:rgba(var(--bg-rgb),.6)}
+/* the month: a little grid, today a magenta gel dot */
+#cal{display:grid;grid-template-columns:repeat(7,1fr);align-content:start;text-align:center;padding:8px 8px 6px;border-radius:10px;background:var(--well);box-shadow:inset 0 1px 2px rgba(var(--bg-rgb),.2)}
+#cal .mh{grid-column:1/-1;text-align:left;font-family:var(--display);font-size:13px;color:var(--surface);margin:0 0 3px 4px}
+#cal .wd{font-size:11px;font-weight:600;color:rgba(var(--bg-rgb),.5)}
+#cal i{font-style:normal;height:22px;display:grid;place-items:center;font-family:var(--display);font-size:13px;color:var(--deep)}
+#cal i.out{color:rgba(var(--bg-rgb),.25)}
+#cal i.today{color:#fff;border-radius:50%;width:22px;justify-self:center;text-shadow:0 1px 0 rgba(var(--bg-rgb),.5);
+  background:linear-gradient(rgba(255,255,255,.6),rgba(255,255,255,0) 55%),var(--mag);box-shadow:0 1px 2px rgba(var(--bg-rgb),.5)}
+/* the player: a little navy screen (the song in the pixel face, a visualiser), a seek bar, round gel buttons */
+#media{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:7px 10px;align-items:center}
+.lcd{grid-column:1/-1;position:relative;display:grid;grid-template-columns:1fr 92px;grid-template-rows:auto auto auto;column-gap:10px;padding:7px 10px 8px;border-radius:10px;
+  color:#cfe0ff;background:linear-gradient(rgba(255,255,255,.08),transparent 40%),var(--bg);box-shadow:inset 0 0 0 1px rgba(var(--bg-rgb),.9),inset 0 2px 6px rgba(0,0,0,.5),0 1px 0 #fff}
+.lcd .k{grid-column:1;font-family:var(--mono);font-size:14px;line-height:1;color:var(--mag);text-shadow:0 0 4px rgba(var(--accent-rgb),.6)}
+#mt{grid-column:1;font-family:var(--display);font-weight:400;font-size:17px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 0 6px rgba(var(--accent2-rgb),.7)}
+#ma{grid-column:1;font-family:var(--mono);font-size:16px;line-height:1;color:var(--pale);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.viz{grid-column:2;grid-row:1/4;display:flex;align-items:flex-end;gap:2px;height:46px;align-self:center}
+.viz i{flex:1;height:100%;transform-origin:bottom;transform:scaleY(.08);
+  background:linear-gradient(var(--mag),var(--peri) 55%,#9effe2) 0 0/100% 46px;-webkit-mask:repeating-linear-gradient(#000 0 3px,transparent 3px 4px);mask:repeating-linear-gradient(#000 0 3px,transparent 3px 4px)}
+#media.playing .viz i{animation:v1 calc(.62s * var(--speed)) ease-in-out infinite alternate}
+#media.playing .viz i:nth-child(3n+1){animation-name:v2;animation-duration:calc(.48s * var(--speed))}
+#media.playing .viz i:nth-child(4n+2){animation-name:v3;animation-duration:calc(.8s * var(--speed))}
+#media.playing .viz i:nth-child(5n){animation-delay:-.2s}
+#media.playing .viz i:nth-child(7n+3){animation-delay:-.4s}
+@keyframes v1{from{transform:scaleY(.2)}to{transform:scaleY(.85)}}
+@keyframes v2{from{transform:scaleY(.4)}to{transform:scaleY(1)}}
+@keyframes v3{from{transform:scaleY(.1)}to{transform:scaleY(.6)}}
+.seek{position:relative;height:10px;border-radius:999px;background:rgba(var(--bg-rgb),.14);box-shadow:inset 0 1px 2px rgba(var(--bg-rgb),.45),0 1px 0 #fff;overflow:hidden}
+#mprog{position:absolute;inset:0;border-radius:999px;transform-origin:left;transform:scaleX(var(--p,0));transition:transform 1s linear;
+  background:linear-gradient(rgba(255,255,255,.6),transparent 60%),var(--mag)}
+.ctl{display:flex;align-items:center;gap:6px}
+.rnd{width:30px;height:30px;padding:0;border-radius:50%}
+.rnd.big2{width:38px;height:38px}
+.rnd svg{width:12px;height:12px;fill:#fff;filter:drop-shadow(0 1px 0 rgba(var(--bg-rgb),.6))}
+.big2 svg{width:15px;height:15px}
+#media.idle .ctl,#media.idle .seek{visibility:hidden}
+#media.idle #mt{color:var(--pale);text-shadow:none}
+/* the tip of the day: a magenta sticker and a line, a blinking cursor after it */
+footer{margin-top:auto;display:flex;align-items:center;gap:9px;padding-top:9px;border-top:1px dashed var(--line);min-width:0}
+.tip{flex:none;padding:2px 9px 1px;border-radius:999px;font-size:11px;font-weight:600;color:#fff;background:linear-gradient(rgba(255,255,255,.5),rgba(255,255,255,0) 55%),var(--mag)}
+.saying{font-family:var(--display);font-size:15px;color:var(--surface);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saying::after{content:"";display:inline-block;width:8px;height:2px;margin-left:3px;background:var(--mag);vertical-align:baseline}
+.open .saying::after{animation:blink calc(1s * var(--speed)) steps(2) infinite}
+
+/* power: the question, a progress bar filling magenta while one is armed, four glossy buttons */
+#power{display:flex;flex-direction:column}
+#pmid{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:76px;padding-top:14px;text-align:center;pointer-events:none}
+#pk{font-family:var(--display);font-weight:400;font-size:24px;color:var(--surface)}
+#pl{font-size:14px;font-weight:500;color:rgba(var(--bg-rgb),.7)}
+#ph{font-style:normal;font-size:11px;font-weight:500;color:rgba(var(--bg-rgb),.45)}
+#power.armed #pk{color:var(--mag)}
+.fuse{position:relative;display:block;height:10px;margin:2px 20px 14px;border-radius:999px;overflow:hidden;background:rgba(var(--bg-rgb),.12);box-shadow:inset 0 1px 2px rgba(var(--bg-rgb),.4)}
+.fuse i{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:repeating-linear-gradient(90deg,var(--mag) 0 8px,rgba(var(--accent-rgb),.7) 8px 10px)}
+#power.armed .fuse i{animation:fill 3s linear both}
+@keyframes fill{to{transform:scaleX(1)}}
+.brands{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 18px 18px}
+.pb{position:relative;height:104px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;border-radius:14px;color:#fff;
+  font-family:var(--display);font-size:14px;text-shadow:0 1px 0 rgba(var(--bg-rgb),.6);
+  background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,.05) 48%,transparent 49%),linear-gradient(var(--peri),var(--surface) 70%,var(--bg));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),0 2px 5px rgba(var(--bg-rgb),.45);transition:transform var(--press) ease-out}
+.pb svg{width:30px;height:30px;fill:#fff;shape-rendering:crispEdges;filter:drop-shadow(0 1px 0 rgba(var(--bg-rgb),.6))}
+.pb::after{content:"";position:absolute;right:6px;top:6px;width:13px;height:13px;opacity:0;transform:scale(0);background:var(--sparkle) center/contain no-repeat}
+.pb:hover::after,.pb:focus-visible::after{opacity:1;transform:scale(.9);animation:spark var(--spark) steps(5) both}
+.pb:hover,.pb:focus-visible{transform:translateY(-2px)}
+.pb:active{transform:scale(.94,.88)}
+.pb.armed{background:linear-gradient(rgba(255,255,255,.6),rgba(255,255,255,.05) 48%,transparent 49%),linear-gradient(rgba(var(--accent-rgb),.75),var(--mag) 70%,rgba(var(--bg-rgb),.9))}
+
+/* the wallpapers: six thumbnails in chrome frames, the one on the desktop with a magenta "on" sticker */
+#wall{display:flex;flex-direction:column}
+#wmsg{margin-left:auto;font-style:normal;font-family:var(--display);font-size:13px;color:#fff}
+#wmsg+.dots{margin-left:12px}
+.cards{flex:1;display:flex;justify-content:center;align-items:center;gap:14px;padding:0 16px}
+.wc{position:relative;width:132px;display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform var(--press) ease-out}
+.wc img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;padding:3px;border-radius:9px;background:var(--chrome);box-shadow:0 2px 5px rgba(var(--bg-rgb),.4)}
+.wc:hover{transform:translateY(-3px)} .wc:active{transform:scale(.95)}
+.wc.on img{background:linear-gradient(#fff,var(--mag) 50%,#fff)}
+.wc .cap{display:flex;align-items:baseline;gap:6px}
+.wc .cap b{font-size:11px;font-weight:600;color:var(--mag)}
+.wc .cap i{font-style:normal;font-family:var(--display);font-size:13px;color:var(--surface)}
+.wc em{position:absolute;right:-4px;top:-6px;display:none;padding:2px 8px 1px;border-radius:999px;font-style:normal;font-size:10.5px;font-weight:600;color:#fff;
+  background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,0) 55%),var(--mag);box-shadow:0 1px 2px rgba(var(--bg-rgb),.5)}
+.wc.on em{display:block}
+.wc.busy{opacity:.5}
+
+/* the shortcuts: three columns, each section under a numbered gel sticker */
+#keysheet .esc{margin-left:auto;font-style:normal;font-size:12px;font-weight:500;opacity:.85}
+#keysheet .esc+.dots{margin-left:12px}
+#keysheet .cols{display:grid;grid-template-columns:.95fr .95fr 1.3fr;gap:16px;padding:14px 18px}
+#keysheet h3{display:flex;align-items:center;gap:8px;margin:0 0 5px;padding-bottom:4px;border-bottom:1px dashed var(--line);
+  font-family:var(--display);font-weight:400;font-size:15px;color:var(--surface)}
+#keysheet h3 b{display:grid;place-items:center;width:19px;height:19px;border-radius:50%;font-size:12px;color:#fff;
+  background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,0) 55%),var(--mag)}
+#keysheet h3 i{font-style:normal;margin-left:auto;font-family:var(--body);font-size:11px;color:rgba(var(--bg-rgb),.5)}
+#keysheet dl{display:grid;grid-template-columns:auto 1fr;gap:0 10px;margin-bottom:8px}
+#keysheet dt,#keysheet dd{padding:1px 0}
+#keysheet dt{font-family:var(--mono);font-size:16px;line-height:1.05;white-space:nowrap;align-self:center;color:var(--surface)}
+#keysheet dd{font-size:12.5px;font-weight:500;line-height:1.25;color:rgba(var(--bg-rgb),.72)}

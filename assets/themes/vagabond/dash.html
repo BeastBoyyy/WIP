@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+<link rel="stylesheet" href="./dash.css">
+</head>
+<body data-mode="dash">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="brushy"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="1.6"/></filter>
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".6" numOctaves="2" seed="9"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+    <symbol id="tsuba" viewBox="0 0 100 100">
+      <circle class="t0" cx="50" cy="50" r="48"/><circle class="t1" cx="50" cy="50" r="42"/>
+      <g class="t2"><path d="M50 4 C58 12 58 18 50 22 C42 18 42 12 50 4Z"/><path d="M50 96 C58 88 58 82 50 78 C42 82 42 88 50 96Z"/>
+        <path d="M14 34 q7 3 9 16 q-2 13 -9 16 q-5 -16 0 -32Z"/><path d="M86 34 q-7 3 -9 16 q2 13 9 16 q5 -16 0 -32Z"/></g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- the scroll: art of the workspace you are on, beside the hour, the month, the rings and the song -->
+<main id="dash">
+  <section id="art"><img id="artImg" alt=""><button class="follow k" id="wallBtn" title="Wallpaper · 絵">絵</button><div class="cap"><span class="k" id="artK"></span><span id="artEn"></span></div></section>
+  <section id="side">
+    <header class="rise">
+      <div class="big k" id="hm">--:--</div>
+      <div class="date"><span id="jdate"></span><span id="edate"></span></div>
+    </header>
+    <div class="row rise"><div id="cal"></div><div id="rings"></div></div>
+    <div id="media" class="rise idle">
+      <svg class="disc" viewBox="0 0 100 100"><use href="#tsuba"/></svg>
+      <div class="mtext"><b id="mt">静</b><span id="ma"></span><div class="blade"><i id="mprog"></i></div></div>
+      <div class="ctl"><button class="follow" id="prev" title="Previous"><svg viewBox="0 0 24 24"><path d="M7 5v14M19 5 9 12l10 7z"/></svg></button><button class="follow" id="pp" title="Play / pause"><svg viewBox="0 0 24 24"><path id="ppi" d="M7 5l12 7-12 7z"/></svg></button><button class="follow" id="next" title="Next"><svg viewBox="0 0 24 24"><path d="M17 5v14M5 5l10 7-10 7z"/></svg></button></div>
+    </div>
+    <footer class="rise"><span class="k shu">独行道</span><i id="precept"></i></footer>
+  </section>
+</main>
+
+<!-- power: an ensō drawn around four seals; the same pre-loaded window, resized -->
+<section id="power">
+  <svg class="pring" viewBox="0 0 300 300">
+    <path class="ens" pathLength="1" d="M176.9 49.5 A104 104 0 1 0 241.8 101.2" filter="url(#brushy)"/>
+    <circle class="sun" cx="214" cy="68" r="7" filter="url(#rough)"/>
+  </svg>
+  <div id="pmid"><b class="k" id="pk">休</b><span id="pl"></span><i id="ph"></i></div>
+  <button class="pb" data-a="lock" style="left:150px;top:46px"></button>
+  <button class="pb" data-a="sleep" style="left:254px;top:150px"></button>
+  <button class="pb danger" data-a="off" style="left:150px;top:254px"></button>
+  <button class="pb danger" data-a="restart" style="left:46px;top:150px"></button>
+</section>
+
+<section id="wall"><header><b class="k">絵</b><span>Wallpaper</span><i id="wmsg"></i></header><div class="cards"></div></section>
+<section id="keysheet"><header><b class="k">書</b><span>The Way of the keys</span><i>Esc to close</i></header><div class="cols"></div></section>
+
+<script type="module" src="./dash.js"></script>
+</body>
+</html>

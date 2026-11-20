@@ -1,0 +1,20 @@
+/* 武蔵 Vagabond — on the wallpaper. Read top→bottom, right→left. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden}
+#desk{position:absolute;inset:0;color:var(--ink);pointer-events:none;font-family:var(--body)}
+.k{font-family:var(--display);font-weight:400}
+#dw{position:absolute;left:46px;top:100px;display:flex;flex-direction:column;gap:22px;writing-mode:vertical-rl;
+  text-shadow:0 2px 14px rgba(0,0,0,.75),0 0 3px rgba(0,0,0,.6)}
+#dw .date{font-size:44px;letter-spacing:.14em;line-height:1}
+#dw .pre{font-size:19px;letter-spacing:.16em;opacity:.9}
+#dclock{position:absolute;left:46px;bottom:calc(12% + 22px);display:flex;flex-direction:column;gap:2px;
+  text-shadow:0 3px 20px rgba(0,0,0,.7),0 0 4px rgba(0,0,0,.6)}
+#dclock b{font-size:118px;line-height:.9;letter-spacing:.02em}
+#dclock span{font-size:15px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;opacity:.88;padding-left:6px}
+/* a red seal after the date */
+#dw .date::after{content:"";display:inline-block;width:.42em;height:.42em;margin-top:.3em;background:var(--accent);border-radius:2px;transform:rotate(-6deg)}
+/* the Void piece (4) is mostly empty paper on the left: the clock sits there larger */
+body[data-wall="4"] #dclock b{font-size:140px}
+.ink{animation:ink .6s cubic-bezier(.22,1,.36,1)}
+@keyframes ink{from{opacity:.25}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}

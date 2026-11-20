@@ -1,0 +1,41 @@
+/* Xerox — on the wallpaper: a flyer stapled to the wall. Photocopy paper, toner, the day cut out letter by letter, the
+   time on a cyan scrap (it jitters for 60 ms when the minute turns), and a fringe of tear-off tabs with one gone.
+   Nothing else moves, and nothing at all while a game is on. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden}
+:root{--speck:radial-gradient(circle at 20% 30%,rgba(var(--ink-rgb),.55) .7px,transparent 1.3px) 0 0/23px 17px,
+    radial-gradient(circle at 70% 60%,rgba(var(--ink-rgb),.4) .5px,transparent 1.1px) 0 0/13px 29px,
+    radial-gradient(circle,rgba(var(--ink-rgb),.3) .6px,transparent 1.1px) 3px 5px/41px 11px,
+    radial-gradient(circle at 40% 80%,rgba(var(--ink-rgb),.6) 1px,transparent 1.6px) 7px 2px/67px 23px}
+#desk{position:absolute;inset:0;pointer-events:none;color:var(--ink)}
+#flyer{position:absolute;right:46px;bottom:9%;width:330px;transform:rotate(2.5deg);filter:drop-shadow(0 12px 16px rgba(0,0,0,.45))}
+.sheet,.tabs i{background:var(--speck),var(--bg)}
+.sheet{position:relative;padding:26px 22px 0;background:var(--speck),linear-gradient(rgba(var(--ink-rgb),.1),transparent 14%),var(--bg)}
+/* two staples through the top corners */
+.stp{position:absolute;top:10px;width:22px;height:4px;background:linear-gradient(#eef0f2,#7d838a);box-shadow:1px 1px 0 rgba(0,0,0,.4)}
+.stp.a{left:16px;transform:rotate(-8deg)} .stp.b{right:16px;transform:rotate(6deg)}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.lbl{padding:3px 7px 2px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:#f2f0ea;background:#161618;transform:rotate(-2deg)}
+#dday{font-size:21px}
+.cut{display:inline-block;padding:1px 3px 0;margin:0 1px;line-height:1.05;transform:translateY(var(--y,0)) rotate(var(--r,0));box-shadow:1px 2px 0 rgba(0,0,0,.25)}
+.cut.f0{font-family:var(--display);font-weight:400} .cut.f1{font-family:var(--body);font-weight:700} .cut.f2{font-family:var(--mono);font-weight:700}
+.cut.s0{background:#fbfaf6;color:var(--ink)} .cut.s1{background:var(--ink);color:var(--bg)} .cut.s2{background:var(--accent);color:var(--ink)} .cut.s3{background:#D8CFB0;color:var(--ink)}
+i.sp{display:inline-block;width:.35em}
+/* the time on a scrap of cyan, torn round */
+.scrap{display:inline-block;margin:0 0 12px -4px;padding:6px 16px 2px 12px;background:var(--speck),var(--accent);transform:rotate(-3deg);
+  clip-path:polygon(0 4%,8% 0,30% 3%,55% 0,80% 4%,100% 1%,98% 30%,100% 62%,97% 100%,70% 96%,42% 100%,15% 97%,2% 100%,0 66%,3% 34%);
+  filter:drop-shadow(1px 2px 0 rgba(0,0,0,.2))}
+#dtime{display:block;font-family:var(--display);font-size:80px;line-height:1}
+#dtime.jit{animation:jit calc(.06s * var(--speed)) steps(2) 2}
+@keyframes jit{0%{transform:translate(2px,-1px)}50%{transform:translate(-1px,1px)}100%{transform:none}}
+.typed{display:flex;flex-direction:column;gap:4px;padding-bottom:12px;font-family:var(--mono);font-size:12.5px}
+#dno{font-weight:700}
+#dwx{color:rgba(var(--ink-rgb),.7)}
+/* the tear-off fringe: cut tabs turned on their side, one already taken */
+.tabs{display:flex;height:74px;border-top:1.5px dashed rgba(var(--ink-rgb),.5)}
+.tabs i{flex:1;display:grid;place-items:center;border-right:1.5px dashed rgba(var(--ink-rgb),.4);font-style:normal;font-family:var(--mono);font-size:9px;
+  writing-mode:vertical-rl;transform:rotate(180deg);color:rgba(var(--ink-rgb),.75)}
+.tabs i:last-child{border-right:none}
+.tabs i.gone{border-color:transparent;clip-path:polygon(0 89%,30% 94%,60% 90%,100% 93%,100% 100%,0 100%)}
+body.nowm #flyer{opacity:.55}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}

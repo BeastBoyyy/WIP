@@ -1,0 +1,112 @@
+/* Ghost Signal — the bar: one strip of HUD glass, dark and faintly lined, a bracket at each corner. What you point at
+   is locked on (brackets close in round it, 200 ms); a figure that changes flickers once (glitch, 90 ms); a scan line
+   crosses the strip when the channel changes and while the pointer is on it (1200 ms), and is still otherwise.
+   Colours, type and speed come from tokens.css (the palette you edit). */
+:root{
+  --amb:var(--accent); --deep:var(--accent2); --warn:var(--muted);
+  --dim:rgba(var(--ink-rgb),.55); --faint:rgba(var(--ink-rgb),.2);
+  --lock:calc(.2s * var(--speed)); --glitch:calc(90ms * var(--speed)); --scan:calc(1.2s * var(--speed));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;color:var(--ink);font-family:var(--body);user-select:none}
+button{all:unset;box-sizing:border-box;cursor:pointer}
+
+/* the glass: a dark tint, a lit hairline along the top and a fainter one under, scan lines in it */
+#bar{position:absolute;top:6px;left:10px;right:14px;height:var(--bar-h);display:flex;align-items:center;gap:14px;padding:0 14px;overflow:hidden;
+  background:repeating-linear-gradient(transparent 0 2px,rgba(0,0,0,.22) 2px 3px),linear-gradient(rgba(var(--surface-rgb),.86),rgba(var(--bg-rgb),.9));
+  box-shadow:inset 0 1px 0 rgba(var(--ink-rgb),.38),inset 0 -1px 0 rgba(var(--ink-rgb),.14),0 6px 18px rgba(0,0,0,.45)}
+.br{position:absolute;width:11px;height:9px;pointer-events:none;border:0 solid var(--ink)}
+.br.tl{left:0;top:0;border-width:1.5px 0 0 1.5px} .br.tr{right:0;top:0;border-width:1.5px 1.5px 0 0}
+.br.bl{left:0;bottom:0;border-width:0 0 1.5px 1.5px} .br.bri{right:0;bottom:0;border-width:0 1.5px 1.5px 0}
+/* the scan line: a soft band with a bright leading edge, once across */
+#bar::after{content:"";position:absolute;top:0;bottom:0;left:0;width:120px;pointer-events:none;opacity:0;transform:translateX(-130px);
+  background:linear-gradient(90deg,transparent,rgba(var(--ink-rgb),.07) 70%,rgba(var(--ink-rgb),.5) 99%,transparent)}
+#bar.scan::after{animation:scan var(--scan) linear both}
+#bar:hover::after{animation:scan var(--scan) linear infinite}
+@keyframes scan{0%{opacity:1;transform:translateX(-130px)}100%{opacity:1;transform:translateX(calc(100vw + 10px))}}
+
+.island{position:relative;height:100%;display:flex;align-items:center;gap:2px}
+#iRight{margin-left:auto}
+#iCenter{position:absolute;left:50%;transform:translateX(-50%);max-width:28vw}
+body.tray #iCenter,body.crowd #iCenter{visibility:hidden;pointer-events:none}
+
+.it{position:relative;height:calc(var(--bar-h) - 12px);padding:0 6px;display:flex;align-items:center;gap:6px;white-space:nowrap;color:var(--dim)}
+.k{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.num{font-family:var(--mono);font-size:14px;color:var(--ink)}
+.sl{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--faint);margin:0 2px}
+/* lock-on: four brackets close in round what is pointed at */
+.it::before,#ws .w::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transform:scale(1.25);
+  transition:opacity var(--lock) ease-out,transform var(--lock) cubic-bezier(.2,.8,.3,1);
+  background:linear-gradient(var(--c,var(--ink)),var(--c,var(--ink))) 0 0/6px 1px,linear-gradient(var(--c,var(--ink)),var(--c,var(--ink))) 0 0/1px 6px,
+    linear-gradient(var(--c,var(--ink)),var(--c,var(--ink))) 100% 0/6px 1px,linear-gradient(var(--c,var(--ink)),var(--c,var(--ink))) 100% 0/1px 6px,
+    linear-gradient(var(--c,var(--ink)),var(--c,var(--ink))) 0 100%/6px 1px,linear-gradient(var(--c,var(--ink)),var(--c,var(--ink))) 0 100%/1px 6px,
+    linear-gradient(var(--c,var(--ink)),var(--c,var(--ink))) 100% 100%/6px 1px,linear-gradient(var(--c,var(--ink)),var(--c,var(--ink))) 100% 100%/1px 6px;
+  background-repeat:no-repeat}
+.it:hover,#ws .w:hover{color:var(--ink)}
+.it:hover::before,#ws .w:hover::before{opacity:1;transform:none}
+.it:active{color:var(--amb)} .it:active::before{--c:var(--amb)}
+
+#overview{width:32px;padding:0;justify-content:center}
+
+/* the channels: the code, and its meter. Open: amber, the meter full, locked on; in use: three bars; empty: one */
+#ws{display:flex;height:calc(var(--bar-h) - 12px);gap:2px;margin:0 2px}
+#ws .w{position:relative;height:100%;padding:0 8px;display:flex;align-items:center;gap:6px;color:var(--dim)}
+.cn{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em}
+.sig{display:flex;align-items:flex-end;gap:1px;height:11px}
+.sig i{width:2px;background:var(--faint)}
+.sig i:nth-child(1){height:3px}.sig i:nth-child(2){height:5px}.sig i:nth-child(3){height:7px}.sig i:nth-child(4){height:9px}.sig i:nth-child(5){height:11px}
+.sig i:first-child{background:rgba(var(--ink-rgb),.5)}
+#ws .w.has .sig i:nth-child(-n+3){background:rgba(var(--ink-rgb),.75)}
+#ws .w.on{color:var(--amb);--c:var(--amb)}
+#ws .w.on .sig i{background:var(--amb)}
+#ws .w.on::before{opacity:1;transform:none}
+body.nowm #ws,body.nowm #overview{opacity:.35;pointer-events:none}
+
+/* the codes: hover and they glitch once */
+.lk{font-family:var(--mono);font-size:12px;letter-spacing:.14em;padding:0 7px}
+.lk:hover{animation:glitch var(--glitch) steps(2) 1}
+@keyframes glitch{0%{transform:translateX(1px);text-shadow:-2px 0 rgba(var(--muted-rgb),.8),2px 0 rgba(var(--ink-rgb),.6)}50%{transform:translateX(-1px);text-shadow:2px 0 rgba(var(--muted-rgb),.8),-2px 0 rgba(var(--ink-rgb),.6)}100%{transform:none;text-shadow:none}}
+/* a figure that changed: one flicker, amber, then itself */
+.tick{animation:tickf var(--glitch) steps(2) 1}
+@keyframes tickf{0%{color:var(--amb);transform:translateY(-1px)}50%{opacity:.4;transform:translateX(1px)}100%{opacity:1;transform:none}}
+
+/* the target: its code boxed in amber, its name, the title after */
+#title{gap:9px;color:var(--dim)}
+#tk{padding:1px 5px 0;color:var(--amb);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.65);font-size:9.5px}
+#title b{color:var(--ink);font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:.02em}
+#tname{overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:14px;font-weight:500}
+
+#weather{cursor:pointer}
+/* audio: five bars that move only while it plays */
+.np{max-width:170px} .np #mt{overflow:hidden;text-overflow:ellipsis;font-size:14px;font-weight:500;color:var(--ink)}
+.np em{font-style:normal;color:var(--dim)}
+.wave{display:flex;align-items:center;gap:1.5px;height:12px;flex:none}
+.wave i{width:2px;height:100%;background:var(--ink);transform:scaleY(.3);transform-origin:center}
+.np.playing .wave i{animation:wav calc(.9s * var(--speed)) ease-in-out infinite alternate}
+.np.playing .wave i:nth-child(2){animation-delay:-.3s}.np.playing .wave i:nth-child(3){animation-delay:-.6s}.np.playing .wave i:nth-child(4){animation-delay:-.15s}.np.playing .wave i:nth-child(5){animation-delay:-.45s}
+@keyframes wav{to{transform:scaleY(1)}}
+#rings{gap:5px} #rings .num+.k{margin-left:6px}
+/* the cell: a frame filled as far as the charge; low, red and blinking; charging, amber */
+#batt[hidden]{display:none}
+.cell{position:relative;display:block;width:24px;height:9px;box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.5)}
+#bfill{position:absolute;left:2px;top:2px;bottom:2px;width:calc((100% - 4px) * var(--p,1));background:var(--ink)}
+#batt.low #bfill{background:var(--warn);animation:blink 1s steps(2) infinite}
+#batt.chg #bfill{background:var(--amb)}
+@keyframes blink{50%{opacity:.2}}
+#net{padding:0 6px} #net.off{color:var(--warn)} #net.off svg{opacity:.5}
+#volb{gap:5px} #volb .mx{display:none} #volb.muted .mx{display:inline;stroke:var(--warn)} #volb.muted .num{display:none}
+
+#trayBtn{width:24px;padding:0;justify-content:center}
+#trayBtn.on svg{transform:scaleX(-1)}
+#tray{display:flex;align-items:center;gap:2px;padding:0 2px} #tray[hidden]{display:none}
+#tray button{width:26px;height:24px;display:grid;place-items:center}
+#tray button:hover{background:rgba(var(--ink-rgb),.08)}
+#tray img{width:16px;height:16px;filter:saturate(.4)}
+
+/* the time: in the HUD's face, the date in code after */
+#clock{gap:8px}
+#clock .hm{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:.04em;color:var(--ink)}
+#pwr{width:32px;padding:0;justify-content:center;color:rgba(var(--muted-rgb),.85);--c:var(--warn)}
+#pwr:hover{color:var(--warn)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

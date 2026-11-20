@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+</head>
+<body>
+<!-- a strip of HUD glass across the top of the screen, a bracket at each corner. On the left the reticle (overview), the
+     five channels each with its signal meter, and four codes; in the middle the target (the window in front); on the
+     right the readouts, the time and PWR. A scan line crosses it once when the channel changes, and while pointed at -->
+<div id="bar">
+  <i class="br tl"></i><i class="br tr"></i><i class="br bl"></i><i class="br bri"></i>
+  <div class="island" id="iLeft">
+    <button class="it" id="overview" title="Overview · Ctrl+Alt+Space">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="7"/><path d="M12 1v6M12 17v6M1 12h6M17 12h6"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>
+    </button>
+    <div id="ws" title="wheel: next / previous · right-click: send the focused window here"></div>
+    <i class="sl">//</i>
+    <button class="it lk" id="lFlow" title="SRCH · apps, files, web · Alt+Space">SRCH</button>
+    <button class="it lk" id="lFiles" title="FILE · File Explorer">FILE</button>
+    <button class="it lk" id="lTerm" title="TERM · Terminal">TERM</button>
+    <button class="it lk" id="lKeys" title="KEYS · keys and bar actions">KEYS</button>
+  </div>
+
+  <div class="island" id="iCenter">
+    <div class="it" id="title" title="wheel: focus ← → · double-click: maximize · right-click: float · middle-click: close"><span class="k" id="tk">IDLE</span><b id="tapp">no target</b><span id="tname"></span></div>
+  </div>
+
+  <div class="island" id="iRight">
+    <div id="tray" hidden></div>
+    <button class="it" id="trayBtn" title="System tray"><svg width="10" height="12" viewBox="0 0 10 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 1L2 6l5 5"/></svg></button>
+    <div class="it" id="weather"><span class="k" id="wk">CLR</span><span class="num" id="wt">–°</span></div>
+    <button class="it np" id="media" hidden title="click: play / pause · right-click: next · middle-click: previous">
+      <i class="wave"><i></i><i></i><i></i><i></i><i></i></i><span id="mt"></span>
+    </button>
+    <i class="sl">//</i>
+    <div class="it" id="rings"><span class="k">CPU</span><span class="num" id="rcpu">--</span><span class="k">MEM</span><span class="num" id="rram">--</span></div>
+    <div class="it" id="batt" hidden><span class="k">PWR</span><i class="cell"><i id="bfill"></i></i><span class="num" id="bp">–</span></div>
+    <button class="it" id="net"><svg width="16" height="14" viewBox="0 0 16 14" fill="currentColor"><rect x="0" y="10" width="3" height="4"/><rect x="4.3" y="7" width="3" height="7"/><rect x="8.6" y="4" width="3" height="10"/><rect x="12.9" y="0" width="3" height="14"/></svg></button>
+    <button class="it" id="volb" title="wheel: volume · click: mute · right-click: sound settings">
+      <span class="k">VOL</span><span class="num" id="vol"></span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path class="mx" d="M2 2l8 8M10 2l-8 8"/></svg>
+    </button>
+    <i class="sl">//</i>
+    <button class="it" id="clock"><span class="hm" id="hm">--:--</span><span class="k" id="day">MON 01.01</span></button>
+    <button class="it" id="pwr" title="PWR · lock, sleep, restart, shut down"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v8"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg></button>
+  </div>
+</div>
+<script type="module" src="./bar.js"></script>
+</body>
+</html>

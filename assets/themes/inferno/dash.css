@@ -1,0 +1,164 @@
+/* Hallmark · shape: the dark of the pit, the river's picture burning in on the left, the hour and the machine on the right · genre: atmospheric · theme: custom · job: try · idea: "The day seen as fire: hours gone are ash, this one burns, the rest are embers" · vibe: "pitch silhouettes on a wall of flame"
+ * paper: oklch(0.14 0.02 35) · accent: oklch(0.84 0.15 75) · display: UnifrakturCook · body: Grenze · hero: the river's picture and the burning hour · nav: none · footer: a line of Dante or Milton and the wallpaper button · imagery: the workspace's own painting · signature: the fuse that burns down as the song plays
+ * axes: dark/blackletter/chromatic-ember · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R4 V5 · weakest: E, four heat columns and a calendar compete for the middle; the columns stay narrow and ash-coloured until they fill, so the month reads first */
+
+/* Inferno: the dashboard, power, wallpaper and shortcuts. Each comes up out of the floor (420 ms, ease-out) and sinks
+   back (240 ms, ease-in). The river's picture burns in from the bottom (900 ms); the heat columns fill from the floor;
+   the song's fuse burns down, a spark at its end. */
+body:not([data-mode=dash]) #dash,body:not([data-mode=power]) #power,body:not([data-mode=wall]) #wall,body:not([data-mode=keys]) #keysheet{display:none}
+body::after{display:none}
+html,body{color:var(--ash);font-weight:600}
+:root{--sh:rgba(0,0,0,.6);--cinder:color-mix(in oklch,var(--ash) 58%,var(--pitch))}
+.pit{position:absolute;inset:8px 14px 16px 8px;overflow:hidden;color:var(--ash);
+  background:radial-gradient(120% 70% at 62% 128%,color-mix(in oklch,var(--flame) 42%,transparent),transparent 62%),var(--pitch);
+  box-shadow:inset 0 -2px 0 color-mix(in oklch,var(--hot),white 25%),0 10px 30px var(--sh)}
+.pit.open{animation:up var(--dur-long) var(--ease-out) both}
+.pit.closing{animation:down calc(240ms * var(--speed)) var(--ease-in) both}
+@keyframes up{from{opacity:0;transform:translateY(12px)}}
+@keyframes down{to{opacity:0;transform:translateY(8px)}}
+.pit button:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+
+/* ── the dashboard ─────────────────────────────────────────────────────────────────────────────────────────── */
+#dash{display:grid;grid-template-columns:304px minmax(0,1fr)}
+#art{position:relative;overflow:hidden;min-width:0;margin-bottom:2px}
+#art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  -webkit-mask-image:linear-gradient(90deg,var(--bg) 62%,transparent 98%)}
+/* it burns in from the bottom: a black sheet with a flame-coloured lower edge rises off it */
+#art::after{content:"";position:absolute;inset:-12% 0 0;pointer-events:none;transform:translateY(-112%);
+  background:linear-gradient(0deg,transparent,color-mix(in oklch,var(--hot) 80%,transparent) 3%,var(--flame) 6%,var(--pitch) 14%)}
+#art.burn::after{animation:burn calc(900ms * var(--speed)) var(--ease-out) both}
+@keyframes burn{from{transform:translateY(0)}to{transform:translateY(-112%)}}
+#art .cap{position:absolute;left:0;right:36px;bottom:0;padding:70px 22px 20px;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;align-items:end;
+  background:linear-gradient(transparent,color-mix(in oklch,var(--pitch) 92%,transparent) 55%)}
+#artN{grid-row:1/3;font:700 82px/.78 var(--display);color:var(--hot);text-shadow:0 0 18px color-mix(in oklch,var(--flame) 70%,transparent)}
+#artK{font:700 28px/1 var(--display)}
+#artEn{color:var(--cinder);font-size:14px;padding-bottom:4px}
+
+#side{display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-width:0;padding:22px 28px 20px 8px}
+.time{display:flex;align-items:flex-end;gap:20px}
+#dash #hm{font:700 96px/.78 var(--display);color:var(--hot);text-shadow:0 6px 26px color-mix(in oklch,var(--flame) 55%,transparent)}
+.date{display:flex;flex-direction:column;gap:5px;padding-bottom:6px}
+#jdate{font-size:17px}
+#edate{color:var(--cinder);font-size:13px}
+
+.mid{display:grid;grid-template-columns:242px minmax(0,1fr);gap:30px}
+/* the month: days gone are ash, today burns, the rest glow like embers */
+#cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;align-content:start}
+#cal .mh{grid-column:1/-1;font:700 19px/1 var(--display);padding-bottom:8px}
+#cal .wd{text-align:center;color:var(--cinder);font-size:11px;padding-bottom:3px}
+#cal i{display:grid;place-items:center;height:27px;font-style:normal;font-size:13px;font-variant-numeric:lining-nums tabular-nums;color:var(--flame)}
+#cal i:has(~ i.today){color:color-mix(in oklch,var(--ash) 34%,var(--pitch))}
+#cal i.today{color:var(--pitch);background:linear-gradient(var(--flame),var(--hot))}
+#cal i.out{color:color-mix(in oklch,var(--ash) 18%,var(--pitch))}
+#cal i:not(.out):not(.today):not(:has(~ i.today)){animation:ember calc(9s * var(--speed)) var(--ease-io) infinite}
+#cal i:nth-child(3n){animation-delay:-3s}#cal i:nth-child(3n+1){animation-delay:-6s}
+@keyframes ember{50%{opacity:.62}}
+body.nowm #cal i{animation:none}
+
+/* the machine: four columns of heat, filled from the floor */
+#rings{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:end}
+.ring2{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.ring2 em{font-style:normal;font-size:19px;font-variant-numeric:lining-nums tabular-nums}
+.col{position:relative;display:block;width:16px;height:118px;background:color-mix(in oklch,var(--ash) 9%,transparent);overflow:hidden}
+.col > i{position:absolute;inset:0;transform-origin:bottom;transform:scaleY(var(--p,0));background:linear-gradient(0deg,var(--flame),var(--hot));
+  transition:transform calc(800ms * var(--speed)) var(--ease-out)}
+.ring2 b{font-size:13px;font-weight:600}
+.ring2 span{color:var(--cinder);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ring2.none{display:none}
+
+/* the song and its fuse */
+#dash #media{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px 16px;max-width:none}
+.song{display:flex;flex-direction:column;gap:4px;min-width:0}
+#dash #mt{font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ma{color:var(--cinder);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctl{display:flex;gap:4px}
+.ctl button{position:relative;display:grid;place-items:center;width:36px;height:36px;color:var(--ash);isolation:isolate;
+  transition:color var(--dur-short) var(--ease-out)}
+.ctl button::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,var(--flame),var(--hot));transform:scaleY(0);transform-origin:bottom;
+  transition:transform var(--dur-short) var(--ease-out)}
+.ctl button:hover{color:var(--pitch)}
+.ctl button:hover::before{transform:scaleY(1)}
+.ctl button:active{transform:translateY(1px)}
+.ctl svg{width:19px;height:19px}
+#pp{color:var(--pitch)}
+#pp::before{transform:scaleY(1)}
+#pp svg{fill:currentColor;stroke:none}
+#dash #media.idle .ctl{opacity:.4}
+/* the fuse: the rope that is left, burnt away from the left, a spark where it burns */
+.fuse{position:relative;grid-column:1/-1;height:2px;background:color-mix(in oklch,var(--ash) 38%,transparent)}
+#mprog{position:absolute;inset:0;--p:0}
+#mprog .burnt{position:absolute;inset:-1px 0;background:var(--pitch);transform-origin:left;transform:scaleX(var(--p));
+  transition:transform calc(1000ms * var(--speed)) linear}
+#mprog .spark{position:absolute;inset:0;transform:translateX(calc((var(--p) - 1) * 100%));transition:transform calc(1000ms * var(--speed)) linear}
+#mprog .spark::after{content:"";position:absolute;right:-3px;top:-2px;width:6px;height:6px;border-radius:50%;background:var(--hot);
+  box-shadow:0 0 8px 2px color-mix(in oklch,var(--flame) 80%,transparent)}
+#dash #media.playing #mprog .spark::after{animation:sputter calc(900ms * var(--speed)) var(--ease-io) infinite}
+#dash #media.idle .fuse{opacity:.35}
+#dash #media.idle #mprog .spark{display:none}
+@keyframes sputter{50%{transform:scale(.6)}}
+body.nowm #mprog .spark::after{animation:none}
+
+#dash footer{display:flex;align-items:center;justify-content:space-between;gap:16px}
+#precept{color:var(--cinder);font-size:14px;line-height:1.35}
+.btn{position:relative;flex:none;padding:8px 10px;color:var(--ash);font-size:14px;isolation:isolate;transition:color var(--dur-short) var(--ease-out)}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,var(--flame),var(--hot));transform:scaleY(.08);transform-origin:bottom;
+  transition:transform var(--dur-short) var(--ease-out)}
+.btn:hover,.btn:focus-visible{color:var(--pitch)}
+.btn:hover::before,.btn:focus-visible::before{transform:scaleY(1)}
+
+/* ── power ─────────────────────────────────────────────────────────────────────────────────────────────────── */
+#power{display:flex;flex-direction:column;gap:18px;padding:24px 26px 24px}
+#pmid{display:flex;flex-direction:column;gap:6px;min-height:76px}
+#pk{font:700 32px/1 var(--display);color:var(--hot)}
+#pl{font-size:14px}
+#ph{color:var(--flame);font-style:normal;font-size:13px;min-height:16px}
+.pbs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;flex:1}
+.pb{position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:12px;overflow:hidden;isolation:isolate;color:var(--ash);
+  background:radial-gradient(120% 60% at 50% 105%,color-mix(in oklch,var(--flame) 30%,transparent),transparent 70%);
+  box-shadow:inset 0 0 0 1px color-mix(in oklch,var(--ash) 16%,transparent);transition:color var(--dur-short) var(--ease-out)}
+.pb::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,var(--flame),var(--hot));transform:scaleY(0);transform-origin:bottom;
+  transition:transform var(--dur-long) var(--ease-out)}
+.pb svg{width:28px;height:28px}
+.pb span{font:700 19px/1 var(--display)}
+.pb:hover,.pb:focus-visible,.pb.armed{color:var(--pitch)}
+.pb:hover::before,.pb:focus-visible::before,.pb.armed::before{transform:scaleY(1)}
+.pb::after{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--pitch);transform:scaleX(0);transform-origin:left}
+#power.armed .pb.armed::after{animation:fuse 3s linear both}
+@keyframes fuse{to{transform:scaleX(1)}}
+#power.armed .pb:not(.armed){opacity:.45}
+
+/* ── wallpaper ─────────────────────────────────────────────────────────────────────────────────────────────── */
+#wall,#keysheet{padding:20px 24px}
+.ph{display:flex;align-items:baseline;gap:16px;margin-bottom:16px}
+.ph b{font:700 28px/1 var(--display);color:var(--hot)}
+.ph i{margin-left:auto;font-style:normal;color:var(--cinder);font-size:13px}
+#wmsg{color:var(--flame)}
+.cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px 12px}
+.wc{position:relative;display:flex;flex-direction:column;gap:7px;min-width:0;cursor:pointer;box-sizing:border-box}
+.wc img{display:block;width:100%;height:162px;object-fit:cover;filter:brightness(.72);
+  transition:filter var(--dur-short) var(--ease-out),transform var(--dur-short) var(--ease-out)}
+.wc::after{content:"";position:absolute;left:0;right:0;top:159px;height:3px;background:var(--char);transform-origin:left;
+  transition:background-color var(--dur-short) var(--ease-out)}
+.wc:hover img,.wc:focus-visible img{filter:none;transform:translateY(-3px)}
+.wc:hover::after,.wc.on::after{background:linear-gradient(90deg,var(--flame),var(--hot))}
+.wc .cap{display:flex;align-items:baseline;gap:7px;min-width:0}
+.wc .cap b{font:700 15px/1 var(--display);color:var(--flame);flex:none}
+.wc .cap i{font-style:normal;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wc .cap i::first-letter{text-transform:uppercase}
+.wc > em{position:absolute;right:6px;top:8px;padding:3px 7px;font-style:normal;font-size:11.5px;color:var(--pitch);background:var(--hot);
+  display:none}
+.wc.on > em{display:block;animation:tag var(--dur-short) var(--ease-out) both}
+@keyframes tag{from{opacity:0;transform:translateY(-4px)}}
+.wc.on img{filter:none}
+.wc.busy{opacity:.55}
+
+/* ── shortcuts ─────────────────────────────────────────────────────────────────────────────────────────────── */
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 30px}
+.cols h3{display:flex;align-items:baseline;gap:8px;margin:0 0 8px;font:700 20px/1.1 var(--display);color:var(--hot)}
+.cols h3 + dl + h3{margin-top:16px}
+.cols h3 .k{color:var(--flame);font-size:16px}
+.cols h3 i{font:600 12px/1 var(--body);color:var(--cinder);font-style:normal;margin-left:auto}
+.cols dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;font-size:13px}
+.cols dt{white-space:nowrap;font-variant-numeric:lining-nums}
+.cols dd{color:var(--cinder);min-width:0}

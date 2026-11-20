@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+</head>
+<body>
+<!-- the opening titles along the top of the screen: red bands cut on the slant with the type knocked out of them.
+     The acts on the left as title cards, the picture now on screen in a black band in the middle, the running time
+     and the house lights on the right -->
+<div id="bar">
+  <div class="island" id="iLeft">
+    <button class="it follow" id="overview" title="Overview · Ctrl+Alt+Space">
+      <svg class="clap" width="22" height="20" viewBox="0 0 24 22"><g class="arm"><path class="bd" d="M2.5 6.5 20.8 2.2l.9 3.6L3.4 10.1z"/><path class="st" d="M6.4 5.6l2.4 3.3M11 4.5l2.4 3.3M15.6 3.4 18 6.7"/></g><rect class="bd" x="2.5" y="10" width="19" height="10.5"/><path class="st" d="M2.5 13.5h19"/></svg>
+    </button>
+    <i class="cut"></i>
+    <div id="ws" title="wheel: next / previous · right-click: send the focused window here"></div>
+    <i class="cut"></i>
+    <button class="it follow lk" id="lFlow" title="Search · apps, files, web · Alt+Space">Find it.</button>
+    <button class="it follow lk" id="lFiles" title="The files · File Explorer">The files.</button>
+    <button class="it follow lk" id="lTerm" title="The machine · Terminal">The machine.</button>
+    <button class="it follow lk" id="lKeys" title="The script · keys and bar actions">The script.</button>
+  </div>
+
+  <div class="island" id="iCenter">
+    <div class="it" id="title" title="wheel: focus ← → · double-click: maximize · right-click: float · middle-click: close"><span class="k" id="tk">INTERMISSION</span><b id="tapp">marquee</b><span id="tname"></span></div>
+  </div>
+
+  <div class="island" id="iRight">
+    <div id="tray" hidden></div>
+    <button class="it follow" id="trayBtn" title="System tray"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="it follow cell" id="weather"><span class="k" id="wk">FAIR</span><span class="num" id="wt">–°</span></div>
+    <button class="it follow np" id="media" hidden title="click: play / pause · right-click: next · middle-click: previous">
+      <svg class="strip" viewBox="0 0 14 20"><rect class="film" x="1" y="0" width="12" height="20"/><g class="holes"><rect x="2.2" y="1" width="2" height="2.6"/><rect x="9.8" y="1" width="2" height="2.6"/><rect x="2.2" y="6" width="2" height="2.6"/><rect x="9.8" y="6" width="2" height="2.6"/><rect x="2.2" y="11" width="2" height="2.6"/><rect x="9.8" y="11" width="2" height="2.6"/><rect x="2.2" y="16" width="2" height="2.6"/><rect x="9.8" y="16" width="2" height="2.6"/><rect x="2.2" y="21" width="2" height="2.6"/><rect x="9.8" y="21" width="2" height="2.6"/></g></svg>
+      <span id="mt"></span>
+    </button>
+    <i class="cut"></i>
+    <div class="it follow" id="rings"><svg class="ring" viewBox="0 0 19 19" id="rcpu"></svg><svg class="ring" viewBox="0 0 19 19" id="rram"></svg></div>
+    <div class="it follow cell" id="batt" hidden><span class="k">LAMP</span><span class="bar"><i class="sb"><i id="bfill"></i></i><span class="num" id="bp">–</span></span></div>
+    <button class="it follow" id="net">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><path d="M10.5 18h3v3h-3z" fill="currentColor" stroke="none"/></svg>
+    </button>
+    <button class="it follow" id="volb" title="wheel: volume · click: mute · right-click: sound settings">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path class="wv" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/><path class="mx" d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></svg><span class="num" id="vol"></span>
+    </button>
+    <i class="cut"></i>
+    <button class="it follow cell" id="clock"><span class="k" id="day">MON 01 JAN</span><span class="hm" id="hm">--:--</span></button>
+    <button class="it follow" id="pwr" title="Power · how it ends"><span class="end">END</span></button>
+  </div>
+</div>
+<script type="module" src="./bar.js"></script>
+</body>
+</html>

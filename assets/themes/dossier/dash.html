@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+<link rel="stylesheet" href="./dash.css">
+</head>
+<body data-mode="dash">
+<!-- the case file, opened: on the left leaf the tab's photograph clipped to a sheet, with its exhibit label; on the right
+     leaf the typed entry: the time, the month, four marker rings, the tape on the recorder, and the motto with its
+     words blacked out -->
+<main id="dash">
+  <section id="art">
+    <div class="sheet">
+      <i class="clip"></i>
+      <div class="port"><img id="artImg" alt=""></div>
+      <div class="cap"><span class="k" id="artK"></span><span id="artEn"></span><span id="artNo"></span></div>
+      <b class="ev">EVIDENCE</b>
+    </div>
+    <button class="follow" id="wallBtn" title="Wallpaper · pin another photograph up">NEW EXHIBIT</button>
+  </section>
+  <section id="side">
+    <div class="head rise"><span>DEPARTMENT OF INVESTIGATION</span><span>CASE No. 1105-B</span></div>
+    <header class="rise">
+      <div class="run"><span class="lbl">TIME OF ENTRY</span><div class="big" id="hm">--:--</div></div>
+      <div class="date"><span id="jdate"></span><span id="edate"></span></div>
+    </header>
+    <div class="row rise"><div id="cal"></div><div id="rings"></div></div>
+    <div id="media" class="rise idle">
+      <div class="credit"><span class="role">AUDIO EXHIBIT · SIDE A</span><b id="mt">NO TAPE</b><span id="ma"></span><div class="rule"><i id="mprog"></i></div></div>
+      <div class="ctl"><button class="follow" id="prev" title="Previous"><svg viewBox="0 0 24 24"><path d="M6 5h2.5v14H6zM20 5 10 12l10 7z"/></svg></button><button class="follow" id="pp" title="Play / pause"><svg viewBox="0 0 24 24"><path id="ppi" d="M7 5l12 7-12 7z"/></svg></button><button class="follow" id="next" title="Next"><svg viewBox="0 0 24 24"><path d="M15.5 5H18v14h-2.5zM4 5l10 7-10 7z"/></svg></button></div>
+    </div>
+    <div class="form rise"><span class="f">STATUS</span><span class="st">OPEN</span><span class="f">FILED BY</span><span>YOU</span>
+      <span class="f">CROSS-REF.</span><span>1105-A · 1105-C</span><span class="f">CUSTODY</span><span>RICE STUDIO P.D.</span></div>
+    <footer class="rise"><span class="saying"><i id="precept"></i></span><span class="mark">PAGE 1 OF 1</span></footer>
+  </section>
+</main>
+
+<!-- power: four rubber stamps. Armed, the stamp comes down inked, and a black bar redacts the line under the heading
+     over the 3 s it waits -->
+<section id="power">
+  <div id="pmid"><b class="k" id="pk">FINAL ENTRY</b><span id="pl"></span><i id="ph"></i></div>
+  <i class="fuse"></i>
+  <div class="brands">
+    <button class="pb" data-a="lock"></button><button class="pb" data-a="sleep"></button>
+    <button class="pb danger" data-a="restart"></button><button class="pb danger" data-a="off"></button>
+  </div>
+</section>
+
+<section id="wall"><header><b class="k">EXHIBITS</b><span>Pin a photograph up</span><i id="wmsg"></i></header><div class="cards"></div></section>
+<section id="keysheet"><header><b class="k">CODES</b><span>Standing orders</span><i>Esc to close</i></header><div class="cols"></div></section>
+
+<script type="module" src="./dash.js"></script>
+</body>
+</html>

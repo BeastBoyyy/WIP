@@ -1,0 +1,35 @@
+/* Dossier — on the wallpaper: a manila evidence tag hung on a string. A reinforced hole, a red printed band, ruled
+   lines; the exhibit typed, the day and the time in marker. The time is rewritten each minute; nothing else moves, and
+   nothing at all while a game is on. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden}
+:root{--tag:color-mix(in srgb,var(--bg) 70%,#d8b56c);--ink2:color-mix(in srgb,var(--ink) 90%,#203a6a)}
+#desk{position:absolute;inset:0;pointer-events:none}
+#tag{position:absolute;left:64px;bottom:10%;width:372px;transform:rotate(-4deg);transform-origin:20px 50%;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45))}
+/* the tag: corners clipped at the hole end, the hole and its ring */
+.card{position:relative;padding:14px 18px 10px 62px;color:var(--ink);background:
+    radial-gradient(circle at 26px 50%,transparent 7px,color-mix(in srgb,var(--tag) 70%,#fff) 7.5px 13px,rgba(0,0,0,.14) 13.5px,transparent 14.5px),
+    radial-gradient(rgba(var(--ink-rgb),.06) .6px,transparent .9px) 0 0/5px 5px,
+    linear-gradient(165deg,var(--tag),color-mix(in srgb,var(--tag) 86%,var(--ink)));
+  -webkit-mask:radial-gradient(circle at 26px 50%,transparent 7px,#000 7.5px);
+  clip-path:polygon(22px 0,100% 0,100% 100%,22px 100%,0 calc(100% - 22px),0 22px)}
+/* the string, threaded through the hole and away up the wall */
+.string{position:absolute;left:-196px;top:50%;width:226px;height:2px;margin-top:-1px;background:color-mix(in srgb,#efe6cf 85%,var(--ink));
+  transform:rotate(28deg);transform-origin:100% 50%;box-shadow:0 2px 2px rgba(0,0,0,.25)}
+.band{display:flex;align-items:baseline;justify-content:space-between;margin:0 -18px 8px 0;padding:5px 18px 3px 10px;background:var(--accent);color:var(--bg)}
+.band b{font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.16em;line-height:1}
+.band span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;opacity:.9}
+.rows{display:flex;flex-direction:column}
+.r{display:flex;align-items:baseline;gap:10px;min-height:28px;padding-top:3px;border-bottom:1px solid rgba(var(--ink-rgb),.32)}
+.l{flex:none;width:56px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 60%,var(--tag))}
+.typed{min-width:0;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* marker: the display face in felt-tip ink, its edges bleeding a little into the card */
+.mk{display:flex;align-items:baseline;white-space:nowrap;font-family:var(--display);color:var(--ink2);text-shadow:0 0 .6px var(--ink2),0 0 2px rgba(32,40,80,.3)}
+.mk b{display:inline-block;font-weight:400;font-size:25px;line-height:1;transform:translateY(var(--y,0)) rotate(var(--r,0))}
+.mk .sp{display:inline-block;width:7px}
+.yr{margin-left:auto;font-family:var(--mono);font-size:10px;color:color-mix(in srgb,var(--ink) 55%,var(--tag))}
+.r.big{min-height:64px}
+.r.big .mk b{font-size:66px;color:var(--accent);text-shadow:0 0 .6px var(--accent),0 0 2px rgba(var(--accent-rgb),.3)}
+.r.sig{border-bottom:none}
+.you b{font-size:22px;transform:rotate(-4deg)}
+body.nowm #tag{opacity:.55}

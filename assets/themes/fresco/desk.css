@@ -1,0 +1,36 @@
+/* Hallmark · shape: one patch set into the wall · genre: editorial · theme: custom · job: try · idea: "A fresh giornata on the wallpaper, the hour cut into its wet plaster" · vibe: "lime plaster, wet pigment, Roman light"
+ * paper: oklch(0.96 0.003 180) · accent: oklch(0.53 0.15 255) · display: Marcellus · body: Alegreya Sans · hero: the hour · nav: none · footer: none · imagery: none · signature: the stroke of wet pigment under the hour
+ * axes: light/roman-serif/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H5 E5 S4 R5 V4 · weakest: P, a clock on a patch is a calm idea; the working light left before eight gives it a point of view */
+
+/* Fresco: the desk. It sits on the wallpaper, ignores the mouse and wakes once a minute: the new minute settles out of a
+   blur (420 ms). It is laid in once when the theme starts; it never moves on its own. */
+:root{--sh:rgba(0,0,0,.28);
+  --plaster:var(--surface); --dry:var(--bg); --sinopia:var(--accent2);
+  --arriccio:color-mix(in oklch,var(--muted) 72%,var(--accent2));
+  --soft:color-mix(in oklch,var(--ink) 64%,var(--plaster));
+  --p0:var(--accent); --p1:oklch(0.6 0.075 145); --p2:var(--accent2); --p3:oklch(0.8 0.13 86); --p4:oklch(0.56 0.15 6);
+  --pig:var(--p0);
+  --dur-long:calc(420ms * var(--speed)); --ease-out:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;overflow-x:clip;background:transparent;font-family:var(--body);color:var(--ink);font-synthesis:none;
+  user-select:none;-webkit-font-smoothing:antialiased}
+#desk{position:absolute;left:34px;bottom:42px;filter:drop-shadow(0 6px 14px var(--sh))}
+/* the arriccio round the edge, then the fresh intonaco on it */
+.patch{position:relative;width:360px;padding:26px 30px 22px;background:var(--plaster);
+  clip-path:polygon(0 7px,100% 0,calc(100% - 5px) 100%,6px calc(100% - 4px));
+  box-shadow:inset 0 0 0 5px var(--arriccio);animation:lay-in calc(700ms * var(--speed)) var(--ease-out) both}
+@keyframes lay-in{from{opacity:0;transform:translateY(12px)}}
+#dhm{font:400 96px/.82 var(--display);letter-spacing:-.01em;font-variant-numeric:lining-nums tabular-nums}
+#dhm.ink{animation:settle var(--dur-long) var(--ease-out) both}
+@keyframes settle{from{opacity:0;filter:blur(3px)}}
+.stroke{display:block;width:64px;height:5px;margin:18px 0 14px;background:color-mix(in oklch,var(--pig),black 10%);
+  transition:background-color var(--dur-long) var(--ease-out)}
+#dday{font-size:17px}
+.row{display:flex;align-items:baseline;gap:12px;margin-top:4px;color:var(--soft);font-size:14px}
+#dpig{font:400 16px/1.2 var(--display);color:var(--ink)}
+#dleft{margin-top:12px;padding-top:10px;color:var(--sinopia);font-size:13px;font-variant-numeric:lining-nums;
+  background:radial-gradient(circle,color-mix(in oklch,var(--ink) 45%,transparent) .9px,transparent 1.3px) 0 0/7px 4px repeat-x}
+body.nowm .patch{animation:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}}

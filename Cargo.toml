@@ -1,0 +1,33 @@
+[package]
+name = "rice-studio"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-or-later"
+description = "Pick a desktop theme, make it yours, add your wallpapers and apply it to Windows."
+
+[dependencies]
+slint = { version = "1.18", features = ["renderer-femtovg-wgpu", "unstable-wgpu-30", "unstable-fontique-011", "unstable-winit-030"] }
+tiny-skia = "0.12"
+ttf-parser = "0.25"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp"] }
+flate2 = "1"
+rfd = "0.18"
+bytemuck = { version = "1", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+base64 = "0.22"
+windows-sys = { version = "0.59", features = ["Win32_UI_WindowsAndMessaging", "Win32_Foundation", "Win32_System_Diagnostics_ToolHelp", "Win32_System_Threading", "Win32_UI_Input_KeyboardAndMouse", "Win32_UI_Shell", "Win32_Graphics_Gdi", "Win32_Security"] }
+
+[dev-dependencies]
+toml = "0.8"
+
+[build-dependencies]
+slint-build = "1.18"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+strip = true
+
+[profile.dev.package."*"]
+opt-level = 2

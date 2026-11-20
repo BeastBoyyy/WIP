@@ -1,0 +1,98 @@
+/* Dither — the bar: a 1-bit window's title bar run the width of the screen. One colour of ink on one of ground, no
+   greys: every in-between tone is a pattern of dots (25, 50, 75 %), every outline one pixel, every shadow two. Nothing
+   eases: it steps, at about 12 frames a second. Colours, type and speed come from tokens.css (the palette you edit). */
+:root{
+  /* the three tones a 1-bit screen has between ink and ground, as 2×2 dot patterns */
+  --d25:conic-gradient(var(--ink) 0 25%,transparent 0) 0 0/2px 2px;
+  --d50:repeating-conic-gradient(var(--ink) 0 25%,transparent 0 50%) 0 0/2px 2px;
+  --d75:conic-gradient(transparent 0 25%,var(--ink) 0) 0 0/2px 2px;
+  --m50:repeating-conic-gradient(#000 0 25%,transparent 0 50%) 0 0/2px 2px;
+  --frame:inset 0 0 0 1px var(--ink);
+  --shadow:2px 2px 0 0 var(--ink);
+  --step:calc(83ms * var(--speed));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;color:var(--ink);font-family:var(--body);user-select:none;-webkit-font-smoothing:none}
+button{all:unset;box-sizing:border-box;cursor:pointer}
+svg.px{display:block;flex:none;image-rendering:pixelated}
+
+/* the title bar: the frame, its drop shadow, and the stripes across it; the parts sit in gaps cut out of the stripes */
+#bar{position:absolute;top:6px;left:10px;right:14px;height:var(--bar-h);display:flex;align-items:center;gap:14px;padding:0 10px;
+  background:var(--bg);box-shadow:var(--frame),var(--shadow)}
+#bar::before{content:"";position:absolute;inset:6px 4px;z-index:-1;background:repeating-linear-gradient(var(--ink) 0 1px,transparent 1px 3px)}
+#bar{isolation:isolate}
+.island{position:relative;height:calc(var(--bar-h) - 10px);display:flex;align-items:center;gap:2px;padding:0 5px;background:var(--bg)}
+#iRight{margin-left:auto}
+#iCenter{position:absolute;left:50%;transform:translateX(-50%);max-width:28vw}
+body.tray #iCenter,body.crowd #iCenter{visibility:hidden;pointer-events:none}
+
+.it{position:relative;height:calc(var(--bar-h) - 14px);padding:0 5px;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.k{font-family:var(--display);font-size:8px;line-height:1;letter-spacing:.05em;text-transform:uppercase}
+.num{font-family:var(--mono);font-size:19px;line-height:1}
+/* pointed at: a one-pixel frame; pressed: inverted, and back */
+.it:hover,#ws .w:hover{box-shadow:var(--frame)}
+.it:active,#ws .w:active{background:var(--ink);color:var(--bg)}
+.sep{width:1px;height:14px;margin:0 6px;background:var(--d50)}
+
+/* the close box: a square in a square; pressed, it fills */
+#overview{width:24px;padding:0;justify-content:center}
+.box{display:block;width:13px;height:13px;box-shadow:inset 0 0 0 1px var(--ink),inset 0 0 0 3px var(--bg),inset 0 0 0 4px var(--ink)}
+#overview:hover{box-shadow:none} #overview:hover .box{box-shadow:inset 0 0 0 1px var(--ink),inset 0 0 0 3px var(--bg),inset 0 0 0 13px var(--ink)}
+#overview:active{background:none;color:var(--ink)}
+
+/* the five icons, each 8×8 at two pixels a dot. The open one is inverted: it dithers in, a quarter at a time; one with
+   windows on it has a dotted line under */
+#ws{display:flex;height:calc(var(--bar-h) - 14px);gap:2px;margin:0 4px}
+#ws .w{position:relative;width:26px;height:100%;display:grid;place-items:center}
+#ws .w.has::after{content:"";position:absolute;left:5px;right:5px;bottom:0;height:1px;background:var(--d50)}
+#ws .w.on{background:var(--ink);color:var(--bg);animation:din calc(var(--step) * 4) steps(1) both}
+@keyframes din{0%{background:var(--d25)}25%{background:var(--d50)}50%{background:var(--d75)}75%,100%{background:var(--ink)}}
+body.nowm #ws,body.nowm #overview{-webkit-mask:var(--m50);mask:var(--m50);pointer-events:none}
+
+/* the four words, in the 8-px capitals at twice their size */
+.lk{font-family:var(--display);font-size:16px;line-height:1;padding:0 5px}
+
+/* the window in front: its kind in a tag, inverted; its name; the title after */
+#title{gap:8px}
+#tk{padding:2px 3px 1px;background:var(--ink);color:var(--bg)}
+#title b{font-family:var(--mono);font-weight:400;font-size:21px;line-height:1}
+#tname{overflow:hidden;text-overflow:ellipsis;min-width:0;font-family:var(--mono);font-size:19px;line-height:1}
+
+#weather{cursor:pointer}
+/* load: two bars, a frame filled solid as far as the reading, dotted for the rest */
+#rings{gap:5px}
+.cb{position:relative;display:block;width:30px;height:9px;padding:2px;box-shadow:var(--frame);background:var(--d50);background-clip:content-box}
+.cb>i{position:absolute;left:2px;top:2px;bottom:2px;width:calc((100% - 4px) * var(--p,0));background:var(--ink)}
+#rings .k+.cb{margin-right:2px}
+/* what plays: a note, and its name */
+.np{max-width:190px} .np #mt{overflow:hidden;text-overflow:ellipsis;font-family:var(--mono);font-size:19px;line-height:1}
+.np em{font-style:normal}
+.np.playing .note{animation:hop calc(var(--step) * 6) steps(1) infinite}
+@keyframes hop{50%{transform:translateY(-2px)}}
+#net{padding:0 4px 0 6px} #volb{padding:0 6px 0 4px;gap:5px}
+#net.off svg{-webkit-mask:var(--m50);mask:var(--m50)}
+#volb .mx,#volb.muted .wv{display:none} #volb.muted .mx{display:inline}
+
+/* the battery: a frame with its nub, filled as far as the charge; low, it blinks; charging, it fills a step at a time */
+#batt[hidden]{display:none}
+.bat{position:relative;display:block;width:22px;height:11px;box-shadow:var(--frame);margin-right:3px}
+.bat::after{content:"";position:absolute;right:-3px;top:3px;width:2px;height:5px;background:var(--ink)}
+#bfill{position:absolute;left:2px;top:2px;bottom:2px;width:calc((100% - 4px) * var(--p,1));background:var(--ink)}
+#batt.low #bfill{background:var(--d50);animation:blink calc(var(--step) * 12) steps(1) infinite}
+#batt.chg #bfill{animation:charge calc(var(--step) * 16) steps(4) infinite}
+@keyframes blink{50%{visibility:hidden}}
+@keyframes charge{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+
+#trayBtn{width:22px;padding:0;justify-content:center}
+#trayBtn.on svg{transform:scaleX(-1)}
+#tray{display:flex;align-items:center;gap:2px;padding:0 2px} #tray[hidden]{display:none}
+#tray button{width:24px;height:20px;display:grid;place-items:center}
+#tray button:hover{box-shadow:var(--frame)}
+#tray img{width:16px;height:16px;filter:grayscale(1) contrast(4);image-rendering:pixelated}
+
+/* the hour, in the terminal figures; the day in the small capitals before it */
+#clock{gap:7px}
+#clock .hm{font-family:var(--mono);font-size:23px;line-height:1}
+#pwr{width:26px;padding:0;justify-content:center}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

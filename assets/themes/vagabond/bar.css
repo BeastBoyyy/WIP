@@ -1,0 +1,99 @@
+/* 武蔵 Vagabond — the ink-shell bar. Colours, type and speed come from tokens.css (the palette you edit in Rice Studio). */
+:root{
+  --ease:cubic-bezier(.22,1,.36,1);
+  --line:rgba(var(--ink-rgb),.08); --line2:rgba(var(--ink-rgb),.14);
+  --stone:var(--muted); --mist:color-mix(in srgb,var(--ink) 62%,var(--bg));
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* washi fibres: long thin strands */
+  --fibre:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .18' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.6 -.75'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;color:var(--ink);font-family:var(--body);user-select:none}
+button{all:unset;cursor:pointer}
+
+#bar{position:absolute;top:6px;left:10px;right:10px;height:var(--bar-h);display:flex;align-items:center;gap:10px}
+/* a sheet of dark washi: grain + fibres, a deckled bottom edge */
+.island{position:relative;height:100%;border-radius:13px;display:flex;align-items:center;padding:0 6px;gap:2px;
+  background:rgba(var(--bg-rgb),.88);border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.island::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background-image:var(--fibre),var(--grain);background-size:240px 120px,160px;opacity:.06;mix-blend-mode:screen}
+.island::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(var(--accent2-rgb),.35) 30%,rgba(var(--accent2-rgb),.12) 70%,transparent);filter:url(#rough)}
+#iCenter{position:absolute;left:50%;transform:translateX(-50%);max-width:34vw;transition:opacity .2s}
+#iRight{margin-left:auto}
+body.tray #iCenter,body.crowd #iCenter{opacity:0;pointer-events:none}   /* a full tray reaches the middle */
+
+.it{height:calc(var(--bar-h) - 8px);padding:0 10px;display:flex;align-items:center;gap:8px;font-size:13px;white-space:nowrap}
+.sep{width:1px;height:18px;background:var(--line);margin:0 4px}
+.k{font-family:var(--display)} .mono{font-family:var(--mono);font-size:12px;color:var(--mist)}
+
+/* ink bleed: a wash spreads from the pointer (180 ms), on the compositor */
+.follow{position:relative;overflow:hidden;border-radius:8px}
+.follow::before{content:"";position:absolute;left:var(--mx,50%);top:var(--my,50%);width:260%;height:260%;border-radius:50%;
+  background:radial-gradient(circle,rgba(var(--accent2-rgb),.32),rgba(var(--accent2-rgb),.1) 60%,transparent 70%);
+  transform:translate(-50%,-50%) scale(0);transition:transform calc(.18s * var(--speed)) var(--ease)}
+.follow:hover::before{transform:translate(-50%,-50%) scale(1)}
+.follow>*{position:relative}
+
+#overview{width:36px;padding:0;justify-content:center}
+#enso .ens{fill:none;stroke:var(--ink);stroke-width:3.6;stroke-linecap:round}
+#enso .sun{fill:var(--accent)}
+#overview:hover svg{animation:turn calc(1.2s * var(--speed)) var(--ease)}
+@keyframes turn{from{transform:rotate(-40deg)}to{transform:none}}
+#pwr{width:34px;padding:0;justify-content:center;color:var(--mist);transition:color .2s}
+#pwr:hover{color:var(--accent)}
+
+/* hanko workspaces: a red seal stamps on the active one */
+#ws{position:relative;display:flex;gap:3px;padding:0 4px}
+#ws .w{min-width:32px;height:32px;padding:0 4px;display:grid;place-items:center;font-family:var(--display);font-size:19px;color:var(--stone);
+  position:relative;z-index:2;transition:color .25s}
+#ws .w.has{color:var(--mist)}
+#ws .w.has::after{content:"";position:absolute;bottom:1px;width:4px;height:4px;border-radius:50%;background:var(--accent2)}
+#ws .w.on{color:var(--ink)} #ws .w.on::after{display:none}
+#ws .w:hover{color:var(--ink)}
+#seal{position:absolute;top:2px;left:0;width:28px;height:28px;border-radius:4px;background:var(--accent);z-index:1;filter:url(#rough);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.08);opacity:0}
+.splat{position:absolute;border-radius:50%;background:var(--accent);z-index:1;pointer-events:none}
+body.nowm #ws,body.nowm #overview{opacity:.3;pointer-events:none} body.nowm #tk{color:var(--accent)!important}
+
+#title{font-size:14px;color:var(--mist);overflow:hidden}
+#title b{color:var(--ink);font-weight:600}
+#tk{color:var(--accent2);font-size:16px}
+#tname{overflow:hidden;text-overflow:ellipsis;max-width:22vw}
+
+#weather{cursor:pointer} #weather .k{font-size:19px;color:var(--accent2)}
+.ring{width:22px;height:22px}
+.ring .track{fill:none;stroke:rgba(var(--ink-rgb),.1)}
+.ring .arc{fill:none;stroke:var(--ink)} .ring.r2 .arc{stroke:var(--accent2)}
+.np{max-width:220px;color:var(--mist)} .np span{overflow:hidden;text-overflow:ellipsis} .np em{font-style:normal;color:var(--ink)}
+.tsuba-mini{width:18px;height:18px;flex:none}
+.t0{fill:var(--surface);stroke:var(--accent2);stroke-width:2.2} .t1{fill:none;stroke:rgba(var(--accent2-rgb),.3);stroke-width:1}
+.t2{fill:var(--bg);stroke:rgba(var(--accent2-rgb),.5);stroke-width:.8}
+.np.playing .tsuba-mini{animation:spin 6s linear infinite;will-change:transform}
+@keyframes spin{to{transform:rotate(360deg)}}
+#net,#volb{color:var(--mist)} #net.off{color:var(--accent)}
+#net{padding:0 5px 0 10px} #volb{padding:0 10px 0 5px;gap:6px}
+#volb .mx,#volb.muted .wv{display:none} #volb.muted .mx{display:inline} #volb.muted{color:var(--accent)}
+
+/* the katana battery */
+#batt[hidden]{display:none}
+#batt .hilt{fill:var(--surface)} #batt .wrap{stroke:var(--stone);stroke-width:.8;fill:none} #batt .guard{fill:var(--accent2)}
+#batt .edge{fill:none;stroke:var(--stone);stroke-width:.8} #bfill{fill:var(--ink);transition:width .6s var(--ease)}
+#batt.low #bfill{fill:var(--accent)} #batt.chg #bp{color:var(--accent2)}
+
+.lk{width:30px;padding:0;justify-content:center;font-size:17px;color:var(--stone);transition:color .2s}
+.lk:hover{color:var(--ink)} #lKeys{color:var(--accent2)}
+
+#trayBtn{width:26px;padding:0;justify-content:center;color:var(--stone)}
+#trayBtn svg{transition:transform .25s var(--ease)} #trayBtn.on svg{transform:rotate(180deg)} #trayBtn.on{color:var(--ink)}
+#tray{display:flex;align-items:center;gap:2px;padding:0 2px} #tray[hidden]{display:none}
+#tray button{width:28px;height:28px;display:grid;place-items:center;border-radius:6px;animation:trayin .2s var(--ease) both}
+#tray button:hover{background:rgba(var(--accent2-rgb),.25)}
+#tray img{width:16px;height:16px}
+@keyframes trayin{from{opacity:0;transform:translateX(6px)}to{opacity:1;transform:none}}
+
+#clock .day{width:22px;height:22px;border-radius:4px;background:var(--accent);display:grid;place-items:center;font-family:var(--display);
+  font-size:14px;color:var(--ink);transform:rotate(-4deg)}
+#clock .hm{font-family:var(--display);font-size:19px}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

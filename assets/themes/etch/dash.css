@@ -1,0 +1,155 @@
+/* Etch — the print, the medallions, the prints for the wall and the instructions. Every panel is a black plate in its
+   plate mark. It comes in on the press (160 ms), its rules are cut in after it by the burin (320 ms), and the light in
+   it comes up last (600 ms). Tokens from tokens.css + bar.css. */
+body:not([data-mode=dash]) #dash,body:not([data-mode=power]) #power,body:not([data-mode=wall]) #wall,body:not([data-mode=keys]) #keysheet{display:none}
+:root{--fade:rgba(var(--ink-rgb),.55);--hair:rgba(var(--ink-rgb),.24);--rule:rgba(var(--ink-rgb),.5)}
+/* the plate: black copper, a faint tone left by the wiping, the plate mark with its hatched bevel */
+#dash,#wall,#keysheet,#power{position:absolute;inset:8px 14px 16px 8px;isolation:isolate;color:var(--ink);overflow:hidden;
+  background:radial-gradient(ellipse at 30% 20%,rgba(var(--ink-rgb),.06),transparent 60%),radial-gradient(ellipse at 80% 90%,rgba(var(--ink-rgb),.04),transparent 55%),var(--bg);
+  box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.62),inset 0 0 0 6px var(--bg),inset 0 0 0 7px rgba(var(--ink-rgb),.22),0 18px 40px rgba(0,0,0,.6)}
+#dash::before,#wall::before,#keysheet::before,#power::before{content:"";position:absolute;inset:1px;z-index:-1;padding:5px;pointer-events:none;background:var(--hatch);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+
+/* on the press: down onto the paper, then still */
+#dash.open,#wall.open,#keysheet.open,#power.open{animation:press calc(.16s * var(--speed)) cubic-bezier(.2,.7,.3,1) both}
+@keyframes press{from{opacity:0;transform:translateY(-5px) scale(1.012)}}
+#dash.closing,#wall.closing,#keysheet.closing,#power.closing{animation:lift calc(.12s * var(--speed)) ease-in both}
+@keyframes lift{to{opacity:0;transform:translateY(-4px)}}
+/* the burin: a rule cut in from its left end */
+@keyframes burin{from{transform:scaleX(0)}}
+
+#dash{display:grid;grid-template-columns:540px 1fr}
+/* the left: the picture cropped to its plate (the art carries its own frame and caption; the print here shows only the
+   picture), its number and title under it, the dials below */
+#art{position:relative;padding:20px 10px 16px 22px;display:flex;flex-direction:column;min-width:0}
+.port{position:relative;width:100%;aspect-ratio:2.162;overflow:hidden;background:#000;
+  box-shadow:0 0 0 1px rgba(var(--ink-rgb),.75),0 0 0 5px var(--bg),0 0 0 6px rgba(var(--ink-rgb),.3)}
+.port img{position:absolute;left:-5.556%;top:-7.43%;width:111.11%;height:auto;display:block}
+.port .lux{left:50%;top:40%;width:24px;height:24px;margin:-12px;opacity:0;mix-blend-mode:screen}
+.open .port .lux{animation:glow calc(.6s * var(--speed)) ease-out calc(.2s * var(--speed)) both}
+@keyframes glow{0%{opacity:0;transform:scale(.4)}50%{opacity:.9}100%{opacity:0;transform:scale(2.4)}}
+.cap{display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0 0;min-width:0}
+.cap .k{color:var(--fade)}
+#artEn{font-family:var(--display);font-size:23px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#legend{margin:7px 0 0;text-align:center;font-size:15px;color:var(--fade)}
+#wallBtn{position:absolute;right:22px;top:26px;z-index:3;padding:4px 10px 5px;font-family:var(--display);font-size:13px;color:var(--ink);
+  background:rgba(var(--bg-rgb),.78);box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.5)}
+#wallBtn::after{left:10px;right:10px}
+#wallBtn:hover{box-shadow:inset 0 0 0 1px var(--ink),0 0 14px rgba(var(--accent-rgb),.2)}
+/* four dials engraved in a row, the reading in the middle, the name in capitals under */
+#rings{margin-top:auto;padding:12px 0 0;gap:6px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--hair)}
+.ring2{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0} .ring2.none{visibility:hidden}
+.dial{position:relative;width:58px;height:58px;flex:none}
+.dial svg{width:100%;height:100%;display:block}
+.dial .rim{fill:none;stroke:var(--hair);stroke-width:.6}
+.dial .on{stroke:var(--ink);stroke-width:1.5} .dial .off{stroke:var(--hair);stroke-width:1}
+#g-cpu .dial .on{stroke:var(--light)}
+.dial em{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-family:var(--display);font-size:17px}
+.rt{display:flex;flex-direction:column;align-items:center;gap:0;min-width:0;max-width:100%}
+.rt b{font-family:var(--display);font-weight:400;font-size:13px;letter-spacing:.03em}
+.rt span{font-size:12.5px;color:var(--fade);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
+/* the right: the hour, the date written out, the plate it is */
+#side{position:relative;padding:22px 26px 18px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+#side::before{content:"";position:absolute;left:0;top:26px;bottom:26px;width:1px;background:linear-gradient(transparent,var(--hair) 12%,var(--hair) 88%,transparent)}
+#side header{display:flex;flex-direction:column;gap:2px}
+.lbl{font-size:14px;color:var(--fade)}
+.big{font-family:var(--display);font-size:64px;line-height:.92;letter-spacing:.01em}
+.date{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.date #jdate{font-size:16px}
+.date #edate{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fade)}
+#side header::after{content:"";display:block;height:3px;margin-top:9px;border-top:1px solid var(--rule);border-bottom:1px solid var(--hair);transform-origin:left}
+.open #side header::after{animation:burin calc(.32s * var(--speed)) cubic-bezier(.4,0,.2,1) calc(.14s * var(--speed)) both}
+
+/* the month: today is the lit point, a ring of light round its figure */
+#cal{display:grid;grid-template-columns:repeat(7,1fr);gap:0 2px;align-content:start;font-size:14px;color:rgba(var(--ink-rgb),.82)}
+#cal .mh{grid-column:1/-1;font-family:var(--display);font-size:15px;letter-spacing:.04em;margin-bottom:2px}
+#cal .wd{font-family:var(--mono);font-size:8.5px;color:var(--fade);text-align:center;padding:1px 0 3px;border-bottom:1px solid var(--hair)}
+#cal i{font-style:normal;height:19px;display:grid;place-items:center;position:relative;line-height:1}
+#cal i.out{opacity:.22}
+#cal i.today{color:var(--ink);text-shadow:0 0 8px rgba(var(--accent-rgb),.7)}
+#cal i.today::before{content:"";position:absolute;left:50%;top:50%;width:21px;height:21px;margin:-10.5px;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.85),0 0 10px rgba(var(--accent-rgb),.3)}
+
+/* the organ: its pipes, what plays, the time gone as a cut line */
+#media{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+#media .pipe{width:22px;height:22px;color:var(--fade)}
+#media.playing .pipe{color:var(--ink);animation:breathe calc(1.6s * var(--speed)) ease-in-out infinite}
+.credit{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.role{font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--fade)}
+.credit b{font-family:var(--display);font-weight:400;font-size:18px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.credit #ma{font-size:13.5px;color:var(--fade);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rule{position:relative;height:1px;margin-top:6px;background:var(--hair)}
+#mprog{position:absolute;inset:0;background:var(--ink);transform-origin:left;transform:scaleX(var(--p,0));transition:transform 1s linear}
+.ctl{display:flex;gap:0}
+.ctl button{position:relative;width:28px;height:28px;display:grid;place-items:center}
+.ctl button::after{left:6px;right:6px;bottom:2px}
+.ctl svg{width:12px;height:12px;fill:currentColor}
+#media.idle .ctl,#media.idle .rule{display:none}
+#media.idle .credit b{color:var(--fade)}
+
+/* the motto, cut in capitals, and under it the engraver's signature on its line */
+footer{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.saying{font-family:var(--display);font-size:20px;line-height:1.2;letter-spacing:.03em}
+.sig{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--fade)}
+.sig::before{content:"";flex:1;height:1px;background:var(--hair)}
+
+/* power: four medallions struck in the plate, each a ring round its device. Armed, the light burns in it, and the
+   candle-line under the heading burns down for the 3 s it waits */
+#power{padding:20px 22px 22px;display:flex;flex-direction:column;align-items:center}
+#pmid{display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:none;min-height:82px;text-align:center}
+#pk{font-family:var(--display);font-size:32px;letter-spacing:.08em;text-transform:none;line-height:1}
+#pl{font-size:16px}
+#ph{font-style:normal;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--fade)}
+#power.armed #pk{color:var(--light);text-shadow:0 0 12px rgba(var(--accent-rgb),.5)}
+.fuse{position:relative;display:block;width:100%;height:9px;margin:4px 0 16px;background:linear-gradient(var(--hair),var(--hair)) left center/100% 1px no-repeat}
+.fuse .lux{top:-3px;left:calc(100% - 7px);opacity:0}
+#power.armed .fuse{animation:burn 3s linear both}
+#power.armed .fuse .lux{opacity:1;animation:wick 3s linear both}
+@keyframes burn{from{background-size:100% 1px}to{background-size:0 1px}}
+@keyframes wick{from{left:calc(100% - 7px)}to{left:-7px}}
+.brands{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%;justify-items:center}
+.pb{position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;padding:2px}
+.pb svg{width:66px;height:66px;padding:15px;border-radius:50%;fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;
+  background:var(--xhatch);box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.62),inset 0 0 0 5px var(--bg),inset 0 0 0 6px rgba(var(--ink-rgb),.25),inset 0 0 0 33px var(--bg);
+  transition:box-shadow calc(.6s * var(--speed)) ease-out,stroke calc(.6s * var(--speed)) ease-out}
+.pb .k{color:var(--fade);transition:color calc(.6s * var(--speed))}
+.pb:hover svg,.pb:focus-visible svg{stroke:var(--light);box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.8),inset 0 0 0 5px var(--bg),inset 0 0 0 6px rgba(var(--ink-rgb),.35),inset 0 0 0 33px var(--bg),0 0 18px rgba(var(--accent-rgb),.22)}
+.pb:hover .k{color:var(--ink)}
+.pb.armed svg{stroke:#fff;box-shadow:inset 0 0 0 1px var(--light),inset 0 0 0 5px var(--bg),inset 0 0 0 6px rgba(var(--accent-rgb),.6),inset 0 0 22px 33px rgba(var(--accent-rgb),.16),0 0 24px rgba(var(--accent-rgb),.4)}
+.pb.armed .k{color:var(--light)}
+
+/* the prints for the wall: six, each in its plate mark; the one on the wall now marked printed, with its light */
+#wall{padding:16px 24px 12px;display:flex;flex-direction:column}
+#wall header,#keysheet header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+#wall header .k,#keysheet header .k{font-size:9px;color:var(--ink)}
+#wall header>span,#keysheet header>span{font-size:14.5px;color:var(--fade)}
+#wall header i,#keysheet header i{margin-left:auto;font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--fade)}
+.cards{flex:1;display:flex;justify-content:center;align-items:center;gap:16px;padding-bottom:8px}
+.wc{position:relative;box-sizing:border-box;width:132px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0 0 2px;
+  transition:transform calc(.16s * var(--speed)) ease-out}
+.wc img{width:100%;aspect-ratio:1.95;object-fit:cover;object-position:50% 28%;display:block;
+  box-shadow:0 0 0 1px rgba(var(--ink-rgb),.6),0 0 0 4px var(--bg),0 0 0 5px rgba(var(--ink-rgb),.22);filter:brightness(.85);transition:filter calc(.6s * var(--speed))}
+.wc:hover{transform:translateY(-2px)} .wc:hover img,.wc.on img{filter:none}
+.wc .cap{display:flex;flex-direction:column;align-items:center;gap:0;margin:4px 0 0}
+.wc .cap b{font-size:7.5px;color:var(--fade)}
+.wc .cap i{font-family:var(--display);font-style:normal;font-size:13.5px;line-height:1.15;white-space:nowrap}
+.wc em{position:absolute;right:-6px;top:-9px;z-index:4;display:none;padding:2px 6px 1px 16px;font-style:normal;font-size:7.5px;color:var(--bg);background:var(--ink)}
+.wc em::before{content:"";position:absolute;left:1px;top:50%;width:13px;height:13px;margin-top:-6.5px;border-radius:50%;
+  background:radial-gradient(circle,#fff 0 1px,var(--light) 1.8px,rgba(var(--accent-rgb),.4) 3px,transparent 6px)}
+.wc.on em{display:block}
+.wc.on img{box-shadow:0 0 0 1px var(--light),0 0 0 4px var(--bg),0 0 0 5px rgba(var(--accent-rgb),.4),0 0 16px rgba(var(--accent-rgb),.25)}
+.wc.busy{opacity:.5}
+
+/* the instructions: three plates of them, each section under its numeral */
+#keysheet{padding:16px 22px 14px}
+#keysheet .cols{display:grid;grid-template-columns:.95fr .95fr 1.3fr;gap:14px}
+#keysheet .cols>div{position:relative;padding:11px 13px 4px;box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.4),inset 0 0 0 4px var(--bg),inset 0 0 0 5px rgba(var(--ink-rgb),.16)}
+#keysheet h3{display:flex;align-items:baseline;gap:8px;font-family:var(--display);font-size:16px;font-weight:400;margin:0 0 4px;padding-bottom:4px;
+  border-bottom:1px solid var(--rule);box-shadow:0 2px 0 -1px var(--bg),0 3px 0 -1px var(--hair)}
+#keysheet h3 b{font-family:var(--display);font-size:15px;letter-spacing:0;color:var(--light);text-transform:none}
+#keysheet h3 i{font-style:normal;font-size:12px;color:var(--fade)}
+#keysheet dl{display:grid;grid-template-columns:auto 1fr;gap:0 9px;margin-bottom:6px}
+#keysheet dt,#keysheet dd{padding:1px 0;border-bottom:1px dotted var(--hair)}
+#keysheet dt{font-family:var(--mono);font-size:9.5px;white-space:nowrap;align-self:center}
+#keysheet dd{font-size:12.5px;line-height:1.25;color:rgba(var(--ink-rgb),.82)}

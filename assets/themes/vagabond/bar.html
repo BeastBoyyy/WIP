@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="brushy"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="1.6"/></filter>
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".6" numOctaves="2" seed="9"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+    <symbol id="enso" viewBox="0 0 40 40"><path class="ens" d="M27 6.5 A15 15 0 1 0 33.8 25" filter="url(#brushy)"/><circle class="sun" cx="31" cy="11" r="3.4"/></symbol>
+    <symbol id="tsuba" viewBox="0 0 100 100">
+      <circle class="t0" cx="50" cy="50" r="48"/><circle class="t1" cx="50" cy="50" r="42"/>
+      <g class="t2"><path d="M50 4 C58 12 58 18 50 22 C42 18 42 12 50 4Z"/><path d="M50 96 C58 88 58 82 50 78 C42 82 42 88 50 96Z"/>
+        <path d="M14 34 q7 3 9 16 q-2 13 -9 16 q-5 -16 0 -32Z"/><path d="M86 34 q-7 3 -9 16 q2 13 9 16 q5 -16 0 -32Z"/></g>
+    </symbol>
+    <clipPath id="blade"><path d="M22 6 L70 5.2 Q76 5.6 77 8 Q74 10 70 10 L22 10 Z"/></clipPath>
+  </defs>
+</svg>
+
+<div id="bar">
+  <div class="island" id="iLeft">
+    <button class="it follow" id="overview" title="Overview · Ctrl+Alt+Space"><svg width="24" height="24" viewBox="0 0 40 40"><use href="#enso"/></svg></button>
+    <div class="sep"></div>
+    <div id="ws" title="wheel: next / previous · right-click: send the focused window here"><div id="seal"></div></div>
+    <div class="sep"></div>
+    <button class="it follow lk k" id="lFlow" title="探 Search apps, files, web · Alt+Space">探</button>
+    <button class="it follow lk k" id="lFiles" title="蔵 File Explorer">蔵</button>
+    <button class="it follow lk k" id="lTerm" title="武 Terminal">武</button>
+    <button class="it follow lk k" id="lKeys" title="書 Keys and bar actions">書</button>
+  </div>
+
+  <div class="island" id="iCenter">
+    <div class="it" id="title" title="wheel: focus ← → · double-click: maximize · right-click: float · middle-click: close"><span class="k" id="tk">武</span><b id="tapp">vagabond</b><span id="tname"></span></div>
+  </div>
+
+  <div class="island" id="iRight">
+    <div id="tray" hidden></div>
+    <button class="it follow" id="trayBtn" title="System tray"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="it follow" id="weather"><span class="k" id="wk">晴</span><span class="mono" id="wt">–°</span></div>
+    <button class="it follow np" id="media" hidden title="click: play / pause · right-click: next · middle-click: previous"><svg class="tsuba-mini" viewBox="0 0 100 100"><use href="#tsuba"/></svg><span id="mt"></span></button>
+    <div class="sep"></div>
+    <div class="it follow" id="rings"><svg class="ring" viewBox="0 0 40 40" id="rcpu"></svg><svg class="ring r2" viewBox="0 0 40 40" id="rram"></svg></div>
+    <div class="it follow" id="batt" hidden>
+      <svg width="78" height="16" viewBox="0 0 78 16">
+        <rect class="hilt" x="0" y="5.5" width="16" height="5" rx="1.5"/><path class="wrap" d="M1 6 l3 4 l3-4 l3 4 l3-4"/>
+        <ellipse class="guard" cx="18.5" cy="8" rx="2.4" ry="5"/>
+        <path class="edge" d="M22 6 L70 5.2 Q76 5.6 77 8 Q74 10 70 10 L22 10 Z"/>
+        <rect clip-path="url(#blade)" x="22" y="4" width="0" height="8" id="bfill"/>
+      </svg><span class="mono" id="bp">–</span>
+    </div>
+    <button class="it follow" id="net">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1.2" fill="currentColor"/></svg>
+    </button>
+    <button class="it follow" id="volb" title="wheel: volume · click: mute · right-click: sound settings">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="wv" d="M16 9a4 4 0 0 1 0 6"/><path class="mx" d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></svg><span class="mono" id="vol"></span>
+    </button>
+    <div class="sep"></div>
+    <button class="it follow" id="clock"><span class="day" id="day">日</span><span class="hm" id="hm">--:--</span></button>
+    <button class="it follow" id="pwr" title="Power · 休"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" filter="url(#brushy)"><path d="M7.2 6.6a7.6 7.6 0 1 0 9.6 0"/><path d="M12 2.8v8.4"/></svg></button>
+  </div>
+</div>
+<script type="module" src="./bar.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+/* Xerox — the bar: strips of photocopy taped along the top of the screen. Toner speckled all over, the copier's dark
+   edge down one end, the ends torn, parcel tape holding them up. The issue that is open is cut in on cyan and run
+   through the copier (a lamp passes over it, 400 ms); what you point at jitters like a bad copy (60 ms) and goes
+   black. Colours, type and speed come from tokens.css (the palette you edit in Rice Studio). */
+:root{
+  --cyan:var(--accent); --paper:var(--bg); --toner:var(--ink);
+  --dim:rgba(var(--ink-rgb),.62); --faint:rgba(var(--ink-rgb),.24);
+  /* toner: three fields of specks at different pitches, so no pattern shows */
+  --speck:radial-gradient(circle at 20% 30%,rgba(var(--ink-rgb),.55) .7px,transparent 1.3px) 0 0/23px 17px,
+    radial-gradient(circle at 70% 60%,rgba(var(--ink-rgb),.4) .5px,transparent 1.1px) 0 0/13px 29px,
+    radial-gradient(circle,rgba(var(--ink-rgb),.3) .6px,transparent 1.1px) 3px 5px/41px 11px,
+    radial-gradient(circle at 40% 80%,rgba(var(--ink-rgb),.6) 1px,transparent 1.6px) 7px 2px/67px 23px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;color:var(--toner);font-family:var(--body);user-select:none}
+button{all:unset;box-sizing:border-box;cursor:pointer}
+
+#bar{position:absolute;top:7px;left:12px;right:16px;height:var(--bar-h);display:flex;align-items:center;gap:26px}
+/* a strip of photocopy: the paper drawn behind the island, its ends torn, and its shadow following the tear */
+.island{position:relative;isolation:isolate;height:100%;display:flex;align-items:center;padding:0 12px;gap:1px;
+  filter:drop-shadow(0 1.5px 0 rgba(0,0,0,.28)) drop-shadow(0 6px 9px rgba(0,0,0,.26))}
+.island::before{content:"";position:absolute;inset:0;z-index:-1;background:
+    var(--speck),
+    linear-gradient(90deg,rgba(var(--ink-rgb),.62),rgba(var(--ink-rgb),.15) 9px,transparent 18px),
+    linear-gradient(rgba(var(--ink-rgb),.08),transparent 30%,transparent 80%,rgba(var(--ink-rgb),.1)),
+    var(--paper);
+  clip-path:polygon(0 3%,3px 0,100% 0,calc(100% - 2px) 18%,100% 33%,calc(100% - 3px) 52%,100% 70%,calc(100% - 2px) 86%,100% 100%,2px 100%,0 82%,3px 64%,0 47%,2px 28%)}
+#iLeft{transform:rotate(-.35deg)}
+#iRight{margin-left:auto;transform:rotate(.3deg)}
+#iRight::before{background:var(--speck),linear-gradient(270deg,rgba(var(--ink-rgb),.6),rgba(var(--ink-rgb),.12) 9px,transparent 18px),
+  linear-gradient(rgba(var(--ink-rgb),.08),transparent 30%,transparent 80%,rgba(var(--ink-rgb),.1)),var(--paper)}
+#iCenter{position:absolute;left:50%;transform:translateX(-50%) rotate(-.6deg);max-width:24vw}
+body.tray #iCenter,body.crowd #iCenter{visibility:hidden;pointer-events:none}
+
+/* parcel tape, torn at both ends, holding each strip up */
+.tape{position:absolute;z-index:4;width:52px;height:15px;pointer-events:none;background:linear-gradient(rgba(255,255,255,.28),transparent 45%,rgba(0,0,0,.05)),rgba(232,226,200,.62);
+  clip-path:polygon(0 0,100% 0,96% 25%,100% 50%,96% 75%,100% 100%,0 100%,4% 75%,0 50%,4% 25%)}
+.t1{left:-20px;top:-4px;transform:rotate(-24deg)}
+.t2{right:-22px;bottom:-3px;transform:rotate(-14deg)}
+.t3{right:-18px;top:-3px;transform:rotate(20deg)}
+
+/* a slash drawn between the groups */
+.slash{width:2.5px;height:56%;margin:0 7px;background:var(--toner);opacity:.75;transform:skewX(-20deg);flex:none;border-radius:1px}
+
+.it{position:relative;height:calc(var(--bar-h) - 10px);padding:0 8px;display:flex;align-items:center;gap:7px;font-size:12.5px;white-space:nowrap}
+.k{font-family:var(--mono);font-size:9px;letter-spacing:.08em}
+.num{font-family:var(--mono);font-size:12px}
+.cell{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
+.cell>.k{font-size:8.5px;color:var(--dim);line-height:1}
+
+/* pointed at: knocked out black and jittering like a bad copy; pressed: cyan */
+.follow:hover{background:var(--toner);color:var(--paper);animation:jit calc(.06s * var(--speed)) steps(2) 3}
+.follow:hover .k,.follow:hover .num{color:var(--paper)}
+.follow:active{background:var(--cyan);color:var(--toner)}
+@keyframes jit{0%{transform:translate(1px,-1px)}50%{transform:translate(-1px,1px)}100%{transform:none}}
+
+#overview{width:34px;padding:0;justify-content:center}
+
+/* the issues: "No." typed small, the number stamped big. The open one cut in on a cyan scrap and copied over */
+#ws{display:flex;height:calc(var(--bar-h) - 8px);gap:1px}
+#ws .w{position:relative;isolation:isolate;height:100%;padding:0 9px;display:flex;align-items:baseline;justify-content:center;gap:2px;color:var(--dim);overflow:visible}
+#ws .w .no{font-family:var(--mono);font-size:8.5px;align-self:center;margin-top:-6px}
+#ws .w b{font-family:var(--display);font-weight:400;font-size:21px;line-height:1;align-self:center}
+#ws .w:hover{color:var(--paper);background:var(--toner);animation:jit calc(.06s * var(--speed)) steps(2) 3}
+#ws .w.has::after{content:"";position:absolute;right:4px;top:7px;width:5px;height:5px;border-radius:50%;background:var(--toner)}
+#ws .w.on{color:var(--toner)}
+#ws .w.on::before{content:"";position:absolute;inset:3px 1px;z-index:-1;background:var(--speck),var(--cyan);transform:rotate(-3deg);
+  clip-path:polygon(2px 0,100% 3px,calc(100% - 2px) 100%,0 calc(100% - 2px));animation:jit calc(.06s * var(--speed)) steps(2) 2}
+/* the copier's lamp passing over it */
+#ws .w.on::after{content:"";position:absolute;top:-3px;bottom:-3px;left:0;width:14px;z-index:3;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.95) 45%,rgba(200,240,255,.9) 55%,transparent);opacity:0;
+  animation:lamp calc(.4s * var(--speed)) linear}
+@keyframes lamp{0%{opacity:1;transform:translateX(-14px)}90%{opacity:1}100%{opacity:0;transform:translateX(60px)}}
+body.nowm #ws,body.nowm #overview{opacity:.35;pointer-events:none}
+
+/* the verbs, typed */
+.lk{padding:0 7px;font-family:var(--mono);font-size:12px;letter-spacing:.02em}
+
+/* what is on: its part on a label-maker strip, its name in the cut-up face, the window's title typed after */
+#title{gap:8px;color:var(--dim)}
+#tk{color:var(--paper);background:#161618;padding:3px 6px 2px;font-size:8.5px;letter-spacing:.12em;transform:rotate(-1.5deg);
+  text-shadow:0 1px 0 rgba(0,0,0,.6);box-shadow:1px 1px 0 rgba(0,0,0,.3)}
+#title b{color:var(--toner);font-family:var(--display);font-weight:400;font-size:17px;letter-spacing:.01em}
+#tname{overflow:hidden;text-overflow:ellipsis;min-width:0;font-family:var(--mono);font-size:11.5px}
+
+#weather{cursor:pointer}
+/* load: rings of halftone dots, one inked per tenth */
+#rings{gap:5px;padding:0 7px}
+.ring{width:20px;height:20px;display:block}
+.ring .on{fill:currentColor} .ring .off{fill:var(--faint)}
+#rings:hover .ring .on{fill:var(--cyan)}
+/* the stereo: a record that turns while something plays */
+.np{max-width:210px} .np #mt{overflow:hidden;text-overflow:ellipsis;font-family:var(--mono);font-size:11.5px}
+.np em{font-style:normal;font-weight:700}
+.rec{width:17px;height:17px;flex:none}
+.rec .v{fill:currentColor} .rec .g{fill:none;stroke:var(--paper);stroke-width:.5;opacity:.45} .rec .h{fill:var(--cyan)}
+.np.playing .rec{animation:spin calc(1.8s * var(--speed)) linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#net{padding:0 5px 0 8px} #volb{padding:0 8px 0 5px;gap:6px}
+#net.off{color:var(--faint)}
+#net.off::after{content:"";position:absolute;left:5px;right:3px;top:48%;height:3px;background:var(--toner);transform:rotate(-28deg)}
+#volb .mx,#volb.muted .wv{display:none} #volb.muted .mx{display:inline}
+
+/* the battery: a row of halftone dots, inked as far as the charge goes */
+#batt[hidden]{display:none}
+#batt .bar{display:flex;align-items:center;gap:6px}
+.sb{position:relative;width:30px;height:8px;display:block;background:radial-gradient(circle,var(--faint) 2px,transparent 2.4px) 0 0/6px 8px}
+#bfill{position:absolute;left:0;top:0;bottom:0;width:calc(100% * var(--p,1));background:radial-gradient(circle,var(--toner) 2.6px,transparent 3px) 0 0/6px 8px}
+#batt .num{font-size:11px}
+#batt.low #bfill{background-image:radial-gradient(circle,var(--cyan) 2.8px,transparent 3.2px);animation:blink 1s steps(2) infinite}
+#batt.chg #bfill{animation:blink 1.6s steps(2) infinite}
+@keyframes blink{50%{opacity:.3}}
+
+#trayBtn{width:24px;padding:0;justify-content:center}
+#trayBtn.on svg{transform:rotate(180deg)}
+#tray{display:flex;align-items:center;gap:2px;padding:0 2px} #tray[hidden]{display:none}
+#tray button{width:28px;height:28px;display:grid;place-items:center}
+#tray button:hover{background:var(--toner)}
+#tray img{width:16px;height:16px;filter:grayscale(1) contrast(1.4)}
+
+/* the time, in the cut-up face; the day typed over it */
+#clock{padding-right:10px}
+#clock .hm{font-family:var(--display);font-size:19px;line-height:1}
+/* power: a round vinyl sticker, slapped on a little crooked; pointed at, it starts to peel */
+#pwr{width:44px;padding:0;justify-content:center;background:none!important;animation:none!important}
+.stk{width:31px;height:31px;display:grid;place-items:center;border-radius:50%;font-family:var(--body);font-weight:700;font-size:9.5px;letter-spacing:.06em;
+  color:var(--toner);background:var(--speck),var(--cyan);box-shadow:inset 0 0 0 2px rgba(255,255,255,.75),1px 2px 0 rgba(0,0,0,.3);transform:rotate(-12deg);
+  transition:transform calc(.12s * var(--speed)) ease-out,box-shadow calc(.12s * var(--speed))}
+#pwr:hover .stk{transform:rotate(-20deg) translate(-1px,-2px);box-shadow:inset 0 0 0 2px rgba(255,255,255,.75),3px 5px 3px rgba(0,0,0,.3)}
+#pwr:active .stk{animation:slap calc(.12s * var(--speed)) ease-out}
+@keyframes slap{from{transform:rotate(-12deg) scale(1.25)}}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

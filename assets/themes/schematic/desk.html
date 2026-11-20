@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./desk.css">
+</head>
+<body>
+<!-- on the wallpaper, under every window: the drawing's title block, live, laid exactly over the one drawn in the corner
+     of each sheet. The project is the date, the scale is the time, and it is drawn by you. -->
+<main id="desk">
+  <div id="tb">
+    <div class="cells">
+      <div class="c proj"><b>PROJECT</b><span><em id="dday"></em> <i id="ddate"></i></span></div>
+      <div class="c title"><b>TITLE</b><span id="dsheet"></span></div>
+      <div class="c foot"><div><b>DRAWN</b><span>YOU</span></div><div><b>SITE</b><span id="dwx"></span></div><div><b>REV</b><span>C</span></div></div>
+    </div>
+    <div class="c scale"><b>SCALE</b><div id="dscale"><small>1 :</small><span id="dh">--</span><span class="colon">:</span><span id="dm">--</span></div><i class="dimln"></i></div>
+  </div>
+</main>
+<script type="module" src="./desk.js"></script>
+</body>
+</html>

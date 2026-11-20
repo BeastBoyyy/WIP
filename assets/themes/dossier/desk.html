@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./desk.css">
+</head>
+<body>
+<!-- on the wallpaper, under every window: an evidence tag on a string. Its red band and number printed, the exhibit typed,
+     and the day and the time written on it in marker, a little off the line -->
+<main id="desk">
+  <div id="tag">
+    <i class="string"></i>
+    <div class="card">
+      <div class="band"><b>EVIDENCE</b><span>No. 1105-B</span></div>
+      <div class="rows">
+        <div class="r"><span class="l">ITEM</span><span class="v typed" id="dtab"></span></div>
+        <div class="r"><span class="l">DATE</span><span class="v mk" id="dday"></span><span class="yr" id="dyear"></span></div>
+        <div class="r big"><span class="l">TIME</span><span class="v mk" id="dtime"></span></div>
+        <div class="r"><span class="l">COND.</span><span class="v typed" id="dwx"></span></div>
+        <div class="r sig"><span class="l">RECEIVED</span><span class="v mk you"><b>you</b></span></div>
+      </div>
+    </div>
+  </div>
+</main>
+<script type="module" src="./desk.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+/* Y2K Blue — the bar: one glossy gel pill, a chrome rim round it, a sheen over its top half. Pointed at, a thing gets a
+   pixel sparkle (500 ms); pressed, it squishes like gel (120 ms); the folder you go to hops, springy (360 ms); a figure
+   that changes pops. Colours, type and speed come from tokens.css (the palette you edit). */
+:root{
+  --mag:var(--accent); --peri:var(--accent2); --pale:var(--muted);
+  --dim:rgba(var(--ink-rgb),.72); --faint:rgba(var(--ink-rgb),.3);
+  --bounce:calc(.36s * var(--speed)); --spark:calc(.5s * var(--speed)); --press:calc(.12s * var(--speed));
+  --spring:cubic-bezier(.3,1.6,.5,1);
+  /* the chrome: what a polished rim reflects, sky to horizon to floor */
+  --chrome:linear-gradient(#fff,#dfe6ff 30%,#7d8bc4 48%,#2a3590 52%,#c9d3ff 78%,#fff);
+  /* a pixel sparkle, 7×7 */
+  --sparkle:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 7' shape-rendering='crispEdges'%3E%3Cpath fill='%23fff' d='M3 0h1v2H3zM3 5h1v2H3zM0 3h2v1H0zM5 3h2v1H5zM2 2h3v3H2z'/%3E%3Cpath fill='%23fff' opacity='.5' d='M1 1h1v1H1zM5 1h1v1H5zM1 5h1v1H1zM5 5h1v1H5z'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;color:var(--ink);font-family:var(--body);user-select:none}
+button{all:unset;box-sizing:border-box;cursor:pointer}
+
+/* the pill: blue gel deepening downward, the chrome rim as its border, a soft drop shadow under */
+#bar{position:absolute;top:5px;left:10px;right:14px;height:var(--bar-h);display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:999px;
+  border:2px solid transparent;
+  background:linear-gradient(rgba(var(--accent2-rgb),.95),rgba(var(--surface-rgb),.96) 48%,rgba(var(--bg-rgb),.97)) padding-box,var(--chrome) border-box;
+  box-shadow:0 4px 10px rgba(0,0,0,.35),inset 0 -3px 6px rgba(var(--accent2-rgb),.35)}
+/* the sheen: a white gloss over the top half, pinched in from the ends */
+#bar::before{content:"";position:absolute;left:18px;right:18px;top:1px;height:46%;border-radius:999px;pointer-events:none;
+  background:linear-gradient(rgba(255,255,255,.62),rgba(255,255,255,.08))}
+
+.island{position:relative;height:100%;display:flex;align-items:center;gap:2px}
+#iRight{margin-left:auto}
+#iCenter{position:absolute;left:50%;transform:translateX(-50%);max-width:26vw}
+body.tray #iCenter,body.crowd #iCenter{visibility:hidden;pointer-events:none}
+
+.it{position:relative;height:calc(var(--bar-h) - 14px);padding:0 5px;display:flex;align-items:center;gap:5px;white-space:nowrap;border-radius:999px;
+  color:var(--ink);text-shadow:0 1px 0 rgba(var(--bg-rgb),.55);transition:transform var(--press) ease-out,background var(--press)}
+.k{font-family:var(--body);font-size:12px;font-weight:500;color:var(--dim)}
+.num{font-family:var(--display);font-size:15px;color:var(--ink)}
+.sl{width:2px;height:18px;margin:0 2px;border-left:1px solid rgba(var(--bg-rgb),.5);border-right:1px solid rgba(255,255,255,.35)}
+/* pointed at: a lighter gel under it and a sparkle at its corner that twinkles in; pressed: it squishes */
+.it:hover,#ws .w:hover{background:rgba(255,255,255,.16)}
+.it::after,#ws .w::after{content:"";position:absolute;right:-2px;top:-3px;width:11px;height:11px;pointer-events:none;opacity:0;transform:scale(0);
+  background:var(--sparkle) center/contain no-repeat;image-rendering:pixelated;filter:drop-shadow(0 0 2px rgba(255,255,255,.8))}
+.it:hover::after,#ws .w:hover::after{opacity:1;transform:scale(.9);animation:spark var(--spark) steps(5) both}
+@keyframes spark{0%{opacity:1;transform:scale(0) rotate(-45deg)}50%{transform:scale(1.4) rotate(0)}100%{opacity:1;transform:scale(.9)}}
+.it:active,#ws .w:active{transform:scale(.92,.86)}
+
+#overview{width:34px;padding:0;justify-content:center;color:#fff}
+#overview svg{filter:drop-shadow(0 1px 0 rgba(var(--bg-rgb),.6))}
+#overview:hover{color:var(--pale)}
+
+/* the folders: each a little gel button, its icon and name. Open: magenta gel with its own sheen; with windows: bright;
+   empty: faded */
+#ws{display:flex;height:calc(var(--bar-h) - 14px);gap:3px;margin:0 2px}
+#ws .w{position:relative;height:100%;padding:0 9px 0 7px;display:flex;align-items:center;gap:5px;border-radius:999px;color:var(--dim);
+  transition:transform var(--press) ease-out}
+.fi{width:15px;height:15px;flex:none;fill:currentColor;shape-rendering:crispEdges;opacity:.6;filter:drop-shadow(0 1px 0 rgba(var(--bg-rgb),.6))}
+.fn{font-family:var(--display);font-size:13.5px;line-height:1;text-shadow:0 1px 0 rgba(var(--bg-rgb),.6)}
+#ws .w.has{color:var(--ink)} #ws .w.has .fi{opacity:1}
+/* an empty folder is just its icon (its name in the tooltip); one with windows, or the open one, shows its name */
+#ws .w:not(.on):not(.has){padding:0 7px} #ws .w:not(.on):not(.has) .fn{display:none}
+#ws .w.on{color:#fff;background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,0) 50%),linear-gradient(rgba(var(--accent-rgb),.85),var(--mag) 55%,rgba(var(--bg-rgb),.4) 140%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55),0 1px 3px rgba(var(--bg-rgb),.6)}
+#ws .w.on .fi{opacity:1}
+#ws .w.hop{animation:hop var(--bounce) var(--spring)}
+@keyframes hop{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-4px) scale(1.06,.96)}60%{transform:translateY(1px) scale(.98,1.03)}100%{transform:none}}
+body.nowm #ws,body.nowm #overview{opacity:.4;pointer-events:none}
+
+/* the launchers: a pixel icon and a lowercase word */
+.lk{font-family:var(--display);font-size:13.5px;gap:5px;padding:0 8px 0 6px}
+.li{width:14px;height:14px;fill:currentColor;shape-rendering:crispEdges}
+/* a figure that changed: one pop */
+.pop{display:inline-block;animation:pop var(--bounce) var(--spring)}
+@keyframes pop{0%{transform:translateY(0)}35%{transform:translateY(-3px) scale(1.12)}100%{transform:none}}
+
+/* the window you are in: its kind on a magenta sticker, its name, its title after */
+#title{gap:6px}
+#tk{padding:2px 8px 1px;border-radius:999px;color:#fff;font-size:11px;font-weight:600;
+  background:linear-gradient(rgba(255,255,255,.5),rgba(255,255,255,0) 55%),var(--mag);box-shadow:inset 0 0 0 1px rgba(255,255,255,.45)}
+#title b{font-family:var(--display);font-weight:400;font-size:15px}
+#tname{overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:13px;color:var(--dim)}
+
+#weather{cursor:pointer}
+/* music: a little cd that spins while it plays */
+.np{max-width:140px} .np #mt{overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:500}
+.cd{flex:none;width:15px;height:15px;border-radius:50%;
+  background:radial-gradient(circle,rgba(var(--bg-rgb),1) 0 1.6px,rgba(255,255,255,.75) 2px 3.6px,transparent 4px),
+    conic-gradient(#e6ebff,#ff9ad6,#9effe2,#e6ebff 40%,#c6cdea,#fff6a0,#9ab8ff,#e6ebff);box-shadow:0 0 0 1px rgba(var(--bg-rgb),.5)}
+.np.playing .cd{animation:spin calc(1.6s * var(--speed)) linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#rings{gap:3px} #rings .num+.k{margin-left:4px}
+/* the battery: a gel capsule filling with blue; low, magenta and blinking; charging, pale */
+#batt[hidden]{display:none}
+.cell{position:relative;display:block;width:26px;height:11px;border-radius:6px;background:rgba(var(--bg-rgb),.55);box-shadow:inset 0 0 0 1px rgba(255,255,255,.6)}
+.cell::after{content:"";position:absolute;right:-3px;top:3px;width:2px;height:5px;border-radius:0 2px 2px 0;background:rgba(255,255,255,.6)}
+#bfill{position:absolute;left:2px;top:2px;bottom:2px;width:calc((100% - 4px) * var(--p,1));border-radius:4px;
+  background:linear-gradient(#fff,var(--peri) 60%)}
+#batt.low #bfill{background:var(--mag);animation:blink 1s steps(2) infinite}
+#batt.chg #bfill{background:linear-gradient(#fff,var(--pale))}
+@keyframes blink{50%{opacity:.25}}
+#net{padding:0 6px} #net.off{color:var(--mag)} #net.off svg{opacity:.55}
+#volb{gap:5px} #volb .mx{display:none} #volb.muted .mx{display:inline;fill:var(--mag)} #volb.muted .wv,#volb.muted .num{display:none}
+
+#trayBtn{width:24px;padding:0;justify-content:center}
+#trayBtn.on svg{transform:scaleX(-1)}
+#tray{display:flex;align-items:center;gap:2px;padding:0 2px} #tray[hidden]{display:none}
+#tray button{width:26px;height:24px;display:grid;place-items:center;border-radius:8px}
+#tray button:hover{background:rgba(255,255,255,.18)}
+#tray img{width:16px;height:16px}
+
+/* the clock: the time in chrome letters, the day beside it */
+#clock{gap:5px}
+#clock .hm{font-family:var(--display);font-size:19px;letter-spacing:.02em;text-shadow:none;
+  background:linear-gradient(#fff 0 52%,#c9d4ff 56%,#eef2ff);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(var(--bg-rgb),.75))}
+/* on a narrower screen the day goes (the dashboard has it) so the window in the middle keeps its room */
+@media (max-width:1700px){#clock .k{display:none}}
+/* power: a round magenta gel button */
+#pwr{width:28px;height:28px;padding:0;justify-content:center;color:#fff;border-radius:50%;
+  background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,0) 52%),radial-gradient(circle at 50% 80%,rgba(var(--accent-rgb),.75),var(--mag));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55),0 1px 3px rgba(var(--bg-rgb),.6)}
+#pwr:hover{background:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,.05) 52%),var(--mag)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./bar.css">
+<link rel="stylesheet" href="./dash.css">
+</head>
+<body data-mode="dash">
+<!-- a targeting overlay on HUD glass: across the top the channel's header; on the left the feed full size with its log
+     line, and under it the readouts (the processor as a radar sweep, the rest arc gauges); on the right the time to the
+     second, the date, the month, the audio channel as a waveform, and a message from the signal -->
+<main id="dash" class="pane">
+  <i class="br tl"></i><i class="br tr"></i><i class="br bl"></i><i class="br bri"></i>
+  <header class="hd"><span id="hdr">GHOST SIGNAL</span><i class="rec"></i><span class="k">LIVE FEED</span></header>
+  <section id="art">
+    <div class="port"><img id="artImg" alt=""><i class="lockon"></i></div>
+    <div class="cap"><span class="k" id="artK"></span><b id="artEn"></b><span id="log"></span>
+      <button class="btn" id="wallBtn" title="Wallpaper · switch the feed on the screen">SWITCH FEED</button></div>
+    <div id="rings"></div>
+  </section>
+  <section id="side">
+    <div class="time">
+      <div class="big" id="hm">--:--:--</div>
+      <div class="date"><span id="jdate"></span><span id="edate"></span></div>
+    </div>
+    <div id="cal"></div>
+    <div id="media" class="idle">
+      <div class="scope"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="credit"><span class="k">AUD // CH-A</span><b id="mt">NO CARRIER</b><span id="ma"></span><div class="rule"><i id="mprog"></i></div></div>
+      <div class="ctl"><button class="btn" id="prev" title="Previous"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5 10 12l10 7z"/></svg></button><button class="btn" id="pp" title="Play / pause"><svg viewBox="0 0 24 24"><path id="ppi" d="M7 5l12 7-12 7z"/></svg></button><button class="btn" id="next" title="Next"><svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5l10 7-10 7z"/></svg></button></div>
+    </div>
+    <footer><span class="k">MSG</span><span class="saying" id="precept"></span></footer>
+  </section>
+</main>
+
+<!-- power: four targets. Pointed at, one is locked on; armed, it turns red and a countdown bar runs out over the 3 s -->
+<section id="power" class="pane">
+  <i class="br tl"></i><i class="br tr"></i><i class="br bl"></i><i class="br bri"></i>
+  <div id="pmid"><b class="k" id="pk">STANDBY</b><span id="pl"></span><i id="ph"></i></div>
+  <i class="fuse"></i>
+  <div class="brands">
+    <button class="pb" data-a="lock"><svg viewBox="0 0 40 40"><rect x="12" y="18" width="16" height="12"/><path d="M15 18v-4a5 5 0 0 1 10 0v4"/><path d="M20 23v3"/></svg><span class="k">LOCK</span></button>
+    <button class="pb" data-a="sleep"><svg viewBox="0 0 40 40"><path d="M25 10a11 11 0 1 0 6 18 9 9 0 0 1-6-18z"/></svg><span class="k">SLEEP</span></button>
+    <button class="pb danger" data-a="restart"><svg viewBox="0 0 40 40"><path d="M29 20a9 9 0 1 1-2.6-6.4"/><path d="M27 8v6h-6"/></svg><span class="k">REBOOT</span></button>
+    <button class="pb danger" data-a="off"><svg viewBox="0 0 40 40"><path d="M20 9v10"/><path d="M13 13a10 10 0 1 0 14 0"/></svg><span class="k">HALT</span></button>
+  </div>
+</section>
+
+<section id="wall" class="pane"><i class="br tl"></i><i class="br tr"></i><i class="br bl"></i><i class="br bri"></i>
+  <header class="hd"><b class="k">FEEDS</b><span>route a channel to the screen</span><i id="wmsg"></i></header><div class="cards"></div></section>
+<section id="keysheet" class="pane"><i class="br tl"></i><i class="br tr"></i><i class="br bl"></i><i class="br bri"></i>
+  <header class="hd"><b class="k">KEYMAP</b><span>every binding on the console</span><i>ESC // CLOSE</i></header><div class="cols"></div></section>
+
+<script type="module" src="./dash.js"></script>
+</body>
+</html>
